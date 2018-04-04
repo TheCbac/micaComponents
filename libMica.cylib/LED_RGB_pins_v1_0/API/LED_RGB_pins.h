@@ -26,21 +26,30 @@
     /***************************************
     * Function declarations 
     ***************************************/
-    uint8   `$INSTANCE_NAME`_R_Write(bool state);
-    uint8   `$INSTANCE_NAME`_G_Write(bool state);
-    uint8   `$INSTANCE_NAME`_B_Write(bool state);
+    uint8 `$INSTANCE_NAME`_R_Write(bool state);
+    uint8 `$INSTANCE_NAME`_G_Write(bool state);
+    uint8 `$INSTANCE_NAME`_B_Write(bool state);
+
+    bool   `$INSTANCE_NAME`_R_Read(void);
+    bool   `$INSTANCE_NAME`_G_Read(void);
+    bool   `$INSTANCE_NAME`_B_Read(void);
+
     
-    uint8   `$INSTANCE_NAME`_Write(uint8 state);
-    uint8   `$INSTANCE_NAME`_Read(void);
-    void    `$INSTANCE_NAME`_Test(uint8 runs);
+    bool   `$INSTANCE_NAME`_G_Toggle(void);
+    bool   `$INSTANCE_NAME`_B_Toggle(void);
     
-    void    `$INSTANCE_NAME`_Sleep(void);
-    void    `$INSTANCE_NAME`_Wakeup(void);
+    uint8  `$INSTANCE_NAME`_Write(uint8 state);
+    uint8  `$INSTANCE_NAME`_Read(void);
+    void   `$INSTANCE_NAME`_Test(uint8 runs);
+
+    void   `$INSTANCE_NAME`_Sleep(void);
+    void   `$INSTANCE_NAME`_Wakeup(void);
     /***************************************
     * Macro Definitions
     ***************************************/
-    #define `$INSTANCE_NAME`_ON                 (!`$activeLow`)
-    #define `$INSTANCE_NAME`_OFF                (`$activeLow`)
+    #define `$INSTANCE_NAME`_ON                 (true)
+    #define `$INSTANCE_NAME`_OFF                (false)
+    #define `$INSTANCE_NAME`_ACTIVE_VAL         (!`$activeLow`)
        
     #define `$INSTANCE_NAME`_R_PIN_SHIFT        (0u)
     #define `$INSTANCE_NAME`_G_PIN_SHIFT        (1u)
@@ -57,6 +66,11 @@
     
     #define `$INSTANCE_NAME`_CTRL_MASK          (0x07u)
     #define `$INSTANCE_NAME`_DELAY_TEST         (500)
+
+    #define `$INSTANCE_NAME`_R_Toggle() `$INSTANCE_NAME`_R_Write(!`$INSTANCE_NAME`_R_Read())
+    #define `$INSTANCE_NAME`_G_Toggle() `$INSTANCE_NAME`_G_Write(!`$INSTANCE_NAME`_G_Read())
+    #define `$INSTANCE_NAME`_B_Toggle() `$INSTANCE_NAME`_B_Write(!`$INSTANCE_NAME`_B_Read())
+    
    
 #endif /* `$INSTANCE_NAME`_H */
 /* [] END OF FILE */

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CyXmlSerializer>
+<!--This file is machine generated and read. It is not intended to be edited by hand.-->
+<!--Due to this, there is no schema for this file.-->
+<CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21 type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWrkspcCustomData" version="4">
+<CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997 type_name="CyDesigner.Common.Base.CyCustomData" version="2">
+<userData>
+<dataGuid v="1b906a0f-a7b6-4e4d-a428-82f98b53cb35">
+<CyGuid_1b906a0f-a7b6-4e4d-a428-82f98b53cb35 type_name="CyDesigner.Common.ProjMgmt.GUI.CyExplorerWindow+CyExplorerWindowState" version="3" SelectedTab="Source">
+<TreeKeys>
+<v>Source</v>
+<v>Components</v>
+<v>Output</v>
+</TreeKeys>
+<TreeStates>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="micaComponents\libMica\Source Files">
+<ExpandedNodeIds>
+<v>micaComponents</v>
+<v>micaComponents\libMica</v>
+<v>micaComponents\libMica\Header Files</v>
+<v>micaComponents\libMica\Source Files</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>micaComponents</v>
+<v>micaComponents\libMica</v>
+<v>micaComponents\libMica\Header Files</v>
+<v>micaComponents\libMica\Source Files</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="micaComponents\libMica\I2C_API_v1_0">
+<ExpandedNodeIds>
+<v>micaComponents</v>
+<v>micaComponents\libMica</v>
+<v>micaComponents\libMica\BMX055_v1_0\API</v>
+<v>micaComponents\libMica\BMX055_v1_0\API\BMX055.c</v>
+<v>micaComponents\libMica\BMX055_v1_0\API\BMX055.h</v>
+<v>micaComponents\libMica\BMX055_v1_0\BMX055_datasheet_v1.0_r0.pdf</v>
+<v>micaComponents\libMica\BMX055_v1_0\BMX055_v1_0.cysym</v>
+<v>micaComponents\libMica\I2C_API_v1_0</v>
+<v>micaComponents\libMica\I2C_API_v1_0\PSoC4</v>
+<v>micaComponents\libMica\I2C_API_v1_0\PSoC4\API</v>
+<v>micaComponents\libMica\I2C_API_v1_0\PSoC4\API\I2C_API.c</v>
+<v>micaComponents\libMica\I2C_API_v1_0\PSoC4\API\I2C_API.h</v>
+<v>micaComponents\libMica\I2C_API_v1_0\I2C_API_datasheet_v1.0_r0.pdf</v>
+<v>micaComponents\libMica\I2C_API_v1_0\I2C_API_v1_0.cysym</v>
+<v>micaComponents\libMica\LED_RGB_pins_v1_0\API</v>
+<v>micaComponents\libMica\LED_RGB_pins_v1_0\API\LED_RGB_pins.c</v>
+<v>micaComponents\libMica\LED_RGB_pins_v1_0\API\LED_RGB_pins.h</v>
+<v>micaComponents\libMica\LED_RGB_pins_v1_0\PSoC4</v>
+<v>micaComponents\libMica\LED_RGB_pins_v1_0\PSoC4\LED_RGB_pins_v1_0.cysch</v>
+<v>micaComponents\libMica\LED_RGB_pins_v1_0\LED_RGB_datasheet_v1.0_r2.pdf</v>
+<v>micaComponents\libMica\LED_RGB_pins_v1_0\LED_RGB_pins_v1_0.cysym</v>
+<v>micaComponents\libMica\MICA_COMMON_v1_0</v>
+<v>micaComponents\libMica\MICA_COMMON_v1_0\API</v>
+<v>micaComponents\libMica\MICA_COMMON_v1_0\MICA_COMMON_datasheet_v1.0_r0.pdf</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\API</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\API\OTA_Updates.c</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\API\OTA_Updates.h</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\OTA_Updates_datasheet_v1.0_r0.pdf</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\OTA_Updates_v1_0.cysym</v>
+<v>micaComponents\libMica\SFLASH_v1_0</v>
+<v>micaComponents\libMica\SFLASH_v1_0\PSoC4</v>
+<v>micaComponents\libMica\SFLASH_v1_0\PSoC4\API</v>
+<v>micaComponents\libMica\SFLASH_v1_0\SFLASH_datasheet_v1.0_r0.pdf</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>micaComponents</v>
+<v>micaComponents\libMica</v>
+<v>micaComponents\libMica\BMX055_v1_0</v>
+<v>micaComponents\libMica\I2C_API_v1_0</v>
+<v>micaComponents\libMica\I2C_API_v1_0\PSoC4</v>
+<v>micaComponents\libMica\I2C_API_v1_0\PSoC4\API</v>
+<v>micaComponents\libMica\I2C_API_v1_0\PSoC4\API\I2C_API.c</v>
+<v>micaComponents\libMica\I2C_API_v1_0\PSoC4\API\I2C_API.h</v>
+<v>micaComponents\libMica\I2C_API_v1_0\I2C_API_datasheet_v1.0_r0.pdf</v>
+<v>micaComponents\libMica\I2C_API_v1_0\I2C_API_v1_0.cysym</v>
+<v>micaComponents\libMica\LED_RGB_pins_v1_0</v>
+<v>micaComponents\libMica\MICA_COMMON_v1_0</v>
+<v>micaComponents\libMica\MICA_COMMON_v1_0\API</v>
+<v>micaComponents\libMica\MICA_COMMON_v1_0\API\micaCommon.c</v>
+<v>micaComponents\libMica\MICA_COMMON_v1_0\API\micaCommon.h</v>
+<v>micaComponents\libMica\MICA_COMMON_v1_0\MICA Common.cymacro</v>
+<v>micaComponents\libMica\MICA_COMMON_v1_0\MICA_COMMON_datasheet_v1.0_r0.pdf</v>
+<v>micaComponents\libMica\MICA_COMMON_v1_0\MICA_COMMON_v1_0.cysym</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\API</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\API\OTA_Updates.c</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\API\OTA_Updates.h</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\OTA Updates.cymacro</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\OTA_Updates_datasheet_v1.0_r0.pdf</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\OTA_Updates_v1_0.cysym</v>
+<v>micaComponents\libMica\SFLASH_v1_0</v>
+<v>micaComponents\libMica\SFLASH_v1_0\PSoC4</v>
+<v>micaComponents\libMica\SFLASH_v1_0\PSoC4\API</v>
+<v>micaComponents\libMica\SFLASH_v1_0\PSoC4\API\sflash.c</v>
+<v>micaComponents\libMica\SFLASH_v1_0\PSoC4\API\sflash.h</v>
+<v>micaComponents\libMica\SFLASH_v1_0\PSoC4\Supervisory Flash.cymacro</v>
+<v>micaComponents\libMica\SFLASH_v1_0\SFLASH_datasheet_v1.0_r0.pdf</v>
+<v>micaComponents\libMica\SFLASH_v1_0\SFLASH_v1_0.cysym</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="micaComponents\libMica\CortexM3\ARM_GCC_541\Debug\libMica.a">
+<ExpandedNodeIds>
+<v>micaComponents</v>
+<v>micaComponents\libMica</v>
+<v>micaComponents\libMica\CortexM0</v>
+<v>micaComponents\libMica\CortexM0\ARM_GCC_541</v>
+<v>micaComponents\libMica\CortexM0\ARM_GCC_541\Debug</v>
+<v>micaComponents\libMica\CortexM0\ARM_GCC_541\Debug\libMica.a</v>
+<v>micaComponents\libMica\CortexM0\ARM_GCC_541\Release</v>
+<v>micaComponents\libMica\CortexM0\ARM_GCC_541\Release\libMica.a</v>
+<v>micaComponents\libMica\CortexM0p</v>
+<v>micaComponents\libMica\CortexM0p\ARM_GCC_541</v>
+<v>micaComponents\libMica\CortexM0p\ARM_GCC_541\Debug</v>
+<v>micaComponents\libMica\CortexM0p\ARM_GCC_541\Debug\libMica.a</v>
+<v>micaComponents\libMica\CortexM0p\ARM_GCC_541\Release</v>
+<v>micaComponents\libMica\CortexM0p\ARM_GCC_541\Release\libMica.a</v>
+<v>micaComponents\libMica\CortexM3</v>
+<v>micaComponents\libMica\CortexM3\ARM_GCC_541</v>
+<v>micaComponents\libMica\CortexM3\ARM_GCC_541\Debug</v>
+<v>micaComponents\libMica\CortexM3\ARM_GCC_541\Debug\libMica.a</v>
+<v>micaComponents\libMica\CortexM3\ARM_GCC_541\Release</v>
+<v>micaComponents\libMica\CortexM3\ARM_GCC_541\Release\libMica.a</v>
+<v>micaComponents\libMica\CortexM4</v>
+<v>micaComponents\libMica\CortexM4\ARM_GCC_541</v>
+<v>micaComponents\libMica\CortexM4\ARM_GCC_541\Debug</v>
+<v>micaComponents\libMica\CortexM4\ARM_GCC_541\Debug\libMica.a</v>
+<v>micaComponents\libMica\CortexM4\ARM_GCC_541\Release</v>
+<v>micaComponents\libMica\CortexM4\ARM_GCC_541\Release\libMica.a</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>micaComponents</v>
+<v>micaComponents\libMica</v>
+<v>micaComponents\libMica\CortexM0</v>
+<v>micaComponents\libMica\CortexM0\ARM_GCC_541</v>
+<v>micaComponents\libMica\CortexM0\ARM_GCC_541\Debug</v>
+<v>micaComponents\libMica\CortexM0\ARM_GCC_541\Debug\libMica.a</v>
+<v>micaComponents\libMica\CortexM0\ARM_GCC_541\Release</v>
+<v>micaComponents\libMica\CortexM0\ARM_GCC_541\Release\libMica.a</v>
+<v>micaComponents\libMica\CortexM0p</v>
+<v>micaComponents\libMica\CortexM0p\ARM_GCC_541</v>
+<v>micaComponents\libMica\CortexM0p\ARM_GCC_541\Debug</v>
+<v>micaComponents\libMica\CortexM0p\ARM_GCC_541\Debug\libMica.a</v>
+<v>micaComponents\libMica\CortexM0p\ARM_GCC_541\Release</v>
+<v>micaComponents\libMica\CortexM0p\ARM_GCC_541\Release\libMica.a</v>
+<v>micaComponents\libMica\CortexM3</v>
+<v>micaComponents\libMica\CortexM3\ARM_GCC_541</v>
+<v>micaComponents\libMica\CortexM3\ARM_GCC_541\Debug</v>
+<v>micaComponents\libMica\CortexM3\ARM_GCC_541\Debug\libMica.a</v>
+<v>micaComponents\libMica\CortexM3\ARM_GCC_541\Release</v>
+<v>micaComponents\libMica\CortexM3\ARM_GCC_541\Release\libMica.a</v>
+<v>micaComponents\libMica\CortexM4</v>
+<v>micaComponents\libMica\CortexM4\ARM_GCC_541</v>
+<v>micaComponents\libMica\CortexM4\ARM_GCC_541\Debug</v>
+<v>micaComponents\libMica\CortexM4\ARM_GCC_541\Debug\libMica.a</v>
+<v>micaComponents\libMica\CortexM4\ARM_GCC_541\Release</v>
+<v>micaComponents\libMica\CortexM4\ARM_GCC_541\Release\libMica.a</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+</TreeStates>
+<TreeKeysV2>
+<v>Datasheet</v>
+</TreeKeysV2>
+<TreeStatesV2>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>micaComponents</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>micaComponents</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+</TreeStatesV2>
+</CyGuid_1b906a0f-a7b6-4e4d-a428-82f98b53cb35>
+</dataGuid>
+<dataGuid v="6c335137-fa19-46ce-bc2d-2fbeb6d5f2a2">
+<CyGuid_70084457-cd6a-4593-9ed0-7f6eeb432dc2 type_name="CyDesigner.Common.ProjMgmt.GUI.CyDependenciesCustomData" version="1">
+<dictName v=".\libMica.cylib\libMica.cyprj">
+<listName />
+</dictName>
+</CyGuid_70084457-cd6a-4593-9ed0-7f6eeb432dc2>
+</dataGuid>
+</userData>
+</CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997>
+<Unloaded />
+<OpenDocs>
+<name v=".\libMica.cylib\BMX055_v1_0\API\BMX055.c" />
+<name v=".\libMica.cylib\BMX055_v1_0\API\BMX055.h" />
+<name v=".\libMica.cylib\BMX055_v1_0\BMX055_v1_0.cysym" />
+<name v=".\libMica.cylib\I2C_API_v1_0\PSoC4\API\I2C_API.h" />
+<name v=".\libMica.cylib\SFLASH_v1_0\PSoC4\API\sflash.h" />
+<name v=".\libMica.cylib\SFLASH_v1_0\PSoC4\API\sflash.c" />
+<name v=".\libMica.cylib\OTA_Updates_v1_0\PSoC4\API\OTA_Updates.h" />
+<name v=".\libMica.cylib\OTA_Updates_v1_0\PSoC4\API\OTA_Updates.c" />
+<name v=".\libMica.cylib\MICA_COMMON_v1_0\API\micaCommon.h" />
+<name v=".\libMica.cylib\I2C_API_v1_0\PSoC4\API\I2C_API.c" />
+</OpenDocs>
+<OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
+
+  Actipro Docking/MDI for WinForms
+  Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
+  http://www.actiprosoftware.com
+
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1620, 711" SelectedTabbedMdiWindow="1df635ff-4e40-4ce5-9e08-ca34102734d0"><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\BMX055_v1_0\API\BMX055.c" Guid="9d79730b-162d-4c09-80e6-7c71b7d15636" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\BMX055_v1_0\API\BMX055.h" Guid="7d68abad-f4d3-4239-a16d-86d5d2b9ca82" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\BMX055_v1_0\BMX055_v1_0.cysym" Guid="a0f54659-fb8a-49f8-bfc7-1c0ddcf5803e" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\I2C_API_v1_0\PSoC4\API\I2C_API.h" Guid="07342394-3a4a-45dd-beef-ff175140064c" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\SFLASH_v1_0\PSoC4\API\sflash.h" Guid="3f281758-e4e5-43ac-810f-d7740900a66d" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\SFLASH_v1_0\PSoC4\API\sflash.c" Guid="d54994cc-e638-45e0-a1fa-ef584d65e927" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\OTA_Updates_v1_0\PSoC4\API\OTA_Updates.h" Guid="4a31dcb1-367b-4d03-8e87-86ac74ee738d" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\OTA_Updates_v1_0\PSoC4\API\OTA_Updates.c" Guid="821520fa-b920-47cc-981d-361fa5b3c97a" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\MICA_COMMON_v1_0\API\micaCommon.h" Guid="a19458d7-e4a9-4239-a7c9-0bde40fd3660" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\I2C_API_v1_0\PSoC4\API\I2C_API.c" Guid="1df635ff-4e40-4ce5-9e08-ca34102734d0" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+<config v="Debug" />
+<AutoUpdate v="true" />
+</CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>
+</CyXmlSerializer>

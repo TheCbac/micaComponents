@@ -26,22 +26,17 @@
     /***************************************
     * Function declarations 
     ***************************************/
+    uint8  `$INSTANCE_NAME`_Write(uint8 state);
     uint8 `$INSTANCE_NAME`_R_Write(bool state);
     uint8 `$INSTANCE_NAME`_G_Write(bool state);
     uint8 `$INSTANCE_NAME`_B_Write(bool state);
 
+    uint8  `$INSTANCE_NAME`_Read(void);
     bool   `$INSTANCE_NAME`_R_Read(void);
     bool   `$INSTANCE_NAME`_G_Read(void);
     bool   `$INSTANCE_NAME`_B_Read(void);
 
-    
-    bool   `$INSTANCE_NAME`_G_Toggle(void);
-    bool   `$INSTANCE_NAME`_B_Toggle(void);
-    
-    uint8  `$INSTANCE_NAME`_Write(uint8 state);
-    uint8  `$INSTANCE_NAME`_Read(void);
     void   `$INSTANCE_NAME`_Test(uint8 runs);
-
     void   `$INSTANCE_NAME`_Sleep(void);
     void   `$INSTANCE_NAME`_Wakeup(void);
     /***************************************

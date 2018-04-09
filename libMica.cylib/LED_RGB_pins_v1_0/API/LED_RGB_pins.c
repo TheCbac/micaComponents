@@ -47,6 +47,84 @@ uint8 `$INSTANCE_NAME`_Write(uint8 state) {
 }
 
 /*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_R_Write()
+********************************************************************************
+* Summary:
+*   Sets the state of the Red LED to the state passed in, Regardless of the 
+*   polarity of the LEDs. I.E. `$INSTANCE_NAME`_R_Write(true) will always
+*   turn on the LED. 
+*
+* Parameters:
+*   bool State - The new state to write.
+*
+* Return:
+*   The value stored in the control register
+*
+*******************************************************************************/
+uint8 `$INSTANCE_NAME`_R_Write(bool state) {
+    /* Read the Current state */
+    uint8 reg = `$INSTANCE_NAME`_Control_reg_Read();
+    /* Set the bit to the new state */
+    SET_BIT_STATE(reg, `$INSTANCE_NAME`_R_PIN_SHIFT, state ? `$INSTANCE_NAME`_ON_VAL: `$INSTANCE_NAME`_OFF_VAL);
+    /* Write the bits */
+    `$INSTANCE_NAME`_Control_reg_Write(reg);
+    /* Return the current state */
+    return reg;
+}
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_G_Write()
+********************************************************************************
+* Summary:
+*   Sets the state of the Red LED to the state passed in, Regardless of the 
+*   polarity of the LEDs. I.E. `$INSTANCE_NAME`_G_Write(true) will always
+*   turn on the LED. 
+*
+* Parameters:
+*   bool State - The new state to write.
+*
+* Return:
+*   The value stored in the control register
+*
+*******************************************************************************/
+uint8 `$INSTANCE_NAME`_G_Write(bool state) {
+    /* Read the Current state */
+    uint8 reg = `$INSTANCE_NAME`_Control_reg_Read();
+    /* Set the bit to the new state */
+    SET_BIT_STATE(reg, `$INSTANCE_NAME`_G_PIN_SHIFT, state ? `$INSTANCE_NAME`_ON_VAL: `$INSTANCE_NAME`_OFF_VAL);
+    /* Write the bits */
+    `$INSTANCE_NAME`_Control_reg_Write(reg);
+    /* Return the current state */
+    return reg;
+}
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_B_Write()
+********************************************************************************
+* Summary:
+*   Sets the state of the Red LED to the state passed in, Regardless of the 
+*   polarity of the LEDs. I.E. `$INSTANCE_NAME`_B_Write(true) will always
+*   turn on the LED. 
+*
+* Parameters:
+*   bool State - The new state to write.
+*
+* Return:
+*   The value stored in the control register
+*
+*******************************************************************************/
+uint8 `$INSTANCE_NAME`_B_Write(bool state) {
+    /* Read the Current state */
+    uint8 reg = `$INSTANCE_NAME`_Control_reg_Read();
+    /* Set the bit to the new state */
+    SET_BIT_STATE(reg, `$INSTANCE_NAME`_B_PIN_SHIFT, state ? `$INSTANCE_NAME`_ACTIVE_VAL : !`$INSTANCE_NAME`_ACTIVE_VAL);
+    /* Write the bits */
+    `$INSTANCE_NAME`_Control_reg_Write(reg);
+    /* Return the current state */
+    return reg;
+}
+
+/*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_Read()
 ********************************************************************************
 * Summary:
@@ -62,6 +140,73 @@ uint8 `$INSTANCE_NAME`_Write(uint8 state) {
 uint8 `$INSTANCE_NAME`_Read(void){
     return `$INSTANCE_NAME`_Control_reg_Read() & `$INSTANCE_NAME`_CTRL_MASK;
 }
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_R_Read()
+********************************************************************************
+* Summary:
+*   Return the current state of the Red LED
+*
+* Parameters:
+*   None
+*
+* Return:
+*   State of the Red LED. True if on, False if off, regardless of LED polarity
+*
+*******************************************************************************/
+bool `$INSTANCE_NAME`_R_Read(void) {
+    /* Read the Current state */
+    uint8 val = `$INSTANCE_NAME`_Control_reg_Read();
+    /* Mask with the bit value */
+    val &= `$INSTANCE_NAME`_ON_RED;
+    /* Take into effect the polarity */
+    return (`$INSTANCE_NAME`_ACTIVE_VAL ? (val) : !val);
+}
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_G_Read()
+********************************************************************************
+* Summary:
+*   Return the current state of the Green LED
+*
+* Parameters:
+*   None
+*
+* Return:
+*   State of the Green LED. True if on, False if off, regardless of LED polarity
+*
+*******************************************************************************/
+bool `$INSTANCE_NAME`_G_Read(void) {
+    /* Read the Current state */
+    uint8 val = `$INSTANCE_NAME`_Control_reg_Read();
+    /* Mask with the bit value */
+    val &= `$INSTANCE_NAME`_ON_GREEN;
+    /* Take into effect the polarity */
+    return (`$INSTANCE_NAME`_ACTIVE_VAL ? (val) : !val);
+}
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_B_Read()
+********************************************************************************
+* Summary:
+*   Return the current state of the Blue LED
+*
+* Parameters:
+*   None
+*
+* Return:
+*   State of the Blue LED. True if on, False if off, regardless of LED polarity
+*
+*******************************************************************************/
+bool `$INSTANCE_NAME`_B_Read(void) {
+    /* Read the Current state */
+    uint8 val = `$INSTANCE_NAME`_Control_reg_Read();
+    /* Mask with the bit value */
+    val &= `$INSTANCE_NAME`_ON_BLUE;
+    /* Take into effect the polarity */
+    return (`$INSTANCE_NAME`_ACTIVE_VAL ? (val) : !val);
+}
+
 
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_Sleep()
@@ -99,143 +244,8 @@ void `$INSTANCE_NAME`_Wakeup(void) {
     `$INSTANCE_NAME`_Control_reg_Wakeup();
 }
 
-/*******************************************************************************
-* Function Name: `$INSTANCE_NAME`_R_Write()
-********************************************************************************
-* Summary:
-*   Sets the state of the Red LED. 
-*
-* Parameters:
-*   uint8 State - The new state to write
-*
-* Return:
-*   None
-*
-*******************************************************************************/
-uint8 `$INSTANCE_NAME`_R_Write(bool state) {
-    /* Read the Current state */
-    uint8 reg = `$INSTANCE_NAME`_Control_reg_Read();
-    /* Set the bit to the new state */
-    SET_BIT_STATE(reg, `$INSTANCE_NAME`_R_PIN_SHIFT, state ? `$INSTANCE_NAME`_ON_VAL: `$INSTANCE_NAME`_OFF_VAL);
-    /* Write the bits */
-    `$INSTANCE_NAME`_Control_reg_Write(reg);
-    /* Return the current state */
-    return reg;
-}
 
-/*******************************************************************************
-* Function Name: `$INSTANCE_NAME`_G_Write()
-********************************************************************************
-* Summary:
-*   Sets the state of the Red LED 
-*
-* Parameters:
-*   uint8 State - The new state to write
-*
-* Return:
-*   None
-*
-*******************************************************************************/
-uint8 `$INSTANCE_NAME`_G_Write(bool state) {
-    /* Read the Current state */
-    uint8 reg = `$INSTANCE_NAME`_Control_reg_Read();
-    /* Set the bit to the new state */
-    SET_BIT_STATE(reg, `$INSTANCE_NAME`_G_PIN_SHIFT, state ? `$INSTANCE_NAME`_ON_VAL: `$INSTANCE_NAME`_OFF_VAL);
-    /* Write the bits */
-    `$INSTANCE_NAME`_Control_reg_Write(reg);
-    /* Return the current state */
-    return reg;
-}
 
-/*******************************************************************************
-* Function Name: `$INSTANCE_NAME`_B_Write()
-********************************************************************************
-* Summary:
-*   Sets the state of the Red LED 
-*
-* Parameters:
-*   uint8 State - The new state to write, regardless of polarity
-*
-* Return:
-*   None
-*
-*******************************************************************************/
-uint8 `$INSTANCE_NAME`_B_Write(bool state) {
-    /* Read the Current state */
-    uint8 reg = `$INSTANCE_NAME`_Control_reg_Read();
-    /* Set the bit to the new state */
-    SET_BIT_STATE(reg, `$INSTANCE_NAME`_B_PIN_SHIFT, state ? `$INSTANCE_NAME`_ACTIVE_VAL : !`$INSTANCE_NAME`_ACTIVE_VAL);
-    /* Write the bits */
-    `$INSTANCE_NAME`_Control_reg_Write(reg);
-    /* Return the current state */
-    return reg;
-}
-
-/*******************************************************************************
-* Function Name: `$INSTANCE_NAME`_R_Read()
-********************************************************************************
-* Summary:
-*   Return the current state of the Red LED
-*
-* Parameters:
-*   None
-*
-* Return:
-*   State of the Blue LED. True if on, False if off, regardless of activeLow
-*
-*******************************************************************************/
-bool `$INSTANCE_NAME`_R_Read(void) {
-    /* Read the Current state */
-    uint8 val = `$INSTANCE_NAME`_Control_reg_Read();
-    /* Mask with the bit value */
-    val &= `$INSTANCE_NAME`_ON_RED;
-    /* Take into effect the polarity */
-    return (`$INSTANCE_NAME`_ACTIVE_VAL ? (val) : !val);
-}
-
-/*******************************************************************************
-* Function Name: `$INSTANCE_NAME`_G_Read()
-********************************************************************************
-* Summary:
-*   Return the current state of the Green LED
-*
-* Parameters:
-*   None
-*
-* Return:
-*   State of the Green LED. True if on, False if off, regardless of activeLow
-*
-*******************************************************************************/
-bool `$INSTANCE_NAME`_G_Read(void) {
-    /* Read the Current state */
-    uint8 val = `$INSTANCE_NAME`_Control_reg_Read();
-    /* Mask with the bit value */
-    val &= `$INSTANCE_NAME`_ON_GREEN;
-    /* Take into effect the polarity */
-    return (`$INSTANCE_NAME`_ACTIVE_VAL ? (val) : !val);
-}
-
-/*******************************************************************************
-* Function Name: `$INSTANCE_NAME`_B_Read()
-********************************************************************************
-* Summary:
-*   Return the current state of the Blue LED
-*
-* Parameters:
-*   None
-*
-* Return:
-*   State of the Blue LED. True if on, False if off, regardless of activeLow
-*
-*******************************************************************************/
-bool `$INSTANCE_NAME`_B_Read(void) {
-    /* Read the Current state */
-    uint8 val = `$INSTANCE_NAME`_Control_reg_Read();
-    /* Mask with the bit value */
-    val &= `$INSTANCE_NAME`_ON_BLUE;
-    /* Take into effect the polarity */
-    return (`$INSTANCE_NAME`_ACTIVE_VAL ? (val) : !val);
-}
 
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_Test()

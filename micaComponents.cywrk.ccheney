@@ -167,16 +167,7 @@
 </CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997>
 <Unloaded />
 <OpenDocs>
-<name v=".\libMica.cylib\BMX055_v1_0\API\BMX055.c" />
-<name v=".\libMica.cylib\BMX055_v1_0\API\BMX055.h" />
-<name v=".\libMica.cylib\BMX055_v1_0\BMX055_v1_0.cysym" />
-<name v=".\libMica.cylib\I2C_API_v1_0\PSoC4\API\I2C_API.h" />
-<name v=".\libMica.cylib\SFLASH_v1_0\PSoC4\API\sflash.h" />
-<name v=".\libMica.cylib\SFLASH_v1_0\PSoC4\API\sflash.c" />
-<name v=".\libMica.cylib\OTA_Updates_v1_0\PSoC4\API\OTA_Updates.h" />
-<name v=".\libMica.cylib\OTA_Updates_v1_0\PSoC4\API\OTA_Updates.c" />
-<name v=".\libMica.cylib\MICA_COMMON_v1_0\API\micaCommon.h" />
-<name v=".\libMica.cylib\I2C_API_v1_0\PSoC4\API\I2C_API.c" />
+<name v=".\libMica.cylib\LED_RGB_pins_v1_0\API\LED_RGB_pins.c" />
 </OpenDocs>
 <OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
 
@@ -184,7 +175,7 @@
   Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
   http://www.actiprosoftware.com
 
---><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1620, 711" SelectedTabbedMdiWindow="1df635ff-4e40-4ce5-9e08-ca34102734d0"><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\BMX055_v1_0\API\BMX055.c" Guid="9d79730b-162d-4c09-80e6-7c71b7d15636" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\BMX055_v1_0\API\BMX055.h" Guid="7d68abad-f4d3-4239-a16d-86d5d2b9ca82" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\BMX055_v1_0\BMX055_v1_0.cysym" Guid="a0f54659-fb8a-49f8-bfc7-1c0ddcf5803e" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\I2C_API_v1_0\PSoC4\API\I2C_API.h" Guid="07342394-3a4a-45dd-beef-ff175140064c" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\SFLASH_v1_0\PSoC4\API\sflash.h" Guid="3f281758-e4e5-43ac-810f-d7740900a66d" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\SFLASH_v1_0\PSoC4\API\sflash.c" Guid="d54994cc-e638-45e0-a1fa-ef584d65e927" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\OTA_Updates_v1_0\PSoC4\API\OTA_Updates.h" Guid="4a31dcb1-367b-4d03-8e87-86ac74ee738d" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\OTA_Updates_v1_0\PSoC4\API\OTA_Updates.c" Guid="821520fa-b920-47cc-981d-361fa5b3c97a" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\MICA_COMMON_v1_0\API\micaCommon.h" Guid="a19458d7-e4a9-4239-a7c9-0bde40fd3660" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\I2C_API_v1_0\PSoC4\API\I2C_API.c" Guid="1df635ff-4e40-4ce5-9e08-ca34102734d0" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1620, 711" SelectedTabbedMdiWindow="0cbf5ac7-4489-4f7c-a22a-c82e9696b047"><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\LED_RGB_pins_v1_0\API\LED_RGB_pins.c" Guid="0cbf5ac7-4489-4f7c-a22a-c82e9696b047" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
 <config v="Debug" />
 <AutoUpdate v="true" />
 </CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>

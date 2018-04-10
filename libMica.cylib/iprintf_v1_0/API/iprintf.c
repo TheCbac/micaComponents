@@ -1,5 +1,5 @@
 /***************************************************************************//**
-* \file iprintf.c
+* \file `$INSTANCE_NAME`.c
 * \version 0.1.0
 *
 * \brief
@@ -12,9 +12,8 @@
 * \copyright
 * Copyright 2017, MICA. All rights reserved.
 *******************************************************************************/
-#include "cytypes.h"
-#include "`$INSTANCE_NAME`_iprintf.h"
-#include "`$commName`.h"
+#include "`$INSTANCE_NAME`.h"
+#include "`$includeFile`.h"
 
 /*******************************************************************************
 * Function Name: iputc()
@@ -31,7 +30,7 @@
 static inline void iputc(char8 ch)
 {
 	/* Function supplied as parameter */	
-	`$commFunction`(ch);
+	`$transportFunction`(ch);
 }
 
 /*******************************************************************************
@@ -64,83 +63,79 @@ static inline uint8* change(uint32 Index)
 * None
  *******************************************************************************/
 void `$INSTANCE_NAME`(char8 *pszFmt,...){
-    #if (`$printActive`)
-        uint8 *pszVal;
-        uint32 iVal, xVal, i = 0, buffer[12], index = 1;
-        uint8 cVal;
-        uint32 *pArg;
-        pArg =(uint32 *)&pszFmt;
+    uint8 *pszVal;
+    uint32 iVal, xVal, i = 0, buffer[12], index = 1;
+    uint8 cVal;
+    uint32 *pArg;
+    pArg =(uint32 *)&pszFmt;
 
-        while(*pszFmt)
+    while(*pszFmt)
+    {
+        if('%' != *pszFmt)
         {
-            if('%' != *pszFmt)
+            iputc(*pszFmt);
+            pszFmt++;
+            continue;
+        }
+        pszFmt++;
+
+        if(*pszFmt == 's')
+        {
+            pszVal = (uint8*)pArg[index++];
+            for(; *pszVal != '\0'; pszVal++)
+                iputc(*pszVal);
+            pszFmt++;
+            continue;
+        }
+        if(*pszFmt == 'd')
+        {
+            iVal = pArg[index++];
+            i = 0;
+            do{
+                buffer[i++] = iVal % 10;
+                iVal /= 10;
+            }while(iVal);
+            while(i > 0)
             {
-                iputc(*pszFmt);
-                pszFmt++;
-                continue;
+                i--;
+                iputc(*change(buffer[i]));
             }
             pszFmt++;
-
-            if(*pszFmt == 's')
-            {
-                pszVal = (uint8*)pArg[index++];
-                for(; *pszVal != '\0'; pszVal++)
-                    iputc(*pszVal);
-                pszFmt++;
-                continue;
-            }
-            if(*pszFmt == 'd')
-            {
-                iVal = pArg[index++];
-                i = 0;
-                do{
-                    buffer[i++] = iVal % 10;
-                    iVal /= 10;
-                }while(iVal);
-                while(i > 0)
-                {
-                    i--;
-                    iputc(*change(buffer[i]));
-                }
-                pszFmt++;
-                continue;
-            }
-            if(*pszFmt == 'c')
-            {
-                cVal = (uint8)pArg[index++];
-                iputc(cVal);
-                pszFmt++;
-                continue;
-            }
-            if(*pszFmt == 'x')
-            {
-                xVal = pArg[index++];
-                i = 0;
-                do{
-                    buffer[i++] = xVal % 16;
-                    xVal /= 16;
-                }while(xVal);
-                if(i%2!=0)
-                    buffer[i++]=0;
-                if(i<2)
-                    buffer[i++]=0;
-
-                while(i > 0)
-                {
-                    i--;
-                    iputc(*change(buffer[i]));
-                }
-                pszFmt++;
-                continue;
-            }
-            if(pszFmt == '\0')
-            {
-                break;
-            }
+            continue;
         }
-    #else
-        (void) pszFmt;
-    #endif /* `$printActive` */
+        if(*pszFmt == 'c')
+        {
+            cVal = (uint8)pArg[index++];
+            iputc(cVal);
+            pszFmt++;
+            continue;
+        }
+        if(*pszFmt == 'x')
+        {
+            xVal = pArg[index++];
+            i = 0;
+            do{
+                buffer[i++] = xVal % 16;
+                xVal /= 16;
+            }while(xVal);
+            if(i%2!=0)
+                buffer[i++]=0;
+            if(i<2)
+                buffer[i++]=0;
+
+            while(i > 0)
+            {
+                i--;
+                iputc(*change(buffer[i]));
+            }
+            pszFmt++;
+            continue;
+        }
+        if(pszFmt == '\0')
+        {
+            break;
+        }
+    }
 }
 
 /* [] END OF FILE */

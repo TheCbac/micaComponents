@@ -76,70 +76,89 @@
 </CyGuid_b0374e30-ce3a-47f2-ad85-821643292c68>
 </dataGuid>
 <dataGuid v="718b6b01-68ba-4a17-b632-d38dc61ebb3b">
-<CyGuid_718b6b01-68ba-4a17-b632-d38dc61ebb3b type_name="CyDesigner.Gde.Schematic.Symbolcatalog.CyComponentCatalogControl+CyCompCatalogData" version="1" tab="MICA">
+<CyGuid_718b6b01-68ba-4a17-b632-d38dc61ebb3b type_name="CyDesigner.Gde.Schematic.Symbolcatalog.CyComponentCatalogControl+CyCompCatalogData" version="1" tab="Cypress">
 <tree_states_tab_names>
 <v>Cypress</v>
+<v>Default</v>
 <v>MICA</v>
 <v>Off-Chip</v>
 </tree_states_tab_names>
 <tree_states>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="Cypress Component Catalog">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="Cypress Component Catalog\Digital">
 <ExpandedNodeIds>
 <v>Cypress Component Catalog</v>
+<v>Cypress Component Catalog\Analog</v>
+<v>Cypress Component Catalog\Analog\Analog MUX</v>
 <v>Cypress Component Catalog\Analog\Analog MUX\Analog Mux [v1.80]</v>
 <v>Cypress Component Catalog\Analog\Analog MUX\Analog Mux Sequencer [v1.80]</v>
 <v>Cypress Component Catalog\Analog\Manual Routing\Net Tie [v1.50]</v>
 <v>Cypress Component Catalog\Analog\Manual Routing\Terminal Reserve [v1.50]</v>
-<v>Cypress Component Catalog\Communications</v>
-<v>Cypress Component Catalog\Communications\I2C</v>
+<v>Cypress Component Catalog\Digital</v>
+<v>Cypress Component Catalog\Ports and Pins</v>
+<v>Cypress Component Catalog\System</v>
 </ExpandedNodeIds>
 <VisibleNodeIds>
 <v>Cypress Component Catalog</v>
 <v>Cypress Component Catalog\Analog</v>
+<v>Cypress Component Catalog\Analog\ADC</v>
+<v>Cypress Component Catalog\Analog\Amplifiers</v>
+<v>Cypress Component Catalog\Analog\Analog MUX</v>
+<v>Cypress Component Catalog\Analog\Analog MUX\Analog Hardware Mux (GPIO) [v1.50]</v>
+<v>Cypress Component Catalog\Analog\Analog MUX\Analog Mux [v1.80]</v>
+<v>Cypress Component Catalog\Analog\Analog MUX\Analog Mux Sequencer [v1.80]</v>
+<v>Cypress Component Catalog\Analog\Analog MUX\Analog Virtual Mux [v1.0]</v>
+<v>Cypress Component Catalog\Analog\Comparators</v>
+<v>Cypress Component Catalog\Analog\DAC</v>
+<v>Cypress Component Catalog\Analog\Manual Routing</v>
 <v>Cypress Component Catalog\Communications</v>
-<v>Cypress Component Catalog\Communications\Bluetooth Low Energy (BLE) [v3.50]</v>
-<v>Cypress Component Catalog\Communications\CAN Controller Macro [v3.0]</v>
-<v>Cypress Component Catalog\Communications\I2C</v>
-<v>Cypress Component Catalog\Communications\I2C\EZI2C Slave (SCB mode) [v4.0]</v>
-<v>Cypress Component Catalog\Communications\I2C\I2C (SCB mode) [v4.0]</v>
-<v>Cypress Component Catalog\Communications\I2S</v>
-<v>Cypress Component Catalog\Communications\LIN [v4.0]</v>
-<v>Cypress Component Catalog\Communications\SENT TX [v1.0]</v>
-<v>Cypress Component Catalog\Communications\Serial Communication Block (SCB) [v4.0]</v>
-<v>Cypress Component Catalog\Communications\SMBus/PMBus Slave</v>
-<v>Cypress Component Catalog\Communications\Software Transmit UART [v1.50]</v>
-<v>Cypress Component Catalog\Communications\SPI</v>
-<v>Cypress Component Catalog\Communications\UART (SCB mode) [v4.0]</v>
-<v>Cypress Component Catalog\Communications\UART [v2.50]</v>
-<v>Cypress Component Catalog\Communications\USB</v>
 <v>Cypress Component Catalog\Digital</v>
+<v>Cypress Component Catalog\Digital\Functions</v>
+<v>Cypress Component Catalog\Digital\Logic</v>
+<v>Cypress Component Catalog\Digital\Registers</v>
+<v>Cypress Component Catalog\Digital\Utility</v>
 <v>Cypress Component Catalog\Display</v>
 <v>Cypress Component Catalog\Ports and Pins</v>
+<v>Cypress Component Catalog\Ports and Pins\Analog Pin [v2.20]</v>
+<v>Cypress Component Catalog\Ports and Pins\Digital Bidirectional Pin [v2.20]</v>
+<v>Cypress Component Catalog\Ports and Pins\Digital Input Pin [v2.20]</v>
+<v>Cypress Component Catalog\Ports and Pins\Digital Output Pin [v2.20]</v>
 <v>Cypress Component Catalog\Power Supervision</v>
 <v>Cypress Component Catalog\System</v>
+<v>Cypress Component Catalog\System\Bootloadable [v1.60]</v>
+<v>Cypress Component Catalog\System\Bootloader [v1.60]</v>
+<v>Cypress Component Catalog\System\Clock [v2.20]</v>
+<v>Cypress Component Catalog\System\Die Temperature [v1.0]</v>
+<v>Cypress Component Catalog\System\DMA Channel [v1.0]</v>
+<v>Cypress Component Catalog\System\Emulated EEPROM [v2.0]</v>
+<v>Cypress Component Catalog\System\External Memory Interface</v>
+<v>Cypress Component Catalog\System\Global Signal Reference [v2.10]</v>
+<v>Cypress Component Catalog\System\ILO Trim [v2.0]</v>
+<v>Cypress Component Catalog\System\Interrupt [v1.70]</v>
 <v>Cypress Component Catalog\Thermal Management</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="MICA Component Catalog\Communications">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>Default Component Catalog</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>Default Component Catalog</v>
+<v>Default Component Catalog\Components</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
 <ExpandedNodeIds>
 <v>MICA Component Catalog</v>
 <v>MICA Component Catalog\Common</v>
-<v>MICA Component Catalog\Communications</v>
-<v>MICA Component Catalog\Display</v>
-<v>MICA Component Catalog\System</v>
 </ExpandedNodeIds>
 <VisibleNodeIds>
 <v>MICA Component Catalog</v>
 <v>MICA Component Catalog\Common</v>
 <v>MICA Component Catalog\Common\MICA Common [v1.0]</v>
 <v>MICA Component Catalog\Communications</v>
-<v>MICA Component Catalog\Communications\OTA Updates [v1.0]</v>
 <v>MICA Component Catalog\Display</v>
-<v>MICA Component Catalog\Display\LED - RGB Active High [v1.0]</v>
-<v>MICA Component Catalog\Display\LED - RGB Active Low [v1.0]</v>
 <v>MICA Component Catalog\Sensors</v>
 <v>MICA Component Catalog\System</v>
-<v>MICA Component Catalog\System\Supervisory Flash [v1.0]</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 <CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="Off-Chip Component Catalog">

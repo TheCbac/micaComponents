@@ -25,12 +25,12 @@
     /***************************************
     * Macro Definitions
     ***************************************/
-    #define `$INSTANCE_NAME`_FORWARD          (0b01u)
-    #define `$INSTANCE_NAME`_BACKWARD         (0b00u)
-    #define `$INSTANCE_NAME`_EN               (1u << 2u)
+    #define `$INSTANCE_NAME`_FORWARD        (0b00u)
+    #define `$INSTANCE_NAME`_BACKWARD       (0b01u)
+    #define `$INSTANCE_NAME`_EN             (1u << 2u)
 
     #define `$INSTANCE_NAME`_M1_SHIFT       (0u)
-    #define `$INSTANCE_NAME`_M2_SHIFT      (4u)
+    #define `$INSTANCE_NAME`_M2_SHIFT       (4u)
 
     #define `$INSTANCE_NAME`_M1_FORWARD     (`$INSTANCE_NAME`_FORWARD  << `$INSTANCE_NAME`_M1_SHIFT)
     #define `$INSTANCE_NAME`_M1_BACKWARD    (`$INSTANCE_NAME`_BACKWARD << `$INSTANCE_NAME`_M1_SHIFT)
@@ -39,12 +39,19 @@
     #define `$INSTANCE_NAME`_M2_FORWARD     (`$INSTANCE_NAME`_FORWARD  << `$INSTANCE_NAME`_M2_SHIFT)
     #define `$INSTANCE_NAME`_M2_BACKWARD    (`$INSTANCE_NAME`_BACKWARD << `$INSTANCE_NAME`_M2_SHIFT)
     #define `$INSTANCE_NAME`_M2_EN          (`$INSTANCE_NAME`_EN       << `$INSTANCE_NAME`_M2_SHIFT)
+    
+    #define `$INSTANCE_NAME`_SPEED_MAX      (2400)
+    #define `$INSTANCE_NAME`_SPEED_HALF     (`$INSTANCE_NAME`_SPEED_MAX / 2)
+    #define `$INSTANCE_NAME`_SPEED_SLOW     (`$INSTANCE_NAME`_SPEED_MAX / 6)
+    #define `$INSTANCE_NAME`_SPEED_MIN      (0)
+    
+    
     /***************************************
     * Enumerated Types
     ***************************************/
     /* The possible directions*/
     typedef enum{
-        `$INSTANCE_NAME`_DIRECTION_FORWARD,
+        `$INSTANCE_NAME`_DIRECTION_FORWARD = (0u),
         `$INSTANCE_NAME`_DIRECTION_BACKWARD,
         `$INSTANCE_NAME`_DIRECTION_CW,
         `$INSTANCE_NAME`_DIRECTION_CCW
@@ -69,6 +76,7 @@
     void `$INSTANCE_NAME`_WriteSpeed(`$INSTANCE_NAME`_MOTOR_T* motors);
     `$INSTANCE_NAME`_MOTOR_T `$INSTANCE_NAME`_GetSpeed(void);
     void `$INSTANCE_NAME`_Move(`$INSTANCE_NAME`_DIRECTION_T direction, uint16 speed);
+    void `$INSTANCE_NAME`_Test(uint8 runs, uint16 speed);
 
 #endif /* `$INSTANCE_NAME`_H */
 

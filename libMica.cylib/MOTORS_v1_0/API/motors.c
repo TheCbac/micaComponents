@@ -19,8 +19,10 @@
 #include "`$INSTANCE_NAME`_PWM_M1.h"
 #include "`$INSTANCE_NAME`_PWM_M2.h"
 #include "`$INSTANCE_NAME`_ControlReg.h"
+#include "micaCommon.h"
 
-
+#define `$INSTANCE_NAME`_TEST_DELAY         (1500)
+#define `$INSTANCE_NAME`_TEST_DELAY_HALF    (`$INSTANCE_NAME`_TEST_DELAY / 2)
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_Start()
 ********************************************************************************
@@ -35,8 +37,8 @@ void `$INSTANCE_NAME`_Start(void) {
     /* Start the PWM blocks */    
     `$INSTANCE_NAME`_PWM_M1_Start();
     `$INSTANCE_NAME`_PWM_M2_Start();
-    /* Enables the motors */
-    `$INSTANCE_NAME`_Enable();
+    /* Disable both motors from moving */
+    `$INSTANCE_NAME`_Disable();
 }
 
 /*******************************************************************************
@@ -95,18 +97,92 @@ void `$INSTANCE_NAME`_Disable(void) {
 *
 *******************************************************************************/
 void `$INSTANCE_NAME`_Move(`$INSTANCE_NAME`_DIRECTION_T direction, uint16 speed){
-    
+    /* Enable both motors */
+    uint8 controlVal = (`$INSTANCE_NAME`_M1_EN | `$INSTANCE_NAME`_M2_EN);
+    /* Act according to direction */
     switch(direction) {
         /* Forward */
         case  `$INSTANCE_NAME`_DIRECTION_FORWARD: {
-            /* Write the control register value */
-            `$INSTANCE_NAME`_ControlReg_Write( `$INSTANCE_NAME`_M1_FORWARD | `$INSTANCE_NAME`_M2_FORWARD);
-            /* Write to the PWM blocks */
-            `$INSTANCE_NAME`_PWM_M1_WriteCompare(speed);
-            `$INSTANCE_NAME`_PWM_M2_WriteCompare(speed);
+            controlVal |= ( `$INSTANCE_NAME`_M1_FORWARD | `$INSTANCE_NAME`_M2_FORWARD);
+            break;
         }
-        /* Pick up here */
+        /* Backward */
+        case `$INSTANCE_NAME`_DIRECTION_BACKWARD: {
+            controlVal |= ( `$INSTANCE_NAME`_M1_BACKWARD | `$INSTANCE_NAME`_M2_BACKWARD);
+            break;
+        }
+        /* CW */
+        case `$INSTANCE_NAME`_DIRECTION_CW: {
+            controlVal |= ( `$INSTANCE_NAME`_M1_FORWARD | `$INSTANCE_NAME`_M2_BACKWARD);
+            break;
+        }
+         /* CCW */
+        case `$INSTANCE_NAME`_DIRECTION_CCW: {
+            controlVal |= ( `$INSTANCE_NAME`_M1_BACKWARD | `$INSTANCE_NAME`_M2_FORWARD);
+            break;
+        }
     }
+    /* Write the control register value */
+    `$INSTANCE_NAME`_ControlReg_Write(controlVal);
+    /* Clip the speed to max value */
+    uint16 clippedSpeed = (speed > `$INSTANCE_NAME`_SPEED_MAX) ? `$INSTANCE_NAME`_SPEED_MAX : speed;
+    /* Write to the PWM blocks */
+    `$INSTANCE_NAME`_PWM_M1_WriteCompare(clippedSpeed);
+    `$INSTANCE_NAME`_PWM_M2_WriteCompare(clippedSpeed);
 }
 
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_Test()
+********************************************************************************
+* Summary:
+*   Runs through a testing routine of the motors
+*
+* Parameter runs
+*   The number of times to run through the test routine - 0 means infinite
+*
+* Parameter speed
+*   The compare value for the PWM motors
+*
+* Return:
+*   None.
+*
+*******************************************************************************/
+void `$INSTANCE_NAME`_Test(uint8 runs, uint16 speed){
+    uint8 i = ZERO;
+    /* Run through a specified number of times */
+    while( (i++ < runs) || runs == 0) {
+        /* Initial Delay */
+        CyDelay(`$INSTANCE_NAME`_TEST_DELAY);
+        
+        /* Forward  */
+        `$INSTANCE_NAME`_Move(`$INSTANCE_NAME`_DIRECTION_FORWARD, speed);
+        CyDelay(`$INSTANCE_NAME`_TEST_DELAY);
+        /* Stop for half time */
+        `$INSTANCE_NAME`_Disable();
+        CyDelay(`$INSTANCE_NAME`_TEST_DELAY_HALF);
+        
+        /* Back  */
+        `$INSTANCE_NAME`_Move(`$INSTANCE_NAME`_DIRECTION_BACKWARD, speed);
+        CyDelay(`$INSTANCE_NAME`_TEST_DELAY);
+        /* Stop for half time */
+        `$INSTANCE_NAME`_Disable();
+        CyDelay(`$INSTANCE_NAME`_TEST_DELAY_HALF);
+        
+        /* CW  */
+        `$INSTANCE_NAME`_Move(`$INSTANCE_NAME`_DIRECTION_CW, speed);
+        CyDelay(`$INSTANCE_NAME`_TEST_DELAY);
+        /* Stop for half time */
+        `$INSTANCE_NAME`_Disable();
+        CyDelay(`$INSTANCE_NAME`_TEST_DELAY_HALF);
+        
+        /* CCW  */
+        `$INSTANCE_NAME`_Move(`$INSTANCE_NAME`_DIRECTION_CCW, speed);
+        CyDelay(`$INSTANCE_NAME`_TEST_DELAY);
+        /* Disable motors at end of run */
+        `$INSTANCE_NAME`_Disable();
+        CyDelay(`$INSTANCE_NAME`_TEST_DELAY_HALF);
+    }
+}
+    
+    
 /* [] END OF FILE */

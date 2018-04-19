@@ -6,7 +6,7 @@
 <CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997 type_name="CyDesigner.Common.Base.CyCustomData" version="2">
 <userData>
 <dataGuid v="1b906a0f-a7b6-4e4d-a428-82f98b53cb35">
-<CyGuid_1b906a0f-a7b6-4e4d-a428-82f98b53cb35 type_name="CyDesigner.Common.ProjMgmt.GUI.CyExplorerWindow+CyExplorerWindowState" version="3" SelectedTab="Source">
+<CyGuid_1b906a0f-a7b6-4e4d-a428-82f98b53cb35 type_name="CyDesigner.Common.ProjMgmt.GUI.CyExplorerWindow+CyExplorerWindowState" version="3" SelectedTab="Components">
 <TreeKeys>
 <v>Source</v>
 <v>Components</v>
@@ -27,15 +27,17 @@
 <v>micaComponents\libMica\Source Files</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="micaComponents\libMica\MOTORS_v1_0">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="micaComponents\libMica\SFLASH_v1_0">
 <ExpandedNodeIds>
 <v>micaComponents</v>
 <v>micaComponents\libMica</v>
+<v>micaComponents\libMica\BMX055_v1_0</v>
 <v>micaComponents\libMica\BMX055_v1_0\API</v>
 <v>micaComponents\libMica\BMX055_v1_0\API\BMX055.c</v>
 <v>micaComponents\libMica\BMX055_v1_0\API\BMX055.h</v>
 <v>micaComponents\libMica\BMX055_v1_0\BMX055_datasheet_v1.0_r0.pdf</v>
 <v>micaComponents\libMica\BMX055_v1_0\BMX055_v1_0.cysym</v>
+<v>micaComponents\libMica\I2C_API_v1_0</v>
 <v>micaComponents\libMica\I2C_API_v1_0\PSoC4</v>
 <v>micaComponents\libMica\I2C_API_v1_0\PSoC4\API</v>
 <v>micaComponents\libMica\I2C_API_v1_0\PSoC4\API\I2C_API.c</v>
@@ -47,7 +49,6 @@
 <v>micaComponents\libMica\IPRINTF_v1_0\API\iprintf.h</v>
 <v>micaComponents\libMica\IPRINTF_v1_0\IPRINTF_v1_0.cymacro</v>
 <v>micaComponents\libMica\IPRINTF_v1_0\IPRINTF_v1_0.cysym</v>
-<v>micaComponents\libMica\LED_RGB_pins_v1_0</v>
 <v>micaComponents\libMica\LED_RGB_pins_v1_0\API</v>
 <v>micaComponents\libMica\LED_RGB_pins_v1_0\API\LED_RGB_pins.c</v>
 <v>micaComponents\libMica\LED_RGB_pins_v1_0\API\LED_RGB_pins.h</v>
@@ -57,6 +58,7 @@
 <v>micaComponents\libMica\LED_RGB_pins_v1_0\PSoC4\LED_RGB_pins_v1_0.cysch</v>
 <v>micaComponents\libMica\LED_RGB_pins_v1_0\LED_RGB_datasheet_v1.0_r3.pdf</v>
 <v>micaComponents\libMica\LED_RGB_pins_v1_0\LED_RGB_pins_v1_0.cysym</v>
+<v>micaComponents\libMica\MICA_COMMON_v1_0</v>
 <v>micaComponents\libMica\MICA_COMMON_v1_0\API</v>
 <v>micaComponents\libMica\MICA_COMMON_v1_0\API\micaCommon.c</v>
 <v>micaComponents\libMica\MICA_COMMON_v1_0\API\micaCommon.h</v>
@@ -71,6 +73,7 @@
 <v>micaComponents\libMica\MOTORS_v1_0\PSoC4\MOTORS_v1_0.cymacro</v>
 <v>micaComponents\libMica\MOTORS_v1_0\PSoC4\MOTORS_v1_0.cysch</v>
 <v>micaComponents\libMica\MOTORS_v1_0\MOTORS_v1_0.cysym</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0</v>
 <v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4</v>
 <v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\API</v>
 <v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\API\OTA_Updates.c</v>
@@ -78,6 +81,7 @@
 <v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\OTA Updates.cymacro</v>
 <v>micaComponents\libMica\OTA_Updates_v1_0\OTA_Updates_datasheet_v1.0_r0.pdf</v>
 <v>micaComponents\libMica\OTA_Updates_v1_0\OTA_Updates_v1_0.cysym</v>
+<v>micaComponents\libMica\SFLASH_v1_0</v>
 <v>micaComponents\libMica\SFLASH_v1_0\PSoC4</v>
 <v>micaComponents\libMica\SFLASH_v1_0\PSoC4\API</v>
 <v>micaComponents\libMica\SFLASH_v1_0\PSoC4\API\sflash.c</v>
@@ -87,22 +91,29 @@
 <v>micaComponents\libMica\SFLASH_v1_0\SFLASH_v1_0.cysym</v>
 </ExpandedNodeIds>
 <VisibleNodeIds>
-<v>micaComponents</v>
 <v>micaComponents\libMica</v>
 <v>micaComponents\libMica\BMX055_v1_0</v>
+<v>micaComponents\libMica\BMX055_v1_0\API</v>
+<v>micaComponents\libMica\BMX055_v1_0\API\BMX055.c</v>
+<v>micaComponents\libMica\BMX055_v1_0\API\BMX055.h</v>
+<v>micaComponents\libMica\BMX055_v1_0\BMX055_datasheet_v1.0_r0.pdf</v>
+<v>micaComponents\libMica\BMX055_v1_0\BMX055_v1_0.cysym</v>
 <v>micaComponents\libMica\I2C_API_v1_0</v>
+<v>micaComponents\libMica\I2C_API_v1_0\PSoC4</v>
+<v>micaComponents\libMica\I2C_API_v1_0\PSoC4\API</v>
+<v>micaComponents\libMica\I2C_API_v1_0\PSoC4\API\I2C_API.c</v>
+<v>micaComponents\libMica\I2C_API_v1_0\PSoC4\API\I2C_API.h</v>
+<v>micaComponents\libMica\I2C_API_v1_0\I2C_API_datasheet_v1.0_r0.pdf</v>
+<v>micaComponents\libMica\I2C_API_v1_0\I2C_API_v1_0.cysym</v>
 <v>micaComponents\libMica\IPRINTF_v1_0</v>
 <v>micaComponents\libMica\LED_RGB_pins_v1_0</v>
-<v>micaComponents\libMica\LED_RGB_pins_v1_0\API</v>
-<v>micaComponents\libMica\LED_RGB_pins_v1_0\API\LED_RGB_pins.c</v>
-<v>micaComponents\libMica\LED_RGB_pins_v1_0\API\LED_RGB_pins.h</v>
-<v>micaComponents\libMica\LED_RGB_pins_v1_0\PSoC4</v>
-<v>micaComponents\libMica\LED_RGB_pins_v1_0\PSoC4\LED - RGB Active High.cymacro</v>
-<v>micaComponents\libMica\LED_RGB_pins_v1_0\PSoC4\LED - RGB Active Low.cymacro</v>
-<v>micaComponents\libMica\LED_RGB_pins_v1_0\PSoC4\LED_RGB_pins_v1_0.cysch</v>
-<v>micaComponents\libMica\LED_RGB_pins_v1_0\LED_RGB_datasheet_v1.0_r3.pdf</v>
-<v>micaComponents\libMica\LED_RGB_pins_v1_0\LED_RGB_pins_v1_0.cysym</v>
 <v>micaComponents\libMica\MICA_COMMON_v1_0</v>
+<v>micaComponents\libMica\MICA_COMMON_v1_0\API</v>
+<v>micaComponents\libMica\MICA_COMMON_v1_0\API\micaCommon.c</v>
+<v>micaComponents\libMica\MICA_COMMON_v1_0\API\micaCommon.h</v>
+<v>micaComponents\libMica\MICA_COMMON_v1_0\MICA Common.cymacro</v>
+<v>micaComponents\libMica\MICA_COMMON_v1_0\MICA_COMMON_datasheet_v1.0_r0.pdf</v>
+<v>micaComponents\libMica\MICA_COMMON_v1_0\MICA_COMMON_v1_0.cysym</v>
 <v>micaComponents\libMica\MOTORS_v1_0</v>
 <v>micaComponents\libMica\MOTORS_v1_0\API</v>
 <v>micaComponents\libMica\MOTORS_v1_0\API\motors.c</v>
@@ -112,6 +123,13 @@
 <v>micaComponents\libMica\MOTORS_v1_0\PSoC4\MOTORS_v1_0.cysch</v>
 <v>micaComponents\libMica\MOTORS_v1_0\MOTORS_v1_0.cysym</v>
 <v>micaComponents\libMica\OTA_Updates_v1_0</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\API</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\API\OTA_Updates.c</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\API\OTA_Updates.h</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\OTA Updates.cymacro</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\OTA_Updates_datasheet_v1.0_r0.pdf</v>
+<v>micaComponents\libMica\OTA_Updates_v1_0\OTA_Updates_v1_0.cysym</v>
 <v>micaComponents\libMica\SFLASH_v1_0</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>

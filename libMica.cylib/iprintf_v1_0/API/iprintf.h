@@ -23,6 +23,7 @@
     * Function declarations 
     ***************************************/
     void `$INSTANCE_NAME`(char8 *pszFmt,...);
+    uint8 `$INSTANCE_NAME`_GetChar(void);
     /***************************************
     * Macro Definitions
     ***************************************/

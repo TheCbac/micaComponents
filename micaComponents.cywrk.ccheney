@@ -6,7 +6,7 @@
 <CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997 type_name="CyDesigner.Common.Base.CyCustomData" version="2">
 <userData>
 <dataGuid v="1b906a0f-a7b6-4e4d-a428-82f98b53cb35">
-<CyGuid_1b906a0f-a7b6-4e4d-a428-82f98b53cb35 type_name="CyDesigner.Common.ProjMgmt.GUI.CyExplorerWindow+CyExplorerWindowState" version="3" SelectedTab="Components">
+<CyGuid_1b906a0f-a7b6-4e4d-a428-82f98b53cb35 type_name="CyDesigner.Common.ProjMgmt.GUI.CyExplorerWindow+CyExplorerWindowState" version="3" SelectedTab="Source">
 <TreeKeys>
 <v>Source</v>
 <v>Components</v>
@@ -108,6 +108,7 @@
 <v>micaComponents\libMica\MOTORS_v1_0\API\motors.c</v>
 <v>micaComponents\libMica\MOTORS_v1_0\API\motors.h</v>
 <v>micaComponents\libMica\MOTORS_v1_0\PSoC4</v>
+<v>micaComponents\libMica\MOTORS_v1_0\PSoC4\MOTORS_v1_0.cymacro</v>
 <v>micaComponents\libMica\MOTORS_v1_0\PSoC4\MOTORS_v1_0.cysch</v>
 <v>micaComponents\libMica\MOTORS_v1_0\MOTORS_v1_0.cysym</v>
 <v>micaComponents\libMica\OTA_Updates_v1_0</v>
@@ -203,8 +204,7 @@
 <name v=".\libMica.cylib\MOTORS_v1_0\MOTORS_v1_0.cysym" />
 <name v=".\libMica.cylib\MOTORS_v1_0\API\motors.c" />
 <name v=".\libMica.cylib\MOTORS_v1_0\API\motors.h" />
-<name v=".\libMica.cylib\LED_RGB_pins_v1_0\API\LED_RGB_pins.c" />
-<name v=".\libMica.cylib\LED_RGB_pins_v1_0\PSoC4\LED - RGB Active Low.cymacro" />
+<name v=".\libMica.cylib\MOTORS_v1_0\PSoC4\MOTORS_v1_0.cymacro" />
 </OpenDocs>
 <OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
 
@@ -212,7 +212,7 @@
   Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
   http://www.actiprosoftware.com
 
---><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1613, 892" SelectedTabbedMdiWindow="c174c93d-c25f-42ab-861d-1f83d025508b"><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\MOTORS_v1_0\PSoC4\MOTORS_v1_0.cysch" Guid="bae59079-1338-4f5f-b844-f8267b60688b" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\MOTORS_v1_0\MOTORS_v1_0.cysym" Guid="07876a9e-8ba6-4f93-be3b-2f9ebc11ce82" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\MOTORS_v1_0\API\motors.c" Guid="c174c93d-c25f-42ab-861d-1f83d025508b" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\MOTORS_v1_0\API\motors.h" Guid="7f21efa4-8fc9-4f5f-a3ca-62cb953396f1" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\LED_RGB_pins_v1_0\API\LED_RGB_pins.c" Guid="fa4154ba-d9d0-46e6-bd38-8940cb703a34" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\LED_RGB_pins_v1_0\PSoC4\LED - RGB Active Low.cymacro" Guid="c4ec4e0b-5c9e-48b2-83b3-eceb10dc0111" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1305, 711" SelectedTabbedMdiWindow="8a800422-b0b6-41dd-b003-94777d783776"><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\MOTORS_v1_0\PSoC4\MOTORS_v1_0.cysch" Guid="bae59079-1338-4f5f-b844-f8267b60688b" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\MOTORS_v1_0\MOTORS_v1_0.cysym" Guid="07876a9e-8ba6-4f93-be3b-2f9ebc11ce82" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\MOTORS_v1_0\API\motors.c" Guid="c174c93d-c25f-42ab-861d-1f83d025508b" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\MOTORS_v1_0\API\motors.h" Guid="7f21efa4-8fc9-4f5f-a3ca-62cb953396f1" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\MOTORS_v1_0\PSoC4\MOTORS_v1_0.cymacro" Guid="8a800422-b0b6-41dd-b003-94777d783776" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
 <config v="Debug" />
 <AutoUpdate v="true" />
 </CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>

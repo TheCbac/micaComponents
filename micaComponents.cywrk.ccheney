@@ -27,28 +27,21 @@
 <v>micaComponents\libMica\Source Files</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="micaComponents\libMica\SFLASH_v1_0">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
 <ExpandedNodeIds>
 <v>micaComponents</v>
 <v>micaComponents\libMica</v>
-<v>micaComponents\libMica\BMX055_v1_0</v>
 <v>micaComponents\libMica\BMX055_v1_0\API</v>
 <v>micaComponents\libMica\BMX055_v1_0\API\BMX055.c</v>
 <v>micaComponents\libMica\BMX055_v1_0\API\BMX055.h</v>
 <v>micaComponents\libMica\BMX055_v1_0\BMX055_datasheet_v1.0_r0.pdf</v>
 <v>micaComponents\libMica\BMX055_v1_0\BMX055_v1_0.cysym</v>
-<v>micaComponents\libMica\I2C_API_v1_0</v>
 <v>micaComponents\libMica\I2C_API_v1_0\PSoC4</v>
 <v>micaComponents\libMica\I2C_API_v1_0\PSoC4\API</v>
 <v>micaComponents\libMica\I2C_API_v1_0\PSoC4\API\I2C_API.c</v>
 <v>micaComponents\libMica\I2C_API_v1_0\PSoC4\API\I2C_API.h</v>
 <v>micaComponents\libMica\I2C_API_v1_0\I2C_API_datasheet_v1.0_r0.pdf</v>
 <v>micaComponents\libMica\I2C_API_v1_0\I2C_API_v1_0.cysym</v>
-<v>micaComponents\libMica\IPRINTF_v1_0\API</v>
-<v>micaComponents\libMica\IPRINTF_v1_0\API\iprintf.c</v>
-<v>micaComponents\libMica\IPRINTF_v1_0\API\iprintf.h</v>
-<v>micaComponents\libMica\IPRINTF_v1_0\IPRINTF_v1_0.cymacro</v>
-<v>micaComponents\libMica\IPRINTF_v1_0\IPRINTF_v1_0.cysym</v>
 <v>micaComponents\libMica\LED_RGB_pins_v1_0\API</v>
 <v>micaComponents\libMica\LED_RGB_pins_v1_0\API\LED_RGB_pins.c</v>
 <v>micaComponents\libMica\LED_RGB_pins_v1_0\API\LED_RGB_pins.h</v>
@@ -65,7 +58,6 @@
 <v>micaComponents\libMica\MICA_COMMON_v1_0\MICA Common.cymacro</v>
 <v>micaComponents\libMica\MICA_COMMON_v1_0\MICA_COMMON_datasheet_v1.0_r0.pdf</v>
 <v>micaComponents\libMica\MICA_COMMON_v1_0\MICA_COMMON_v1_0.cysym</v>
-<v>micaComponents\libMica\MOTORS_v1_0</v>
 <v>micaComponents\libMica\MOTORS_v1_0\API</v>
 <v>micaComponents\libMica\MOTORS_v1_0\API\motors.c</v>
 <v>micaComponents\libMica\MOTORS_v1_0\API\motors.h</v>
@@ -73,7 +65,6 @@
 <v>micaComponents\libMica\MOTORS_v1_0\PSoC4\MOTORS_v1_0.cymacro</v>
 <v>micaComponents\libMica\MOTORS_v1_0\PSoC4\MOTORS_v1_0.cysch</v>
 <v>micaComponents\libMica\MOTORS_v1_0\MOTORS_v1_0.cysym</v>
-<v>micaComponents\libMica\OTA_Updates_v1_0</v>
 <v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4</v>
 <v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\API</v>
 <v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\API\OTA_Updates.c</v>
@@ -81,7 +72,6 @@
 <v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\OTA Updates.cymacro</v>
 <v>micaComponents\libMica\OTA_Updates_v1_0\OTA_Updates_datasheet_v1.0_r0.pdf</v>
 <v>micaComponents\libMica\OTA_Updates_v1_0\OTA_Updates_v1_0.cysym</v>
-<v>micaComponents\libMica\SFLASH_v1_0</v>
 <v>micaComponents\libMica\SFLASH_v1_0\PSoC4</v>
 <v>micaComponents\libMica\SFLASH_v1_0\PSoC4\API</v>
 <v>micaComponents\libMica\SFLASH_v1_0\PSoC4\API\sflash.c</v>
@@ -89,23 +79,17 @@
 <v>micaComponents\libMica\SFLASH_v1_0\PSoC4\Supervisory Flash.cymacro</v>
 <v>micaComponents\libMica\SFLASH_v1_0\SFLASH_datasheet_v1.0_r0.pdf</v>
 <v>micaComponents\libMica\SFLASH_v1_0\SFLASH_v1_0.cysym</v>
+<v>micaComponents\libMica\UART_API_v1_0</v>
+<v>micaComponents\libMica\UART_API_v1_0\API</v>
+<v>micaComponents\libMica\UART_API_v1_0\API\uartApi.c</v>
+<v>micaComponents\libMica\UART_API_v1_0\API\uartApi.h</v>
+<v>micaComponents\libMica\UART_API_v1_0\UART_API_v1_0.cysym</v>
 </ExpandedNodeIds>
 <VisibleNodeIds>
+<v>micaComponents</v>
 <v>micaComponents\libMica</v>
 <v>micaComponents\libMica\BMX055_v1_0</v>
-<v>micaComponents\libMica\BMX055_v1_0\API</v>
-<v>micaComponents\libMica\BMX055_v1_0\API\BMX055.c</v>
-<v>micaComponents\libMica\BMX055_v1_0\API\BMX055.h</v>
-<v>micaComponents\libMica\BMX055_v1_0\BMX055_datasheet_v1.0_r0.pdf</v>
-<v>micaComponents\libMica\BMX055_v1_0\BMX055_v1_0.cysym</v>
 <v>micaComponents\libMica\I2C_API_v1_0</v>
-<v>micaComponents\libMica\I2C_API_v1_0\PSoC4</v>
-<v>micaComponents\libMica\I2C_API_v1_0\PSoC4\API</v>
-<v>micaComponents\libMica\I2C_API_v1_0\PSoC4\API\I2C_API.c</v>
-<v>micaComponents\libMica\I2C_API_v1_0\PSoC4\API\I2C_API.h</v>
-<v>micaComponents\libMica\I2C_API_v1_0\I2C_API_datasheet_v1.0_r0.pdf</v>
-<v>micaComponents\libMica\I2C_API_v1_0\I2C_API_v1_0.cysym</v>
-<v>micaComponents\libMica\IPRINTF_v1_0</v>
 <v>micaComponents\libMica\LED_RGB_pins_v1_0</v>
 <v>micaComponents\libMica\MICA_COMMON_v1_0</v>
 <v>micaComponents\libMica\MICA_COMMON_v1_0\API</v>
@@ -115,22 +99,13 @@
 <v>micaComponents\libMica\MICA_COMMON_v1_0\MICA_COMMON_datasheet_v1.0_r0.pdf</v>
 <v>micaComponents\libMica\MICA_COMMON_v1_0\MICA_COMMON_v1_0.cysym</v>
 <v>micaComponents\libMica\MOTORS_v1_0</v>
-<v>micaComponents\libMica\MOTORS_v1_0\API</v>
-<v>micaComponents\libMica\MOTORS_v1_0\API\motors.c</v>
-<v>micaComponents\libMica\MOTORS_v1_0\API\motors.h</v>
-<v>micaComponents\libMica\MOTORS_v1_0\PSoC4</v>
-<v>micaComponents\libMica\MOTORS_v1_0\PSoC4\MOTORS_v1_0.cymacro</v>
-<v>micaComponents\libMica\MOTORS_v1_0\PSoC4\MOTORS_v1_0.cysch</v>
-<v>micaComponents\libMica\MOTORS_v1_0\MOTORS_v1_0.cysym</v>
 <v>micaComponents\libMica\OTA_Updates_v1_0</v>
-<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4</v>
-<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\API</v>
-<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\API\OTA_Updates.c</v>
-<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\API\OTA_Updates.h</v>
-<v>micaComponents\libMica\OTA_Updates_v1_0\PSoC4\OTA Updates.cymacro</v>
-<v>micaComponents\libMica\OTA_Updates_v1_0\OTA_Updates_datasheet_v1.0_r0.pdf</v>
-<v>micaComponents\libMica\OTA_Updates_v1_0\OTA_Updates_v1_0.cysym</v>
 <v>micaComponents\libMica\SFLASH_v1_0</v>
+<v>micaComponents\libMica\UART_API_v1_0</v>
+<v>micaComponents\libMica\UART_API_v1_0\API</v>
+<v>micaComponents\libMica\UART_API_v1_0\API\uartApi.c</v>
+<v>micaComponents\libMica\UART_API_v1_0\API\uartApi.h</v>
+<v>micaComponents\libMica\UART_API_v1_0\UART_API_v1_0.cysym</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 <CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="micaComponents\libMica\CortexM3\ARM_GCC_541\Debug\libMica.a">
@@ -218,11 +193,12 @@
 </CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997>
 <Unloaded />
 <OpenDocs>
-<name v=".\libMica.cylib\MOTORS_v1_0\PSoC4\MOTORS_v1_0.cysch" />
-<name v=".\libMica.cylib\MOTORS_v1_0\MOTORS_v1_0.cysym" />
-<name v=".\libMica.cylib\MOTORS_v1_0\API\motors.c" />
-<name v=".\libMica.cylib\MOTORS_v1_0\API\motors.h" />
-<name v=".\libMica.cylib\MOTORS_v1_0\PSoC4\MOTORS_v1_0.cymacro" />
+<name v=".\libMica.cylib\UART_API_v1_0\UART_API_v1_0.cysym" />
+<name v=".\libMica.cylib\UART_API_v1_0\API\uartApi.h" />
+<name v=".\libMica.cylib\UART_API_v1_0\API\uartApi.c" />
+<name v=".\libMica.cylib\MICA_COMMON_v1_0\API\micaCommon.h" />
+<name v=".\libMica.cylib\MICA_COMMON_v1_0\MICA_COMMON_v1_0.cysym" />
+<name v=".\libMica.cylib\UART_API_v1_0\UART_API_v1_0.cymacro" />
 </OpenDocs>
 <OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
 
@@ -230,7 +206,7 @@
   Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
   http://www.actiprosoftware.com
 
---><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1305, 711" SelectedTabbedMdiWindow="8a800422-b0b6-41dd-b003-94777d783776"><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\MOTORS_v1_0\PSoC4\MOTORS_v1_0.cysch" Guid="bae59079-1338-4f5f-b844-f8267b60688b" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\MOTORS_v1_0\MOTORS_v1_0.cysym" Guid="07876a9e-8ba6-4f93-be3b-2f9ebc11ce82" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\MOTORS_v1_0\API\motors.c" Guid="c174c93d-c25f-42ab-861d-1f83d025508b" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\MOTORS_v1_0\API\motors.h" Guid="7f21efa4-8fc9-4f5f-a3ca-62cb953396f1" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\MOTORS_v1_0\PSoC4\MOTORS_v1_0.cymacro" Guid="8a800422-b0b6-41dd-b003-94777d783776" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1466, 772" SelectedTabbedMdiWindow="2384afcc-6046-4a21-ac3f-3810e68aa2f0"><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\UART_API_v1_0\UART_API_v1_0.cysym" Guid="7b8dc790-d380-48cf-b15b-1c5c442481e1" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\UART_API_v1_0\API\uartApi.h" Guid="0199d4c6-c3bc-49d4-9f8f-0dadb462bc74" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\UART_API_v1_0\API\uartApi.c" Guid="d4cb368e-227c-4e01-a714-4ded8b6ebb6d" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\MICA_COMMON_v1_0\API\micaCommon.h" Guid="7b77320c-bfda-4012-86bc-be539b196bd9" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\MICA_COMMON_v1_0\MICA_COMMON_v1_0.cysym" Guid="4394f8fd-4dcf-41b0-84c8-2af6a220b565" /><DocumentWindow Key="C:\Users\ccheney\Dropbox (MIT)\MICA\Creator\libraries\micaComponents\libMica.cylib\UART_API_v1_0\UART_API_v1_0.cymacro" Guid="2384afcc-6046-4a21-ac3f-3810e68aa2f0" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
 <config v="Debug" />
 <AutoUpdate v="true" />
 </CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>

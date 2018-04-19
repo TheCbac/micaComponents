@@ -14,27 +14,10 @@
 *******************************************************************************/
 #include "`$INSTANCE_NAME`.h"
 #include "`$includeFile`.h"
+#include "micaCommon.h"
 
 /*******************************************************************************
-* Function Name: iputc()
-****************************************************************************//**
-*
-* \brief Function to print individial 
-*
-* \param pszFmt
-*   Pointer to string, zero formatted. String to print out, accepts %d, %s, %x, %c
-*
-* \return
-* None
- *******************************************************************************/
-static inline void iputc(char8 ch)
-{
-	/* Function supplied as parameter */	
-	`$transportFunction`(ch);
-}
-
-/*******************************************************************************
-* Function Name: change()
+* Function Name: `$INSTANCE_NAME`_changeBase()
 ****************************************************************************//**
 *
 * \brief Changes the base to hex from decimal
@@ -45,9 +28,9 @@ static inline void iputc(char8 ch)
 * \return
 * None
  *******************************************************************************/
-static inline uint8* change(uint32 Index)
+static inline uint8* `$INSTANCE_NAME`_changeBase(uint32 Index)
 {
-    return (uint8*)("0123456789abcdef"+Index);
+    return (uint8*)("0123456789ABCDEF"+Index);
 }
 
 /*******************************************************************************
@@ -73,7 +56,7 @@ void `$INSTANCE_NAME`(char8 *pszFmt,...){
     {
         if('%' != *pszFmt)
         {
-            iputc(*pszFmt);
+            `$INSTANCE_NAME`_putChar(*pszFmt);
             pszFmt++;
             continue;
         }
@@ -83,7 +66,7 @@ void `$INSTANCE_NAME`(char8 *pszFmt,...){
         {
             pszVal = (uint8*)pArg[index++];
             for(; *pszVal != '\0'; pszVal++)
-                iputc(*pszVal);
+                `$INSTANCE_NAME`_putChar(*pszVal);
             pszFmt++;
             continue;
         }
@@ -98,7 +81,7 @@ void `$INSTANCE_NAME`(char8 *pszFmt,...){
             while(i > 0)
             {
                 i--;
-                iputc(*change(buffer[i]));
+                `$INSTANCE_NAME`_putChar(*`$INSTANCE_NAME`_changeBase(buffer[i]));
             }
             pszFmt++;
             continue;
@@ -106,7 +89,7 @@ void `$INSTANCE_NAME`(char8 *pszFmt,...){
         if(*pszFmt == 'c')
         {
             cVal = (uint8)pArg[index++];
-            iputc(cVal);
+            `$INSTANCE_NAME`_putChar(cVal);
             pszFmt++;
             continue;
         }
@@ -126,7 +109,7 @@ void `$INSTANCE_NAME`(char8 *pszFmt,...){
             while(i > 0)
             {
                 i--;
-                iputc(*change(buffer[i]));
+                `$INSTANCE_NAME`_putChar(*`$INSTANCE_NAME`_changeBase(buffer[i]));
             }
             pszFmt++;
             continue;
@@ -137,5 +120,34 @@ void `$INSTANCE_NAME`(char8 *pszFmt,...){
         }
     }
 }
+
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_txTest()
+****************************************************************************//**
+*
+* \brief Transmits the a string listing the compile date and time out over the UART.
+*
+* \param runs
+*    The number of times to execute the test function. Zero indicates
+*       infinite runs. 
+*
+* \return
+* None
+*******************************************************************************/
+void `$INSTANCE_NAME`_txTest(uint8 runs) {
+    uint8 i = ZERO;
+    /* Run through a specified number of times */
+    while( (i++ < runs) || runs == ZERO) {
+        /* Print the date and time the program was compiled */
+        `$INSTANCE_NAME`("Compiled: ");
+        `$INSTANCE_NAME`(__TIME__);
+        `$INSTANCE_NAME`(" ");
+        `$INSTANCE_NAME`(__DATE__);
+        `$INSTANCE_NAME`("\r\n");
+        /* Delay */
+        MICA_delayMs(MICA_DELAY_MS_SEC_ONE);
+    }
+}  
 
 /* [] END OF FILE */

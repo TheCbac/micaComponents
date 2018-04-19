@@ -23,12 +23,28 @@
     * Function declarations 
     ***************************************/
     void `$INSTANCE_NAME`(char8 *pszFmt,...);
-    uint8 `$INSTANCE_NAME`_GetChar(void);
+    void `$INSTANCE_NAME`_txTest(uint8 runs);
     /***************************************
     * Macro Definitions
     ***************************************/
-    #define `$INSTANCE_NAME`_clearScreen()  `$INSTANCE_NAME`("\033[2J\033[1;1H")
+    #define `$INSTANCE_NAME`_clearScreen()  `$INSTANCE_NAME`("\033[2J\033[1;1H")    /**< Clear the terminal screen */
+    /* TX Functions */
+    #define `$INSTANCE_NAME`_putChar(ch) `$txFunction`(ch)  /**< Wrapper for UART TX function */
     
+    /* RX functions */
+    #define `$INSTANCE_NAME`_RX_EN  `$rxEnabled`        /**< Is receiving enabled? */
+    #if `$INSTANCE_NAME`_RX_EN
+        #define `$INSTANCE_NAME`_getChar() `$rxFunction`() /**< Wrapper for UART RX function */
+    #endif /* `$INSTANCE_NAME`_RX_EN */
+    
+    /* Logging */ 
+    #define `$INSTANCE_NAME`_DEBUG_EN `$enableLogging`   /**< Is log printing enabled? */
+    #if `$INSTANCE_NAME`_DEBUG_EN
+        #define `$INSTANCE_NAME`_log(...) `$INSTANCE_NAME`(__VA_ARGS__)  /**< Log Function */
+    #else
+        #define `$INSTANCE_NAME`_log(...) do { (void)0; } while(0) /**< Without logging */
+    #endif /*  */
+
     
 #endif /* (`$INSTANCE_NAME`_H) */
 /* [] END OF FILE */

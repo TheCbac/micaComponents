@@ -18,6 +18,11 @@
 /* Header Guard */
 #ifndef `$INSTANCE_NAME`_H
     #define `$INSTANCE_NAME`_H
+    
+    /***************************************
+    * Included files
+    ***************************************/
+    #include "`$delayHeader`.h"
     /***************************************
     * Macro Definitions
     ***************************************/
@@ -57,7 +62,11 @@
     #define INDEX_ZERO_CORRECT      (1u)                /**< Corrects for a zero indexed array*/
     
     #define MICA_TEST_INFINITE      (0u)                /**< Run test an infinite number of times  */
+    #define MICA_TEST_ONCE          (1u)                /**< Run test one time */
+   
+    #define MICA_DELAY_MS_SEC_ONE      (1000)              /**< Delay in ms for one second  */
 
+    #define MICA_delayMs(val)     `$msDelayFunction`(val)    /**< Delay function */
 #endif /* `$INSTANCE_NAME`_H */
 
 /* [] END OF FILE */

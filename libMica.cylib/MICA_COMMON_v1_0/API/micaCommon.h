@@ -64,7 +64,9 @@
     #define MICA_TEST_INFINITE      (0u)                /**< Run test an infinite number of times  */
     #define MICA_TEST_ONCE          (1u)                /**< Run test one time */
    
-    #define MICA_DELAY_MS_SEC_ONE      (1000)              /**< Delay in ms for one second  */
+    #define MICA_DELAY_MS_SEC_QUARTER   (250)           /**< Delay in ms for 0.25 seconds  */
+    #define MICA_DELAY_MS_SEC_HALF      (500)           /**< Delay in ms for 0.5 second  */
+    #define MICA_DELAY_MS_SEC_ONE       (1000)          /**< Delay in ms for 1 second  */
 
     #define MICA_delayMs(val)     `$msDelayFunction`(val)    /**< Delay function */
 #endif /* `$INSTANCE_NAME`_H */

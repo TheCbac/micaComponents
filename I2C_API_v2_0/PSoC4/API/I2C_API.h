@@ -22,7 +22,7 @@
     * Included Files
     ***************************************/
     #include "cytypes.h"    
-    
+    #include "micaCommon.h"
     /***************************************
     * Macro Definitions
     ***************************************/
@@ -30,6 +30,10 @@
     #define `$INSTANCE_NAME`_ERR_READ       (1u) /**< An error occured during the read */
     
     #define `$INSTANCE_NAME`_MASK_READ_ERR  (0x80000000) /**< Mask for determining if an error occured during the read operation. MSB of uint32 */
+    
+    #define `$i2cInstanceName`_TIMEOUT_WRITE        (MICA_DELAY_MS_SEC_QUARTER) /* Delay for writting time out */
+    #define `$i2cInstanceName`_TIMEOUT_READ        (MICA_DELAY_MS_SEC_QUARTER) /* Delay for reading time out */
+    
     /***************************************
     * Function Prototypes
     ***************************************/

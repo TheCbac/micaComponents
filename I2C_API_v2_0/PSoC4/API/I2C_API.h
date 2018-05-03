@@ -3,7 +3,7 @@
 * File: I2C_API.h
 * Workspace: micaComponents
 * Project Name: libMica
-* Version: v1.0
+* Version: v2.0
 * Author: Craig Cheney
 *
 * Brief:
@@ -13,6 +13,7 @@
 *   Craig Cheney
 *
 * Change Log:
+*   2018.05.03 CC - Transitioned to I2C component v4 (timeout)
 *   2018.03.14 CC - Document created
 ********************************************************************************/
 /* Header Guard */

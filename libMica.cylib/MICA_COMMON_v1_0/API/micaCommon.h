@@ -36,6 +36,9 @@
     #define SEVEN           (7u)    /**< Constant 7 */
     #define EIGHT           (8u)    /**< Constant 8 */
     #define NINE            (9u)    /**< Constant 9 */
+    #define TEN             (10u)   /**< Constant 10 */
+    #define ELEVEN          (11u)   /**< Constant 11 */
+    #define TWELVE          (12u)   /**< Constant 12 */
     #define NULL_OCTET      (0u)    /**< Null Octet */
     
     #define BITS_SINGLE_BIT         (0x01u)             /**< Single bit mask */
@@ -59,6 +62,7 @@
     #define MASK_BIT_TWELVE         (0xFFFu)            /**< One and a half byte mask*/
     #define MASK_ODD                (MASK_BIT_ONE)      /**< Odd mask*/
     
+    
     #define INDEX_ZERO_CORRECT      (1u)                /**< Corrects for a zero indexed array*/
     
     #define MICA_TEST_INFINITE      (0u)                /**< Run test an infinite number of times  */
@@ -69,6 +73,31 @@
     #define MICA_DELAY_MS_SEC_ONE       (1000)          /**< Delay in ms for 1 second  */
 
     #define MICA_delayMs(val)     `$msDelayFunction`(val)    /**< Delay function */
+    
+    /***************************************
+    * Structs
+    ***************************************/   
+    /* Struct for handling accelerometer data */
+    typedef struct {
+        float Ax; /**< Acceleration X */
+        float Ay; /**< Acceleration Y */
+        float Az; /**< Acceleration Z */
+    } ACC_DATA_T;
+    /* Struct for handling Gyro data */
+    typedef struct {
+        float Wx; /**< Angular velocity, X */
+        float Wy; /**< Angular velocity, Y */
+        float Wz; /**< Angular velocity, Z */
+    } GYRO_DATA_T;
+
+    /* Struct for representing a Quaternion */
+    typedef struct {
+        float q1; /**< First element (Scalar) */
+        float q2; /**< Second element (i) */
+        float q3; /**< Second element (j) */
+        float q4; /**< Second element (k) */
+    } QUATERNION_T;
+    
 #endif /* `$INSTANCE_NAME`_H */
 
 /* [] END OF FILE */

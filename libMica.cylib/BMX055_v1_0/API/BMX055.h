@@ -22,6 +22,7 @@
     * Included Files
     ***************************************/
     #include "cytypes.h"
+    #include "micaCommon.h"
     /***************************************
     * Macro Definitions
     ***************************************/
@@ -289,6 +290,8 @@
     #define `$INSTANCE_NAME`_MAG_CONTROLBITS_REG                 (0x4Bu)     /**< Address of the Magnetometer Power Control register */
     #define `$INSTANCE_NAME`_MAG_CONTROLBITS_SHIFT_PWR_CTRL    (0x00u)     /**< Position of the Power control bit */
     #define `$INSTANCE_NAME`_MAG_CONTROLBITS_PWR_CTRL          (0x01u << `$INSTANCE_NAME`_MAG_CONTROLBITS_SHIFT_PWR_CTRL )    /**< Mask of the Power control bit */
+    
+   
 
     /***************************************
     *        Function Prototypes
@@ -301,20 +304,25 @@
     uint32 `$INSTANCE_NAME`_SetParameters(uint8 deviceAddr, uint8 numParams, uint8* sensorParams); /**< Writes the parameters out to the device specified */
     uint32 `$INSTANCE_NAME`_GetDeviceState(uint8 deviceAddr, uint8 * returnState); /**< Get the value of the power state for a device */
     uint32 `$INSTANCE_NAME`_Test(uint32* i2cError);          /**< Test basic I2C contact with device */
+    int16 `$INSTANCE_NAME`_twosComp_12To16(uint16 baseTwelve);  /**< Convert from base 12 two'sComp to base 16 */
 
     /* Accelerometer specific functions */
     uint32 `$INSTANCE_NAME`_Acc_Start(void);    /**< Start the Accelerometer */
     uint32 `$INSTANCE_NAME`_Acc_Stop(void);     /**< Stop the Accelerometer */
     uint32 `$INSTANCE_NAME`_Acc_Sleep(uint8 powerMode);    /**< Put the Accelerometer into the specified sleep mode */
     uint32 `$INSTANCE_NAME`_Acc_Wakeup(void);   /**< Wakeup the Accelerometer*/
-    uint32 `$INSTANCE_NAME`_Acc_Read(uint16* dataArray, uint8 sensorChannels);     /**< Read the value of the Accelerometer*/
+//    uint32 `$INSTANCE_NAME`_Acc_Read(int16* dataArray, uint8 sensorChannels);     /**< Read the value of the Accelerometer*/
+    uint32 `$INSTANCE_NAME`_Acc_Read(ACC_DATA_T* accData);     /**< Read the value of the Accelerometer*/
+    
 
     /* Gyroscope specific functions */
     uint32 `$INSTANCE_NAME`_Gyr_Start(void);    /**< Start the Gyroscope*/
     uint32 `$INSTANCE_NAME`_Gyr_Stop(void);     /**< Stop the Gyroscope*/
     uint32 `$INSTANCE_NAME`_Gyr_Sleep(uint8 powerMode);    /**< Put the Gyroscope to sleep */
     uint32 `$INSTANCE_NAME`_Gyr_Wakeup(void);   /**< Wakeup the Gyroscope*/
-    uint32 `$INSTANCE_NAME`_Gyr_Read(uint16* dataArray, uint8 sensorChannels);     /**< Read the value of the Gyroscope*/
+//    uint32 `$INSTANCE_NAME`_Gyr_Read(int16* dataArray, uint8 sensorChannels);     /**< Read the value of the Gyroscope*/
+    uint32 `$INSTANCE_NAME`_Gyr_Read(GYRO_DATA_T* gyroData);     /**< Read the value of the Gyroscope*/
+    
 
     /* Magnetometer specific functions */
     uint32 `$INSTANCE_NAME`_Mag_Start(void);    /**< Start the Magnetometer*/

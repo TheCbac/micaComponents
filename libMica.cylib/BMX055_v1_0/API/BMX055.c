@@ -403,6 +403,8 @@ uint32 `$INSTANCE_NAME`_Acc_Read(ACC_DATA_T* accData){
     uint8 msb = ZERO;
     uint8 lsb = ZERO;
     uint32 readError;
+    // TODO: Scale correctly based on settings
+    float scale = 0.0096f;
     /************** X Channel **************/
     /* Read the LSB first to lock MSB */
     readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_X_LSB, &lsb);
@@ -410,7 +412,7 @@ uint32 `$INSTANCE_NAME`_Acc_Read(ACC_DATA_T* accData){
     /* Read the MSB */
     readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_X_MSB, &msb);
     /* Write X value */
-    accData->Ax = (float) `$INSTANCE_NAME`_twosComp_12To16( (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
+    accData->Ax = scale * (float) `$INSTANCE_NAME`_twosComp_12To16( (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
     /************** Y Channel **************/
     /* Read the LSB first to lock MSB */
     readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Y_LSB, &lsb);
@@ -418,7 +420,7 @@ uint32 `$INSTANCE_NAME`_Acc_Read(ACC_DATA_T* accData){
     /* Read the MSB */
     readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Y_MSB, &msb);
     /* Write Y value */
-    accData->Ay = (float) `$INSTANCE_NAME`_twosComp_12To16( (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
+    accData->Ay = scale *  (float) `$INSTANCE_NAME`_twosComp_12To16( (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
     /************** Z Channel **************/
     /* Read the LSB first to lock MSB */
     readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Z_LSB, &lsb);
@@ -426,48 +428,10 @@ uint32 `$INSTANCE_NAME`_Acc_Read(ACC_DATA_T* accData){
     /* Read the MSB */
     readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Z_MSB, &msb);
     /* Write Z value */
-    accData->Az = (float) `$INSTANCE_NAME`_twosComp_12To16( (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
+    accData->Az = scale * (float) `$INSTANCE_NAME`_twosComp_12To16( (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
     
     /* Indicate success */
     return `$INSTANCE_NAME`_ERR_OK;
-    
-    
-//    if (sensorChannels & `$INSTANCE_NAME`_CHANNEL_MASK_X){
-//            /* A channel is being read */
-//            channelCount++;
-//            /* Read the LSB first to lock MSB */
-//            readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_X_LSB, &lsb);
-//            if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-//            /* Read the MSB */
-//            readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_X_MSB, &msb);
-//            if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-//        /* Discard LS nibble and store the value in the output array */
-//        dataArray[channelCount] = (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW);
-//    }
-//    /* Y Data */
-//    if (sensorChannels & `$INSTANCE_NAME`_CHANNEL_MASK_Y){ 
-//            channelCount++;
-//            readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Y_LSB, &lsb);
-//            if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-//            readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Y_MSB, &msb);
-//            if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-//        dataArray[channelCount] = (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW);
-//    }
-//    /* Z Data */
-//    if (sensorChannels & `$INSTANCE_NAME`_CHANNEL_MASK_Z){
-//            channelCount++;
-//            readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Z_LSB, &lsb);
-//            if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-//            readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Z_MSB, &msb);
-//            if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-//        dataArray[channelCount] = (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW);
-//    }
-//    /* if no channels reported, return noData */
-//    if(!channelCount){return `$INSTANCE_NAME`_ERR_CHANNELS_NONE;}
-//    /* Pack the Channel info */
-//    dataArray[`$INSTANCE_NAME`_CHANNEL_INDEX_NUM_CHAN] = channelCount;
-//    /* Return success */
-//    return `$INSTANCE_NAME`_ERR_OK;
 }
 
 /* -------------------------- Gyroscope Functions -------------------------- */
@@ -581,7 +545,8 @@ uint32 `$INSTANCE_NAME`_Gyr_Wakeup(void) {
 ****************************************************************************//**
 *
 * \brief
-*  Reads the specified channels of the gyroscope. Places result into the dataArray
+*  Reads the specified channels of the gyroscope. Places result into the dataArray.
+*   values are scaled and converted to radians.
 *
 * \param dataArray
 *  Array to place the data into
@@ -604,8 +569,9 @@ uint32 `$INSTANCE_NAME`_Gyr_Read(GYRO_DATA_T* gyroData){
     /* Read in the gyroscope data */
     uint8 msb = ZERO;
     uint8 lsb = ZERO;
-    uint16 channelCount = ZERO;
     uint32 readError;
+    // TODO: scale based off settings
+    float scale = 0.061f; /* Default settings 61 m°/s/lsb */
     /************** X Channel **************/
     /* Read the LSB first to lock MSB */
     readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_X_LSB, &lsb);
@@ -614,7 +580,7 @@ uint32 `$INSTANCE_NAME`_Gyr_Read(GYRO_DATA_T* gyroData){
     readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_X_MSB, &msb);
     int16 x = (msb << SHIFT_BYTE_ONE) | lsb;
     /* Write X value */
-    gyroData->Wx = (float) x;
+    gyroData->Wx = to_radians(scale * (float) x);
     /************** Y Channel **************/
     /* Read the LSB first to lock MSB */
     readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_Y_LSB, &lsb);
@@ -623,7 +589,7 @@ uint32 `$INSTANCE_NAME`_Gyr_Read(GYRO_DATA_T* gyroData){
     readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_Y_MSB, &msb);
     int16 y = (msb << SHIFT_BYTE_ONE) | lsb;
     /* Write Y value */
-    gyroData->Wy = (float) y;
+    gyroData->Wy = to_radians(scale * (float) y);
     /************** Z Channel **************/
     /* Read the LSB first to lock MSB */
     readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_Z_LSB, &lsb);
@@ -632,52 +598,11 @@ uint32 `$INSTANCE_NAME`_Gyr_Read(GYRO_DATA_T* gyroData){
     readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_Z_MSB, &msb);
     int16 z = (msb << SHIFT_BYTE_ONE) | lsb;
     /* Write Z value */
-    gyroData->Wz = (float) z;
+    gyroData->Wz = to_radians(scale * (float) z);
     
     /* Indicate success */
     return `$INSTANCE_NAME`_ERR_OK;
-    
-//    /* X Data */
-//    if (sensorChannels & `$INSTANCE_NAME`_CHANNEL_MASK_X){
-//        /* A channel is being read */
-//        channelCount++;
-//        /* Read the LSB first to lock MSB */
-//        readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_X_LSB, &lsb);
-//        if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-//        /* Read the MSB */
-//        readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_X_MSB, &msb);
-//        if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-////        /* Discard LS nibble and store the value in the output array */
-////        dataArray[channelCount] = (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW);
-//        /* turn into 16 bit */
-//        dataArray[channelCount] = (msb << SHIFT_BYTE_ONE) | lsb;       
-//    }
-//    /* Y Data */
-//    if (sensorChannels & `$INSTANCE_NAME`_CHANNEL_MASK_Y){ 
-//        channelCount++;
-//        readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_Y_LSB, &lsb);
-//        if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-//        readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_Y_MSB, &msb);
-//        if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-////        dataArray[channelCount] = (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW);
-//        dataArray[channelCount] = (msb << SHIFT_BYTE_ONE) | lsb;   
-//    }
-//    /* Z Data */
-//    if (sensorChannels & `$INSTANCE_NAME`_CHANNEL_MASK_Z){
-//        channelCount++;
-//        readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_Z_LSB, &lsb);
-//        if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-//        readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_Z_MSB, &msb);
-//        if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-////        dataArray[channelCount] = (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW);.
-//        dataArray[channelCount] = (msb << SHIFT_BYTE_ONE) | lsb;   
-//    }
-//    /* if no channels reported, return noData */
-//    if(!channelCount){return `$INSTANCE_NAME`_ERR_CHANNELS_NONE;}
-//    /* Pack the Channel info */
-//    dataArray[`$INSTANCE_NAME`_CHANNEL_INDEX_NUM_CHAN] = channelCount;
-//    /* Return success */
-//    return `$INSTANCE_NAME`_ERR_OK;
+
 }
 
 

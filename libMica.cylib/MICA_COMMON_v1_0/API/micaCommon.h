@@ -41,6 +41,13 @@
     #define TWELVE          (12u)   /**< Constant 12 */
     #define NULL_OCTET      (0u)    /**< Null Octet */
     
+    #define PI              (3.14159265358979f) /**< Pi */
+    
+    #define ZERO_F          (0.0f)  /**< Floating point Zero */
+    #define HALF_F          (0.5f)  /**< Floating point half */
+    #define ONE_F           (1.0f)  /**< Floating point One */
+    #define TWO_F           (2.0f)  /**< Floating point two */
+    
     #define BITS_SINGLE_BIT         (0x01u)             /**< Single bit mask */
     #define BITS_ONE_NIBBLE         (4u)                /**< Number of bits in a nibble */
     #define BITS_ONE_BYTE           (8u)                /**< Number of bits in one byte */
@@ -71,6 +78,9 @@
     #define MICA_DELAY_MS_SEC_QUARTER   (250)           /**< Delay in ms for 0.25 seconds  */
     #define MICA_DELAY_MS_SEC_HALF      (500)           /**< Delay in ms for 0.5 second  */
     #define MICA_DELAY_MS_SEC_ONE       (1000)          /**< Delay in ms for 1 second  */
+    
+    #define MICA_DELAY_US_SEC_TENTH     (100000)        /**< Delay in us for 0.1 second  */
+    #define MICA_DELAY_US_SEC_QUARTER   (250000)        /**< Delay in us for 0.25 second  */
 
     #define MICA_delayMs(val)     `$msDelayFunction`(val)    /**< Delay function */
     
@@ -97,6 +107,18 @@
         float q3; /**< Second element (j) */
         float q4; /**< Second element (k) */
     } QUATERNION_T;
+    /* Struct for handling Euler angles */
+    typedef struct {
+        float yaw; /**< Yaw of system */
+        float pitch; /**< pitch of system */
+        float roll; /**< roll of system */
+    } EULER_ANGLE_T;
+    
+    /***************************************
+    * Function prototypes
+    ***************************************/  
+    float to_degrees(float radians);
+    float to_radians(float degrees);
     
 #endif /* `$INSTANCE_NAME`_H */
 

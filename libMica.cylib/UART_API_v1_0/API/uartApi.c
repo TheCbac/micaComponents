@@ -16,6 +16,55 @@
 #include "`$includeFile`.h"
 #include "micaCommon.h"
 
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_putString()
+****************************************************************************//**
+*
+* \brief Prints out the string starting at address passsed until a null character
+    is reached.
+*
+* \param Address of array, must be zero terminated
+*
+* \return
+* None
+ *******************************************************************************/
+void `$INSTANCE_NAME`_putString(char * str){
+    /* Iterate until a zero is hit */
+    while(*str){
+        `$INSTANCE_NAME`_putChar(*str);
+        /* Increment index */
+        str++;
+    }
+    
+}
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_putArray()
+****************************************************************************//**
+*
+* \brief Prints out the data starting at the addressed passed in, for the specified 
+*   length
+*
+* \param Array  - Address of array with the data to print
+*
+* \param length - Length of data to write
+*
+* \return
+* None
+ *******************************************************************************/
+void `$INSTANCE_NAME`_putArray(uint8 * array, uint16 length){
+    uint8 i;
+    /* Loop until length satisfacition is met*/
+    for(i=ZERO; i < length; i++){
+        `$INSTANCE_NAME`_putChar(*array);
+        /* Increment index */
+        array++;
+    }
+    
+}
+
+
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_changeBase()
 ****************************************************************************//**

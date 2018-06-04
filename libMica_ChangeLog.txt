@@ -1,0 +1,13 @@
+CHANGE LOG
+libMICA - MICA Components - v1
+
+2018.06.04 - BMX component CC
+* Create two accelerometer data types - float and int16     ✓
+* Create two gyroscope data types - float and int16         ✓
+* Convert Power states to enumerated types                  ✓
+* Create devices state structs                              ✓
+* Update BMX device functions
+* Update ACC functions
+* Update GYR functions
+* Update MAG funcitons 
+

@@ -20,9 +20,10 @@
 
 
 /* Store the power state of the device */
-uint8 `$INSTANCE_NAME`_Acc_powerState = `$INSTANCE_NAME`_ACC_PM_NORMAL;
-uint8 `$INSTANCE_NAME`_Gyr_powerState = `$INSTANCE_NAME`_GYR_PM_NORMAL;
-uint8 `$INSTANCE_NAME`_Mag_powerState = `$INSTANCE_NAME`_MAG_PM_SUSPEND ;
+//uint8 `$INSTANCE_NAME`_Acc_powerState = `$INSTANCE_NAME`_ACC_PM_NORMAL;
+//uint8 `$INSTANCE_NAME`_Gyr_powerState = `$INSTANCE_NAME`_GYR_PM_NORMAL;
+//uint8 `$INSTANCE_NAME`_Mag_powerState = `$INSTANCE_NAME`_MAG_PM_SUSPEND ;
+
 
 
 /* -------------------------- Device Wide Functions -------------------------- */
@@ -33,27 +34,40 @@ uint8 `$INSTANCE_NAME`_Mag_powerState = `$INSTANCE_NAME`_MAG_PM_SUSPEND ;
 *
 * \brief Starts all three devices (Acc, GYR, and MAG)
 *
+* \param deviceState
+*  Pointer to struct to place the device settings into
+*
 * \return
-* uint8: An error code with the result of the start procedure. 
-* The possible error codes are:
+*  An error code with the result of the start procedure. 
+*  The possible error codes are:
 *
 *  Errors codes                             | Description
 *   ------------                            | -----------
 *   `$INSTANCE_NAME`_ERR_OK                 | On Successful stop
 *******************************************************************************/
-uint32 `$INSTANCE_NAME`_Start(void) {
-    // @TODO: implement
-    // StartAcc();
-    // StartGyr();
-    // StartMag();
+uint32 `$INSTANCE_NAME`_Start(`$INSTANCE_NAME`_STATE_T* deviceState) {
+    /* Initialize Accelerometer */
+    uint32 initError;
+    initError = `$INSTANCE_NAME`_Acc_Start(&deviceState->acc);
+    if(initError != `$INSTANCE_NAME`_ERR_OK){return initError;}
+    /* Initialize Gyroscope */
+    initError = `$INSTANCE_NAME`_Gyr_Start(&deviceState->gyr);
+    if(initError != `$INSTANCE_NAME`_ERR_OK){return initError;}
+    /* Initialize Magnetomter */
+    initError = `$INSTANCE_NAME`_Mag_Start(&deviceState->mag);
+    if(initError != `$INSTANCE_NAME`_ERR_OK){return initError;}
+    /* Return success */
     return `$INSTANCE_NAME`_ERR_OK;
 }
 
 /*******************************************************************************
-* Function Name: `$INSTANCE_NAME`_Stop()
+* Function Name: `$INSTANCE_NAME`_Stop(`$INSTANCE_NAME`_STATE_T* deviceState)
 ********************************************************************************
 *
 * \brief Stop all three devices (Acc, GYR, and MAG)
+*
+* \param deviceState
+*  Pointer to struct to place the device settings into
 *
 * \return
 * uint8: An error code with the result of the Stop procedure. 
@@ -63,7 +77,7 @@ uint32 `$INSTANCE_NAME`_Start(void) {
 *   ------------                            | -----------
 *   `$INSTANCE_NAME`_ERR_OK                 | On Successful stop
 *******************************************************************************/
-uint32 `$INSTANCE_NAME`_Stop(void) {
+uint32 `$INSTANCE_NAME`_Stop(`$INSTANCE_NAME`_STATE_T* deviceState) {
     // @TODO: implement
     // StopAcc();
     // StopGyr();
@@ -77,6 +91,9 @@ uint32 `$INSTANCE_NAME`_Stop(void) {
 *
 * \brief Sleep all three devices (Acc, GYR, and MAG)
 *
+* \param deviceState
+*  Pointer to struct to place the device settings into
+*
 * \return
 * uint8: An error code with the result of the sleep procedure. 
 * The possible error codes are:
@@ -85,7 +102,7 @@ uint32 `$INSTANCE_NAME`_Stop(void) {
 *   ------------                            | -----------
 *   `$INSTANCE_NAME`_ERR_OK                 | On Successful Sleep
 *******************************************************************************/
-uint32 `$INSTANCE_NAME`_Sleep(void) {
+uint32 `$INSTANCE_NAME`_Sleep(`$INSTANCE_NAME`_STATE_T* deviceState) {
     // @TODO: implement
     // SleepAcc();
     // SleepGyr();
@@ -99,6 +116,9 @@ uint32 `$INSTANCE_NAME`_Sleep(void) {
 *
 * \brief Wakeup all three devices (Acc, GYR, and MAG)
 *
+* \param deviceState
+*  Pointer to struct to place the device settings into
+*
 * \return
 * uint8: An error code with the result of the Wakeup procedure. 
 * The possible error codes are:
@@ -107,7 +127,7 @@ uint32 `$INSTANCE_NAME`_Sleep(void) {
 *   ------------                            | -----------
 *   `$INSTANCE_NAME`_ERR_OK                 | On Successful Wakeup
 *******************************************************************************/
-uint32 `$INSTANCE_NAME`_Wakeup(void) {
+uint32 `$INSTANCE_NAME`_Wakeup(`$INSTANCE_NAME`_STATE_T* deviceState) {
     // @TODO: implement
     // WakeupAcc();
     // WakeupGyr();
@@ -168,46 +188,9 @@ uint32 `$INSTANCE_NAME`_SetParameters(uint8 deviceAddr, uint8 numParams, uint8* 
     return `$INSTANCE_NAME`_ERR_OK;
 }
 
-/*******************************************************************************
-* Function Name: `$INSTANCE_NAME`_GetDeviceState()
-********************************************************************************
-*
-* \brief Allows the user to get the power state for any of the three devices
-* 
-* \param deviceAddr
-*   Address of the device to 
-*
-* \return
-* uint8: An error code with the result of the Wakeup procedure. 
-* The possible error codes are:
-*
-*  Errors codes                             | Description
-*   ------------                            | -----------
-*   `$INSTANCE_NAME`_ERR_OK                 | On Successful Wakeup
-*   `$INSTANCE_NAME`_ERR_DEVICE_UNKNOWN;    | An unknown device address used
-*******************************************************************************/
-uint32 `$INSTANCE_NAME`_GetDeviceState(uint8 deviceAddr, uint8 * returnState){
-    /* Ensure the correct device was written to */
-    switch(deviceAddr){
-        /* Accelerometer, gyroscope or magnetometer */
-        case `$INSTANCE_NAME`_ACC_ADDR:     
-            *returnState = `$INSTANCE_NAME`_Acc_powerState;   
-            break; 
-        case `$INSTANCE_NAME`_GYR_ADDR:
-            *returnState = `$INSTANCE_NAME`_Gyr_powerState;    
-            break;         
-        case `$INSTANCE_NAME`_MAG_ADDR:
-            *returnState = `$INSTANCE_NAME`_Mag_powerState;    
-            break;
-        /* Unknown device */
-        default:
-            return `$INSTANCE_NAME`_ERR_DEVICE_UNKNOWN;
-    }
-    return `$INSTANCE_NAME`_ERR_OK;    
-}
 
 /*******************************************************************************
-* Function Name: `$INSTANCE_NAME`_Test()
+* Function Name: `$INSTANCE_NAME`_testConnection()
 ********************************************************************************
 *
 * \brief Test I2C Connectivity
@@ -224,7 +207,7 @@ uint32 `$INSTANCE_NAME`_GetDeviceState(uint8 deviceAddr, uint8 * returnState){
 *   `$INSTANCE_NAME`_ERR_WHOAMI             | Who am I value return did not match expected
 *   `$INSTANCE_NAME`_ERR_I2C                | I2C Error occured
 *******************************************************************************/
-uint32 `$INSTANCE_NAME`_Test(uint32* i2cError){
+uint32 `$INSTANCE_NAME`_testConnection(uint32* i2cError){
     uint8 whoAmI = ZERO;
     /* Read the LSB first to lock MSB */
     uint32 readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_CHIPID_REG, &whoAmI);
@@ -275,6 +258,8 @@ int16 `$INSTANCE_NAME`_twosComp_12To16(uint16 baseTwelve) {
 *  Initializes the Accelerometer. Meant to be a one time initialization / reset. 
 * Use `$INSTANCE_NAME`_Acc_Wakeup if the sensor needs to be woken up from sleep
 *
+* \param accState
+* Pointer to the state of the accelerometer
 *
 * \return  
 * uint32: An error code with the result of the Start procedure. 
@@ -284,8 +269,18 @@ int16 `$INSTANCE_NAME`_twosComp_12To16(uint16 baseTwelve) {
 *   ------------                            | -----------
 *   `$INSTANCE_NAME`_ERR_OK                 | On successful Start
 *******************************************************************************/
-uint32 `$INSTANCE_NAME`_Acc_Start(void) {
-    /* @TODO: Implement function */
+uint32 `$INSTANCE_NAME`_Acc_Start(`$INSTANCE_NAME`_ACC_STATE_T* accState) {
+    /* Initiate Accelerometer software reset */
+    `$i2cWriteFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_BGW_SOFTRESET_REG, `$INSTANCE_NAME`_ACC_BGW_SOFTRESET_VAL);
+    /* Wait necessary boot time */
+    MICA_delayMs(`$INSTANCE_NAME`_ACC_BGW_SOFTRESET_MS);
+    /* Set state values to the default */
+    accState->powerState = `$INSTANCE_NAME`_ACC_PM_NORMAL;
+    accState->scale = `$INSTANCE_NAME`_ACC_RANGE_2G_GAIN;
+    accState->channels.X = true;
+    accState->channels.Y = true;
+    accState->channels.Z = true;
+    /* Return Success */
     return `$INSTANCE_NAME`_ERR_OK;
 }
 
@@ -310,9 +305,8 @@ uint32 `$INSTANCE_NAME`_Acc_Stop(void) {
     /* @TODO: Implement function */
     return `$INSTANCE_NAME`_ERR_OK;
 }
-
 /*******************************************************************************
-* Function Name: `$INSTANCE_NAME`_Acc_Sleep()
+* Function Name: `$INSTANCE_NAME`_Acc_SetPowerMode()
 ****************************************************************************//**
 *
 * \brief
@@ -331,24 +325,227 @@ uint32 `$INSTANCE_NAME`_Acc_Stop(void) {
 *   `$INSTANCE_NAME`_ERR_MODE_INVALID       | An invalid power mode was specified
 *   `$INSTANCE_NAME`_ERR_MODE_UNKNOWN       | An unknown power mode was specified
 *******************************************************************************/
-uint32 `$INSTANCE_NAME`_Acc_Sleep(uint8 powerMode) {
-    switch(powerMode) {
-        case `$INSTANCE_NAME`_ACC_PM_STANDBY:
-        case `$INSTANCE_NAME`_ACC_PM_LP1:
-        case `$INSTANCE_NAME`_ACC_PM_LP2:
-        case `$INSTANCE_NAME`_ACC_PM_SUSPEND:
-        case `$INSTANCE_NAME`_ACC_PM_DEEP_SUSPEND:
+uint32 `$INSTANCE_NAME`_Acc_SetPowerMode(`$INSTANCE_NAME`_ACC_STATE_T* accState, `$INSTANCE_NAME`_ACC_POWER_T powerMode){
+    uint8 powerRegVal;
+    /* Current state */
+    switch(accState->powerState){
+        case `$INSTANCE_NAME`_ACC_PM_NORMAL:{
+            /* Normal to Next state */
+            switch(powerMode){
+                /* Place device in standby mode (SUSPEND + LowPower Bit) */
+                case `$INSTANCE_NAME`_ACC_PM_STANDBY: {
+                    /* Set the lowpower bit in the LP register */
+                    `$i2cWriteFunction`(`$INSTANCE_NAME`_ACC_ADDR,\
+                                        `$INSTANCE_NAME`_ACC_PMU_LOW_POWER_REG,\
+                                        `$INSTANCE_NAME`_ACC_PMU_LOW_POWER_LOWPOWER_MODE);
+                    /* Prepare to place in Suspend mode */
+                    powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_SUSPEND;
+                    break;   
+                }
+                /* Place device in Low Power 1 mode (LOW_POWER + !LowPower Bit) */
+                case `$INSTANCE_NAME`_ACC_PM_LP1:{
+                    /* Clear the lowpower bit in the LP register (@TODO: Should read and then clear) */
+                    `$i2cWriteFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_PMU_LOW_POWER_REG, ZERO);
+                    /* Prepare for low power mode */
+                    powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_LOWPOWER_EN;
+                    break;
+                }
+                /* Place device in Low Power 2 mode (LOW_POWER + LowPower Bit) */
+                case `$INSTANCE_NAME`_ACC_PM_LP2:{
+                    /* Set the lowpower bit in the LP register (@TODO: Should read and then Set) */
+                    `$i2cWriteFunction`(`$INSTANCE_NAME`_ACC_ADDR,\
+                                        `$INSTANCE_NAME`_ACC_PMU_LOW_POWER_REG,\
+                                        `$INSTANCE_NAME`_ACC_PMU_LOW_POWER_LOWPOWER_MODE);
+                    /* Prepare for low power mode */
+                    powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_LOWPOWER_EN;
+                    break;
+                }
+                /* Place device in Suspend mode (SUSPEND + !LowPower Bit) */
+                case `$INSTANCE_NAME`_ACC_PM_SUSPEND:{
+                    /* Clear the lowpower bit in the LP register (@TODO: Should read and then clear) */
+                    `$i2cWriteFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_PMU_LOW_POWER_REG, ZERO);
+                    /* Prepare for suspend */
+                    powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_SUSPEND;
+                    break;
+                }
+                /* Place device in Deep Suspend mode (DEEP_SUSPEND) */
+                case `$INSTANCE_NAME`_ACC_PM_DEEP_SUSPEND:{
+                    powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_DEEP_SUSPEND; 
+                    break;
+                }
+                /* Invalid Power state */
+                default:{
+                    return `$INSTANCE_NAME`_ERR_MODE_INVALID;
+                }
+            }
             break;
-        /* Cannot sleep to Normal */
-        case `$INSTANCE_NAME`_ACC_PM_NORMAL:
-            return `$INSTANCE_NAME`_ERR_MODE_INVALID;
-        /* Unknown power mode */
-        default:
-            return `$INSTANCE_NAME`_ERR_MODE_UNKNOWN; 
-
+        } /* End `$INSTANCE_NAME`_ACC_PM_NORMAL */
+        case `$INSTANCE_NAME`_ACC_PM_STANDBY:{
+            /* Standby to Next state */
+            switch(powerMode){
+                /* Exit Standby (NORMAL) */
+                case `$INSTANCE_NAME`_ACC_PM_NORMAL:{
+                    powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_NORMAL;
+                    break;
+                }
+                /* Place device in Low Power 2 mode (LOW_POWER + LowPower Bit) */
+                case `$INSTANCE_NAME`_ACC_PM_LP2:{
+                    /* Prepare for low power mode (Low Power bit is already set in standby) */
+                    powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_LOWPOWER_EN;
+                    break;
+                }
+                /* Place device in Deep Suspend mode (DEEP_SUSPEND) */
+                case `$INSTANCE_NAME`_ACC_PM_DEEP_SUSPEND:{
+                    powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_DEEP_SUSPEND; 
+                    break;
+                }
+                /* Invalid Power state */
+                default:{
+                    return `$INSTANCE_NAME`_ERR_MODE_INVALID;
+                }
+            }
+            break;
+        } /* End `$INSTANCE_NAME`_ACC_PM_STANDBY */
+        case `$INSTANCE_NAME`_ACC_PM_LP1:{
+            /* Low Power 1 to Next state */
+            switch(powerMode){
+                /* Exit LP1 to NORMAL */
+                case `$INSTANCE_NAME`_ACC_PM_NORMAL:{
+                    powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_NORMAL;
+                    break;
+                }
+                /* Place device in SUSPEND mode (SUSPEND + !LowPower Bit) */
+                case `$INSTANCE_NAME`_ACC_PM_SUSPEND:{
+                    /* Prepare for low power mode (Low Power bit is already cleared in LP1) */
+                    powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_SUSPEND;
+                    break;
+                }
+                /* Place device in Deep Suspend mode (DEEP_SUSPEND) */
+                case `$INSTANCE_NAME`_ACC_PM_DEEP_SUSPEND:{
+                    powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_DEEP_SUSPEND; 
+                    break;
+                }
+                /* Invalid Power state */
+                default:{
+                    return `$INSTANCE_NAME`_ERR_MODE_INVALID;
+                }
+            }
+            break;
+        } /*End `$INSTANCE_NAME`_ACC_PM_LP1 */
+        case `$INSTANCE_NAME`_ACC_PM_LP2:{
+            /* Low Power 2 to Next state */
+            switch(powerMode){
+                /* Exit LP2 to NORMAL */
+                case `$INSTANCE_NAME`_ACC_PM_NORMAL:{
+                    powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_NORMAL;
+                    break;
+                }
+                /* Place device in STANDBY mode (LowPower_En + LowPower Bit) */
+                case `$INSTANCE_NAME`_ACC_PM_SUSPEND:{
+                    /* Prepare for low power mode (Low Power bit is already set in LP2) */
+                    powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_SUSPEND;
+                    break;
+                }
+                /* Place device in Deep Suspend mode (DEEP_SUSPEND) */
+                case `$INSTANCE_NAME`_ACC_PM_DEEP_SUSPEND:{
+                    powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_DEEP_SUSPEND; 
+                    break;
+                }
+                /* Invalid Power state */
+                default:{
+                    return `$INSTANCE_NAME`_ERR_MODE_INVALID;
+                }
+            }
+            break;
+        } /*End `$INSTANCE_NAME`_ACC_PM_LP2 */
+        case `$INSTANCE_NAME`_ACC_PM_SUSPEND:{
+            /* Suspend to Next state */
+            switch(powerMode){
+                /* Exit LP2 to NORMAL */
+                case `$INSTANCE_NAME`_ACC_PM_NORMAL:{
+                    powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_NORMAL;
+                    break;
+                }
+                /* Place device in LP1 mode (LowPower_En + !LowPower Bit) */
+                case `$INSTANCE_NAME`_ACC_PM_SUSPEND:{
+                    /* Prepare for low power mode (Low Power bit is already cleared in LP1) */
+                    powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_LOWPOWER_EN;
+                    break;
+                }
+                /* Place device in Deep Suspend mode (DEEP_SUSPEND) */
+                case `$INSTANCE_NAME`_ACC_PM_DEEP_SUSPEND:{
+                    powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_DEEP_SUSPEND; 
+                    break;
+                }
+                /* Invalid Power state */
+                default:{
+                    return `$INSTANCE_NAME`_ERR_MODE_INVALID;
+                }
+            }
+            break;
+        } /*End `$INSTANCE_NAME`_ACC_PM_SUSPEND */
+        case `$INSTANCE_NAME`_ACC_PM_DEEP_SUSPEND:{
+            /* Deep Suspend to Next state */
+            switch(powerMode){
+                /* Exit Deep Suspend to NORMAL */
+                case `$INSTANCE_NAME`_ACC_PM_NORMAL:{
+                    powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_NORMAL;
+                    break;
+                }
+                /* Invalid Power state */
+                default:{
+                    return `$INSTANCE_NAME`_ERR_MODE_INVALID;
+                }
+            }
+            break;
+        } /*End `$INSTANCE_NAME`_ACC_PM_DEEP_SUSPEND */
     }
+    /* Write to the low power register value selected from above */
+    `$i2cWriteFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_PMU_LPW_REG, powerRegVal);
+    /* Update the state (valid if reached this point) */
+    accState->powerState = powerMode;
+    /* Return Success */
     return `$INSTANCE_NAME`_ERR_OK;
 }
+
+///*******************************************************************************
+//* Function Name: `$INSTANCE_NAME`_Acc_Sleep()
+//****************************************************************************//**
+//*
+//* \brief
+//*  Puts the Accelerometer into the low power mode specified.
+//*
+//* \param powerMode
+//*  Power mode to place the device into 
+//*
+//* \return  
+//* uint32: An error code with the result of the Sleep procedure. 
+//* The possible error codes are:
+//*
+//*  Errors codes                             | Description
+//*   ------------                            | -----------
+//*   `$INSTANCE_NAME`_ERR_OK                 | On successful Sleep
+//*   `$INSTANCE_NAME`_ERR_MODE_INVALID       | An invalid power mode was specified
+//*   `$INSTANCE_NAME`_ERR_MODE_UNKNOWN       | An unknown power mode was specified
+//*******************************************************************************/
+//uint32 `$INSTANCE_NAME`_Acc_Sleep(uint8 powerMode) {
+//    switch(powerMode) {
+//        case `$INSTANCE_NAME`_ACC_PM_STANDBY:
+//        case `$INSTANCE_NAME`_ACC_PM_LP1:
+//        case `$INSTANCE_NAME`_ACC_PM_LP2:
+//        case `$INSTANCE_NAME`_ACC_PM_SUSPEND:
+//        case `$INSTANCE_NAME`_ACC_PM_DEEP_SUSPEND:
+//            break;
+//        /* Cannot sleep to Normal */
+//        case `$INSTANCE_NAME`_ACC_PM_NORMAL:
+//            return `$INSTANCE_NAME`_ERR_MODE_INVALID;
+//        /* Unknown power mode */
+//        default:
+//            return `$INSTANCE_NAME`_ERR_MODE_UNKNOWN; 
+//
+//    }
+//    return `$INSTANCE_NAME`_ERR_OK;
+//}
 
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_Acc_Wakeup()
@@ -375,17 +572,164 @@ uint32 `$INSTANCE_NAME`_Acc_Wakeup(void) {
 
 
 /*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_Acc_Int2Float
+****************************************************************************//**
+*
+* \brief
+*  Converts an accelerometer data sample from int16 to float type. 
+*
+* \param State
+*  Pointer to the Struct containing the settings of the device in order to scale correctly
+*
+* \param intData
+*  Pointer to the int16 data to be converted
+*       
+* \param floatData 
+*   Pointer to the output data in float format 
+*
+* \return 
+* uint32: An error code with the result of the conversion procedure. 
+* The possible error codes are:
+*
+*  Errors codes                             | Description
+*   ------------                            | -----------
+*   `$INSTANCE_NAME`_ERR_OK                 | On successful operation
+*   `$INSTANCE_NAME`_ERR_CHANNELS_NONE      | No channels indicated for conversion
+*******************************************************************************/
+uint32 `$INSTANCE_NAME`_Acc_Int2Float(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_T* intData, ACC_DATA_F* floatData){
+    /* Extract channels */
+    CHANNELS_T chans = state->channels;
+    if( (!chans.X) && (!chans.Y) && (!chans.Z) ){
+        return `$INSTANCE_NAME`_ERR_CHANNELS_NONE;
+    }
+    /* Gain of the accelerometer */
+    float gain = state->scale;
+    /* Convert to float */
+    if(chans.X){ floatData->Ax = gain * (float) intData->Ax; }
+    if(chans.Y){ floatData->Ay = gain * (float) intData->Ay; }
+    if(chans.Z){ floatData->Az = gain * (float) intData->Az; }
+    /* Return success */
+    return `$INSTANCE_NAME`_ERR_OK;
+}
+
+/*******************************************************************************
+* Function Name: ``$INSTANCE_NAME`_Acc_Float2Int(); 
+****************************************************************************//**
+*
+* \brief
+*  Converts an accelerometer data sample from float to int16 type. 
+*
+* \param State
+*  Pointer to the Struct containing the settings of the device in order to scale correctly
+*
+* \param floatData
+*  Pointer to the float data to be converted
+*       
+* \param intData 
+*   Pointer to the output data in int16 format 
+*
+* \return 
+* uint32: An error code with the result of the conversion procedure. 
+* The possible error codes are:
+*
+*  Errors codes                             | Description
+*   ------------                            | -----------
+*   `$INSTANCE_NAME`_ERR_OK                 | On successful operation
+*******************************************************************************/
+uint32 `$INSTANCE_NAME`_Acc_Float2Int(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_F* floatData, ACC_DATA_T* intData) {
+    /* Extract channels */
+    CHANNELS_T chans = state->channels;
+    /* Ensure at least one channel is enabled  */
+    if( (!chans.X) && (!chans.Y) && (!chans.Z) ){
+        return `$INSTANCE_NAME`_ERR_CHANNELS_NONE;
+    }
+    /* Gain of the accelerometer */
+    float gain = state->scale;
+    /* Convert to int */
+    if(chans.X){ intData->Ax = (int16) (floatData->Ax / gain); }
+    if(chans.Y){ intData->Ay = (int16) (floatData->Ay / gain); }
+    if(chans.Z){ intData->Az = (int16) (floatData->Az / gain); }
+    /* Return success */
+    return `$INSTANCE_NAME`_ERR_OK;
+}
+
+///*******************************************************************************
+//* Function Name: `$INSTANCE_NAME`_Acc_Read()
+//****************************************************************************//**
+//*
+//* \brief
+//*  Reads the specified channels of the Accelerometer. Places result into the dataArray
+//*
+//* \param state
+//*  Pointer to the state of the accelerometer
+//*
+//* \param accData
+//*  Pointer to struct to place the data into
+//*
+//* \return 
+//* uint32: An error code with the result of the read procedure. 
+//* The possible error codes are:
+//*
+//*  Errors codes                             | Description
+//*   ------------                            | -----------
+//*   `$INSTANCE_NAME`_ERR_OK                 | On successful operation
+//*   `$INSTANCE_NAME`_ERR_CHANNELS_NONE      | Data was not requested from any channels
+//*
+//*******************************************************************************/
+//uint32 `$INSTANCE_NAME`_Acc_Read(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_T* accData){
+//        /* Extract channels */
+//    CHANNELS_T chans = state->channnels;
+//    /* Ensure at least one channel is enabled  */
+//    if( (!chans.X) && (!chans.Y) && (!chans.Z) ){
+//        return `$INSTANCE_NAME`_ERR_CHANNELS_NONE;
+//    }
+//    /* Read in the accelerometer data */
+//    uint8 msb = ZERO;
+//    uint8 lsb = ZERO;
+//    uint32 readError;
+//    // TODO: Scale correctly based on settings
+//    float scale = 0.0096f;
+//    /************** X Channel **************/
+//    /* Read the LSB first to lock MSB */
+//    readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_X_LSB, &lsb);
+//    if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
+//    /* Read the MSB */
+//    readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_X_MSB, &msb);
+//    /* Write X value */
+//    accData->Ax = scale * (float) `$INSTANCE_NAME`_twosComp_12To16( (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
+//    /************** Y Channel **************/
+//    /* Read the LSB first to lock MSB */
+//    readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Y_LSB, &lsb);
+//    if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
+//    /* Read the MSB */
+//    readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Y_MSB, &msb);
+//    /* Write Y value */
+//    accData->Ay = scale *  (float) `$INSTANCE_NAME`_twosComp_12To16( (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
+//    /************** Z Channel **************/
+//    /* Read the LSB first to lock MSB */
+//    readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Z_LSB, &lsb);
+//    if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
+//    /* Read the MSB */
+//    readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Z_MSB, &msb);
+//    /* Write Z value */
+//    accData->Az = scale * (float) `$INSTANCE_NAME`_twosComp_12To16( (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
+//    
+//    /* Indicate success */
+//    return `$INSTANCE_NAME`_ERR_OK;
+//}
+
+/*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_Acc_Read()
 ****************************************************************************//**
 *
 * \brief
 *  Reads the specified channels of the Accelerometer. Places result into the dataArray
 *
-* \param dataArray
-*  Pointer to array to place the data into
-*       
-* \param sensorChannels 
-* A bit mask of the channels to sample 
+* \param state
+*  Pointer to the state of the accelerometer
+*
+* \param accData
+*  Pointer to struct to place the data into
 *
 * \return 
 * uint32: An error code with the result of the read procedure. 
@@ -397,41 +741,87 @@ uint32 `$INSTANCE_NAME`_Acc_Wakeup(void) {
 *   `$INSTANCE_NAME`_ERR_CHANNELS_NONE      | Data was not requested from any channels
 *
 *******************************************************************************/
-//uint32 `$INSTANCE_NAME`_Acc_Read(uint16* dataArray, uint8 sensorChannels){
-uint32 `$INSTANCE_NAME`_Acc_Read(ACC_DATA_T* accData){
+uint32 `$INSTANCE_NAME`_Acc_Read(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_T* accData){
+    /* Extract channels */
+    CHANNELS_T chans = state->channels;
+    /* Ensure at least one channel is enabled  */
+    if( (!chans.X) && (!chans.Y) && (!chans.Z) ){
+        return `$INSTANCE_NAME`_ERR_CHANNELS_NONE;
+    }
     /* Read in the accelerometer data */
     uint8 msb = ZERO;
     uint8 lsb = ZERO;
     uint32 readError;
-    // TODO: Scale correctly based on settings
-    float scale = 0.0096f;
     /************** X Channel **************/
-    /* Read the LSB first to lock MSB */
-    readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_X_LSB, &lsb);
-    if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-    /* Read the MSB */
-    readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_X_MSB, &msb);
-    /* Write X value */
-    accData->Ax = scale * (float) `$INSTANCE_NAME`_twosComp_12To16( (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
+    if(chans.X){
+        /* Read the LSB first to lock MSB */
+        readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_X_LSB, &lsb);
+        if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
+        /* Read the MSB */
+        readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_X_MSB, &msb);
+        if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
+        /* Write X value */
+        accData->Ax = `$INSTANCE_NAME`_twosComp_12To16( (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
+    }
     /************** Y Channel **************/
-    /* Read the LSB first to lock MSB */
-    readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Y_LSB, &lsb);
-    if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-    /* Read the MSB */
-    readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Y_MSB, &msb);
-    /* Write Y value */
-    accData->Ay = scale *  (float) `$INSTANCE_NAME`_twosComp_12To16( (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
+    if(chans.Y){
+        /* Read the LSB first to lock MSB */
+        readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Y_LSB, &lsb);
+        if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
+        /* Read the MSB */
+        readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Y_MSB, &msb);
+        if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
+        /* Write Y value */
+        accData->Ay = `$INSTANCE_NAME`_twosComp_12To16( (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
+    }
     /************** Z Channel **************/
-    /* Read the LSB first to lock MSB */
-    readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Z_LSB, &lsb);
-    if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-    /* Read the MSB */
-    readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Z_MSB, &msb);
-    /* Write Z value */
-    accData->Az = scale * (float) `$INSTANCE_NAME`_twosComp_12To16( (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
-    
+    if(chans.Z){
+        /* Read the LSB first to lock MSB */
+        readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Z_LSB, &lsb);
+        if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
+        /* Read the MSB */
+        readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Z_MSB, &msb);
+        if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
+        /* Write Z value */
+        accData->Az = `$INSTANCE_NAME`_twosComp_12To16( (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
+    }
+    /***************************************/
     /* Indicate success */
     return `$INSTANCE_NAME`_ERR_OK;
+}
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_Acc_Readf()
+****************************************************************************//**
+*
+* \brief
+*  Reads the specified channels of the Accelerometer and converts to a floating
+*  point number.
+*
+* \param state
+*  Pointer to the state of the Accelerometer\
+*
+* \param accData
+*  Pointer to struct to place the data into
+*
+* \return 
+* uint32: An error code with the result of the read procedure. 
+* The possible error codes are:
+*
+*  Errors codes                             | Description
+*   ------------                            | -----------
+*   `$INSTANCE_NAME`_ERR_OK                 | On successful operation
+*   `$INSTANCE_NAME`_ERR_CHANNELS_NONE      | Data was not requested from any channels
+*
+*******************************************************************************/
+uint32 `$INSTANCE_NAME`_Acc_Readf(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_F* accData){
+    /* Read from the device */
+    ACC_DATA_T accIntData;
+    uint32 readError = `$INSTANCE_NAME`_Acc_Read(state, &accIntData);
+    if(readError != `$INSTANCE_NAME`_ERR_OK) {return readError;}
+    /* Convert to a float */
+    readError = `$INSTANCE_NAME`_Acc_Int2Float(state, &accIntData, accData); 
+    return readError;
 }
 
 /* -------------------------- Gyroscope Functions -------------------------- */

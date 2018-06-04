@@ -21,8 +21,70 @@
     /***************************************
     * Included Files
     ***************************************/
+    #include <stdbool.h>
     #include "cytypes.h"
     #include "micaCommon.h"
+    /***************************************
+    * Enumerated Types
+    ***************************************/
+    /* Possible Accelerometer power states */
+    typedef enum {
+        `$INSTANCE_NAME`_ACC_PM_NORMAL = (0u),      /**< Acc Normal power mode */
+        `$INSTANCE_NAME`_ACC_PM_STANDBY,            /**< Acc Standby mode */
+        `$INSTANCE_NAME`_ACC_PM_LP1,                /**< Acc Low Power 1 mode */
+        `$INSTANCE_NAME`_ACC_PM_LP2,                /**< Acc Low Power 2 mode */
+        `$INSTANCE_NAME`_ACC_PM_SUSPEND,            /**< Acc Suspend mode */
+        `$INSTANCE_NAME`_ACC_PM_DEEP_SUSPEND        /**< Acc Deep Suspend mode */
+    } `$INSTANCE_NAME`_ACC_POWER_T;
+    /* Possible Gyroscope power states */
+    typedef enum  {
+        `$INSTANCE_NAME`_GYR_PM_NORMAL = (0u),      /**< Gyr Normal power mode */
+        `$INSTANCE_NAME`_GYR_PM_FAST_POWERUP,       /**< Gyr Fast Power up power mode */
+        `$INSTANCE_NAME`_GYR_PM_SUSPEND,            /**< Gyr suspend power mode */
+        `$INSTANCE_NAME`_GYR_PM_DEEP_SUSPEND,       /**< Gyr deep suspend power mode */
+    } `$INSTANCE_NAME`_GYR_POWER_T;
+    /* Possible Magnetometer power states */
+    typedef enum  {
+        `$INSTANCE_NAME`_MAG_PM_SUSPEND = (0u),      /**< Mag Suspend power mode */
+        `$INSTANCE_NAME`_MAG_PM_SLEEP,               /**< Mag Sleep power mode */
+        `$INSTANCE_NAME`_MAG_PM_NORMAL,              /**< Mag Normal power mode */
+        `$INSTANCE_NAME`_MAG_PM_FORCED,              /**< Mag Forced power mode */
+    } `$INSTANCE_NAME`_MAG_POWER_T;
+    /***************************************
+    * Structs
+    ***************************************/
+    /* Keep track of which channels are enabled */
+    typedef struct {
+        bool X;     /**< Indicates whether the X channel is active or not */
+        bool Y;     /**< Indicates whether the Y channel is active or not */
+        bool Z;     /**< Indicates whether the Z channel is active or not */
+    } CHANNELS_T;
+    
+    /* Accelerometer settings */
+    typedef struct {
+        float scale;                             /**< Scale for the Accelerometer */
+        CHANNELS_T channels;                      /**< Channels that are enabled */
+        `$INSTANCE_NAME`_ACC_POWER_T powerState; /**< Power State of the accelerometer */
+    } `$INSTANCE_NAME`_ACC_STATE_T;
+    /* Gyroscope settings */
+    typedef struct {
+        float scale;                             /**< Scale for the Gyroscope */
+        CHANNELS_T channels;                      /**< Channels that are enabled */
+        `$INSTANCE_NAME`_GYR_POWER_T powerState; /**< Power State of the gyroscope */
+    } `$INSTANCE_NAME`_GYR_STATE_T;
+    /* Magnetometer settings */
+    typedef struct {
+        float scale;                             /**< Scale for the magnetometer */
+        CHANNELS_T channels;                      /**< Channels that are enabled */
+        `$INSTANCE_NAME`_MAG_POWER_T powerState; /**< Power State of the magnetometer */
+    } `$INSTANCE_NAME`_MAG_STATE_T;
+    
+    /* Struct used for keeping track of the IMU Settings */
+    typedef struct {
+        `$INSTANCE_NAME`_ACC_STATE_T acc;       /**< Device settings for the Accelerometer */
+        `$INSTANCE_NAME`_GYR_STATE_T gyr;       /**< Device settings for the Gyroscope */
+        `$INSTANCE_NAME`_MAG_STATE_T mag;       /**< Device settings for the Magnetometer */
+    }`$INSTANCE_NAME`_STATE_T;
     /***************************************
     * Macro Definitions
     ***************************************/
@@ -61,12 +123,12 @@
     #define `$INSTANCE_NAME`_ACC_Z_MSB           (0x07u)     /**< Accelerometer register address of the Z-axis Most Significant Byte */
     #define `$INSTANCE_NAME`_ACC_Z_LSB           (0x06u)     /**< Accelerometer register address of the Z-axis Least Significant Byte */
 
-    #define `$INSTANCE_NAME`_ACC_PM_NORMAL          (0u)    /**< Accelerometer Power Mode - Normal */
-    #define `$INSTANCE_NAME`_ACC_PM_STANDBY         (1u)    /**< Accelerometer Power Mode - Standby */
-    #define `$INSTANCE_NAME`_ACC_PM_LP1             (2u)    /**< Accelerometer Power Mode - Low Power 1 */
-    #define `$INSTANCE_NAME`_ACC_PM_LP2             (3u)    /**< Accelerometer Power Mode - Low Power 2 */
-    #define `$INSTANCE_NAME`_ACC_PM_SUSPEND         (4u)    /**< Accelerometer Power Mode - Suspend */
-    #define `$INSTANCE_NAME`_ACC_PM_DEEP_SUSPEND    (5u)    /**< Accelerometer Power Mode - Deep Suspend */
+    // #define `$INSTANCE_NAME`_ACC_PM_NORMAL          (0u)    /**< Accelerometer Power Mode - Normal */
+    // #define `$INSTANCE_NAME`_ACC_PM_STANDBY         (1u)    /**< Accelerometer Power Mode - Standby */
+    // #define `$INSTANCE_NAME`_ACC_PM_LP1             (2u)    /**< Accelerometer Power Mode - Low Power 1 */
+    // #define `$INSTANCE_NAME`_ACC_PM_LP2             (3u)    /**< Accelerometer Power Mode - Low Power 2 */
+    // #define `$INSTANCE_NAME`_ACC_PM_SUSPEND         (4u)    /**< Accelerometer Power Mode - Suspend */
+    // #define `$INSTANCE_NAME`_ACC_PM_DEEP_SUSPEND    (5u)    /**< Accelerometer Power Mode - Deep Suspend */
     
 
     /***********************************************
@@ -170,11 +232,15 @@
     * *********************************************/
 
     /* Sets the range of the accelerometer */    
-    #define `$INSTANCE_NAME`_ACC_RANGE_REG       (0x0Fu)     /**< Address of accelerometer range register*/
-    #define `$INSTANCE_NAME`_ACC_RANGE_2G        (0x03u)     /**< Value for setting the bandwidth to ± 2 g */
-    #define `$INSTANCE_NAME`_ACC_RANGE_4G        (0x05u)     /**< Value for setting the bandwidth to ± 4 g */
-    #define `$INSTANCE_NAME`_ACC_RANGE_8G        (0x08u)     /**< Value for setting the bandwidth to ± 8 g */
-    #define `$INSTANCE_NAME`_ACC_RANGE_16G       (0x0Cu)     /**< Value for setting the bandwidth to ± 16 g */
+    #define `$INSTANCE_NAME`_ACC_RANGE_REG       (0x0Fu)        /**< Address of accelerometer range register*/
+    #define `$INSTANCE_NAME`_ACC_RANGE_2G        (0x03u)        /**< Value for setting the bandwidth to ± 2 g */
+    #define `$INSTANCE_NAME`_ACC_RANGE_4G        (0x05u)        /**< Value for setting the bandwidth to ± 4 g */
+    #define `$INSTANCE_NAME`_ACC_RANGE_8G        (0x08u)        /**< Value for setting the bandwidth to ± 8 g */
+    #define `$INSTANCE_NAME`_ACC_RANGE_16G       (0x0Cu)        /**< Value for setting the bandwidth to ± 16 g */
+    #define `$INSTANCE_NAME`_ACC_RANGE_2G_GAIN   (0.0096138f)   /**< Gain of the ± 2 g setting */
+    #define `$INSTANCE_NAME`_ACC_RANGE_4G_GAIN   (0.0191295f)   /**< Gain of the ± 4 g setting */
+    #define `$INSTANCE_NAME`_ACC_RANGE_8G_GAIN   (0.0383571f)   /**< Gain of the ± 8 g setting */
+    #define `$INSTANCE_NAME`_ACC_RANGE_16G_GAIN  (0.0766161f)   /**< Gain of the ± 16 g setting */    
     /* Sets the bandwidth the of the accelerometer data filter */
     #define `$INSTANCE_NAME`_ACC_BW_REG          (0x10u)     /**< Address of filter bandwidth register */
     #define `$INSTANCE_NAME`_ACC_BW_8_HZ         (0x08u)     /**< Value for setting the bandwidth to 8 HZ */
@@ -217,6 +283,10 @@
     #define `$INSTANCE_NAME`_ACC_ACCD_SHADOW_DIS_POS     (6u)        /**< Position for shadowing enable bit */
     #define `$INSTANCE_NAME`_ACC_ACCD_DATA_HIGH_BW       (1u << `$INSTANCE_NAME`_ACC_ACCD_DATA_HIGH_BW_POS)   /**< Mask for disabling filters (enable high speed) */
     #define `$INSTANCE_NAME`_ACC_ACCD_SHADOW_DIS         (1u << `$INSTANCE_NAME`_ACC_ACCD_SHADOW_DIS_POS)     /**< Mask for disabling shadowing (LSB locked until MSB read) */
+    /* Soft Reset Register */
+    #define `$INSTANCE_NAME`_ACC_BGW_SOFTRESET_REG              (0x14u) /**< Address of the accelerometer soft reset register */
+    #define `$INSTANCE_NAME`_ACC_BGW_SOFTRESET_VAL              (0xB6u) /**< Value that causes the accelerometer to reset */
+    #define `$INSTANCE_NAME`_ACC_BGW_SOFTRESET_MS               (1u)    /**< Time in ms that it takes to reset the device*/
 
     /* ########################################### 
     **                   GYROSCOPE
@@ -233,10 +303,10 @@
     #define `$INSTANCE_NAME`_GYR_Z_MSB           (0x07u)     /**< Gyroscope register address of the Z-axis Most Significant Byte */
     #define `$INSTANCE_NAME`_GYR_Z_LSB           (0x06u)     /**< Gyroscope register address of the Z-axis Least Significant Byte */
 
-    #define `$INSTANCE_NAME`_GYR_PM_NORMAL          (0u)    /**< Gyroscope Power Mode - Normal */
-    #define `$INSTANCE_NAME`_GYR_PM_FAST_POWERUP    (1u)    /**< Gyroscope Power Mode - Fast Power up */
-    #define `$INSTANCE_NAME`_GYR_PM_SUSPEND         (2u)    /**< Gyroscope Power Mode - Suspend */
-    #define `$INSTANCE_NAME`_GYR_PM_DEEP_SUSPEND    (3u)    /**< Gyroscope Power Mode - Deep Suspend */
+    // #define `$INSTANCE_NAME`_GYR_PM_NORMAL          (0u)    /**< Gyroscope Power Mode - Normal */
+    // #define `$INSTANCE_NAME`_GYR_PM_FAST_POWERUP    (1u)    /**< Gyroscope Power Mode - Fast Power up */
+    // #define `$INSTANCE_NAME`_GYR_PM_SUSPEND         (2u)    /**< Gyroscope Power Mode - Suspend */
+    // #define `$INSTANCE_NAME`_GYR_PM_DEEP_SUSPEND    (3u)    /**< Gyroscope Power Mode - Deep Suspend */
 
     /***********************************************
     * Gyroscope definitions used setting the digital filters,
@@ -276,10 +346,10 @@
     #define `$INSTANCE_NAME`_MAG_Z_MSB           (0x47u)     /**< Magnetometer register address of the Z-axis Most Significant Byte */
     #define `$INSTANCE_NAME`_MAG_Z_LSB           (0x46u)     /**< Magnetometer register address of the Z-axis Least Significant Byte */
 
-    #define `$INSTANCE_NAME`_MAG_PM_SUSPEND      (0u)    /**< Magnetometer Power Mode - Suspend */
-    #define `$INSTANCE_NAME`_MAG_PM_SLEEP        (1u)    /**< Magnetometer Power Mode - Sleep */
-    #define `$INSTANCE_NAME`_MAG_PM_NORMAL       (2u)    /**< Magnetometer Power Mode - Normal */
-    #define `$INSTANCE_NAME`_MAG_PM_FORCED       (3u)    /**< Magnetometer Power Mode - Forced */
+    // #define `$INSTANCE_NAME`_MAG_PM_SUSPEND      (0u)    /**< Magnetometer Power Mode - Suspend */
+    // #define `$INSTANCE_NAME`_MAG_PM_SLEEP        (1u)    /**< Magnetometer Power Mode - Sleep */
+    // #define `$INSTANCE_NAME`_MAG_PM_NORMAL       (2u)    /**< Magnetometer Power Mode - Normal */
+    // #define `$INSTANCE_NAME`_MAG_PM_FORCED       (3u)    /**< Magnetometer Power Mode - Forced */
     
     /***********************************************
     * magnetometer definitions used setting the digital filters,
@@ -297,35 +367,37 @@
     *        Function Prototypes
     ***************************************/
     /* Device wide Functions */
-    uint32 `$INSTANCE_NAME`_Start(void);        /**< Start the IMU (Acc, Gyr, Mag) */
-    uint32 `$INSTANCE_NAME`_Stop(void);         /**< Disable the IMU (Acc, Gyr, Mag)*/
-    uint32 `$INSTANCE_NAME`_Sleep(void);        /**< Put the IMU (Acc, Gyr, Mag) to sleep */
-    uint32 `$INSTANCE_NAME`_Wakeup(void);       /**< Wakeup all of the IMU (Acc, Gyr, Mag)*/
+    uint32 `$INSTANCE_NAME`_Start(`$INSTANCE_NAME`_STATE_T* deviceState);        /**< Start the IMU (Acc, Gyr, Mag) */
+    uint32 `$INSTANCE_NAME`_Stop(`$INSTANCE_NAME`_STATE_T* deviceState);         /**< Disable the IMU (Acc, Gyr, Mag)*/
+    uint32 `$INSTANCE_NAME`_Sleep(`$INSTANCE_NAME`_STATE_T* deviceState);        /**< Put the IMU (Acc, Gyr, Mag) to sleep */
+    uint32 `$INSTANCE_NAME`_Wakeup(`$INSTANCE_NAME`_STATE_T* deviceState);       /**< Wakeup all of the IMU (Acc, Gyr, Mag)*/
     uint32 `$INSTANCE_NAME`_SetParameters(uint8 deviceAddr, uint8 numParams, uint8* sensorParams); /**< Writes the parameters out to the device specified */
-    uint32 `$INSTANCE_NAME`_GetDeviceState(uint8 deviceAddr, uint8 * returnState); /**< Get the value of the power state for a device */
-    uint32 `$INSTANCE_NAME`_Test(uint32* i2cError);          /**< Test basic I2C contact with device */
+    // uint32 `$INSTANCE_NAME`_GetDeviceState(uint8 deviceAddr, uint8 * returnState); /**< Get the value of the power state for a device */
+    uint32 `$INSTANCE_NAME`_testConnection(uint32* i2cError);          /**< Test basic I2C contact with device */
     int16 `$INSTANCE_NAME`_twosComp_12To16(uint16 baseTwelve);  /**< Convert from base 12 two'sComp to base 16 */
 
     /* Accelerometer specific functions */
-    uint32 `$INSTANCE_NAME`_Acc_Start(void);    /**< Start the Accelerometer */
-    uint32 `$INSTANCE_NAME`_Acc_Stop(void);     /**< Stop the Accelerometer */
-    uint32 `$INSTANCE_NAME`_Acc_Sleep(uint8 powerMode);    /**< Put the Accelerometer into the specified sleep mode */
-    uint32 `$INSTANCE_NAME`_Acc_Wakeup(void);   /**< Wakeup the Accelerometer*/
-//    uint32 `$INSTANCE_NAME`_Acc_Read(int16* dataArray, uint8 sensorChannels);     /**< Read the value of the Accelerometer*/
-    uint32 `$INSTANCE_NAME`_Acc_Read(ACC_DATA_T* accData);     /**< Read the value of the Accelerometer*/
+    uint32 `$INSTANCE_NAME`_Acc_Start(`$INSTANCE_NAME`_ACC_STATE_T* accState);    /**< Start the Accelerometer */
+    uint32 `$INSTANCE_NAME`_Acc_SetPowerMode(`$INSTANCE_NAME`_ACC_STATE_T* accState, `$INSTANCE_NAME`_ACC_POWER_T powerMode);    /**< Put the Accelerometer into the specified sleep mode */
+    uint32 `$INSTANCE_NAME`_Acc_Read(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_T* accData);      /**< Read the value of the Accelerometer in int16 precision*/
+    uint32 `$INSTANCE_NAME`_Acc_Readf(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_F* accData);    /**< Read the value of the Accelerometer in floating point precision*/
+    uint32 `$INSTANCE_NAME`_Acc_Int2Float(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_T* intData, ACC_DATA_F* floatData);     /**< Converts the accelerometer int type to float type*/
+    uint32 `$INSTANCE_NAME`_Acc_Float2Int(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_F* floatData, ACC_DATA_T* intData);     /**< Converts the accelerometer float type to int type*/
+    
     
 
     /* Gyroscope specific functions */
-    uint32 `$INSTANCE_NAME`_Gyr_Start(void);    /**< Start the Gyroscope*/
+    uint32 `$INSTANCE_NAME`_Gyr_Start(`$INSTANCE_NAME`_GYR_STATE_T* gyrState);    /**< Start the Gyroscope*/
     uint32 `$INSTANCE_NAME`_Gyr_Stop(void);     /**< Stop the Gyroscope*/
     uint32 `$INSTANCE_NAME`_Gyr_Sleep(uint8 powerMode);    /**< Put the Gyroscope to sleep */
     uint32 `$INSTANCE_NAME`_Gyr_Wakeup(void);   /**< Wakeup the Gyroscope*/
-//    uint32 `$INSTANCE_NAME`_Gyr_Read(int16* dataArray, uint8 sensorChannels);     /**< Read the value of the Gyroscope*/
-    uint32 `$INSTANCE_NAME`_Gyr_Read(GYRO_DATA_T* gyroData);     /**< Read the value of the Gyroscope*/
+    uint32 `$INSTANCE_NAME`_Gyr_Read(GYRO_DATA_T* gyroData);        /**< Read the value of the Gyroscope in int16 precision*/
+    uint32 `$INSTANCE_NAME`_Gyr_Readf(GYRO_DATA_F* gyroData);      /**< Read the value of the Gyroscope in float*/
+    
     
 
     /* Magnetometer specific functions */
-    uint32 `$INSTANCE_NAME`_Mag_Start(void);    /**< Start the Magnetometer*/
+    uint32 `$INSTANCE_NAME`_Mag_Start(`$INSTANCE_NAME`_MAG_STATE_T* magState);    /**< Start the Magnetometer*/
     uint32 `$INSTANCE_NAME`_Mag_Stop(void);     /**< Stop the Magnetometer*/
     uint32 `$INSTANCE_NAME`_Mag_Sleep(uint8 powerMode);    /**< Put the Magnetometer into the specified sleep mode */
     uint32 `$INSTANCE_NAME`_Mag_Wakeup(void);   /**< Wakeup the Magnetometer*/

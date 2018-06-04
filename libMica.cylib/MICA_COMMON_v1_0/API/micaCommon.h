@@ -87,19 +87,32 @@
     /***************************************
     * Structs
     ***************************************/   
-    /* Struct for handling accelerometer data */
+    /* Struct for handling Float accelerometer data */
     typedef struct {
         float Ax; /**< Acceleration X */
         float Ay; /**< Acceleration Y */
         float Az; /**< Acceleration Z */
-    } ACC_DATA_T;
-    /* Struct for handling Gyro data */
+    } ACC_DATA_F;
+    /* Struct for handling Float Gyro data */
     typedef struct {
         float Wx; /**< Angular velocity, X */
         float Wy; /**< Angular velocity, Y */
         float Wz; /**< Angular velocity, Z */
+    } GYRO_DATA_F;
+    /* Struct for handling int16 accelerometer data */
+    typedef struct {
+        int16 Ax; /**< Acceleration X */
+        int16 Ay; /**< Acceleration Y */
+        int16 Az; /**< Acceleration Z */
+    } ACC_DATA_T;
+    /* Struct for handling Float Gyro data */
+    typedef struct {
+        int16 Wx; /**< Angular velocity, X */
+        int16 Wy; /**< Angular velocity, Y */
+        int16 Wz; /**< Angular velocity, Z */
     } GYRO_DATA_T;
-
+    
+    
     /* Struct for representing a Quaternion */
     typedef struct {
         float q1; /**< First element (Scalar) */

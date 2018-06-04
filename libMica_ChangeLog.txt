@@ -10,4 +10,4 @@ libMICA - MICA Components - v1
 * Update ACC functions
 * Update GYR functions
 * Update MAG funcitons 
-
+* Create inclinometer Component

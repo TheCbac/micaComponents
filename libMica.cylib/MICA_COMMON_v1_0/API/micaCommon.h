@@ -113,6 +113,13 @@
     } GYRO_DATA_T;
     
     
+    /* Keep track of which channels are enabled */
+    typedef struct {
+        bool X;     /**< Indicates whether the X channel is active or not */
+        bool Y;     /**< Indicates whether the Y channel is active or not */
+        bool Z;     /**< Indicates whether the Z channel is active or not */
+    } CHANNELS_XYZ_T;
+    
     /* Struct for representing a Quaternion */
     typedef struct {
         float q1; /**< First element (Scalar) */

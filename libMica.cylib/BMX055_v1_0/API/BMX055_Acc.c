@@ -16,6 +16,7 @@
 *   2018.06.04 CC - Document created
 ********************************************************************************/
 #include "`$INSTANCE_NAME`_Acc.h"
+#include "`$i2cIncludeFile`.h"
 #include "`$INSTANCE_NAME`_Common.h"
 
 
@@ -77,6 +78,7 @@ uint32 `$INSTANCE_NAME`_Acc_Reset(`$INSTANCE_NAME`_ACC_STATE_T* accState) {
 *******************************************************************************/
 uint32 `$INSTANCE_NAME`_Acc_SetPowerMode(`$INSTANCE_NAME`_ACC_STATE_T* accState, `$INSTANCE_NAME`_ACC_POWER_T powerMode){
     uint8 powerRegVal;
+    uint32 writeError;
     /* Current state */
     switch(accState->powerState){
         case `$INSTANCE_NAME`_ACC_PM_NORMAL:{
@@ -85,9 +87,10 @@ uint32 `$INSTANCE_NAME`_Acc_SetPowerMode(`$INSTANCE_NAME`_ACC_STATE_T* accState,
                 /* Place device in standby mode (SUSPEND + LowPower Bit) */
                 case `$INSTANCE_NAME`_ACC_PM_STANDBY: {
                     /* Set the lowpower bit in the LP register */
-                    `$i2cWriteFunction`(`$INSTANCE_NAME`_ACC_ADDR,\
+                    writeError = `$i2cWriteFunction`(`$INSTANCE_NAME`_ACC_ADDR,\
                                         `$INSTANCE_NAME`_ACC_PMU_LOW_POWER_REG,\
                                         `$INSTANCE_NAME`_ACC_PMU_LOW_POWER_LOWPOWER_MODE);
+                    if(writeError != `$INSTANCE_NAME`_ERR_OK){return `$INSTANCE_NAME`_ERR_I2C;}
                     /* Prepare to place in Suspend mode */
                     powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_SUSPEND;
                     break;   
@@ -95,7 +98,8 @@ uint32 `$INSTANCE_NAME`_Acc_SetPowerMode(`$INSTANCE_NAME`_ACC_STATE_T* accState,
                 /* Place device in Low Power 1 mode (LOW_POWER + !LowPower Bit) */
                 case `$INSTANCE_NAME`_ACC_PM_LP1:{
                     /* Clear the lowpower bit in the LP register (@TODO: Should read and then clear) */
-                    `$i2cWriteFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_PMU_LOW_POWER_REG, ZERO);
+                    writeError = `$i2cWriteFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_PMU_LOW_POWER_REG, ZERO);
+                    if(writeError != `$INSTANCE_NAME`_ERR_OK){return `$INSTANCE_NAME`_ERR_I2C;}
                     /* Prepare for low power mode */
                     powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_LOWPOWER_EN;
                     break;
@@ -103,9 +107,10 @@ uint32 `$INSTANCE_NAME`_Acc_SetPowerMode(`$INSTANCE_NAME`_ACC_STATE_T* accState,
                 /* Place device in Low Power 2 mode (LOW_POWER + LowPower Bit) */
                 case `$INSTANCE_NAME`_ACC_PM_LP2:{
                     /* Set the lowpower bit in the LP register (@TODO: Should read and then Set) */
-                    `$i2cWriteFunction`(`$INSTANCE_NAME`_ACC_ADDR,\
+                    writeError = `$i2cWriteFunction`(`$INSTANCE_NAME`_ACC_ADDR,\
                                         `$INSTANCE_NAME`_ACC_PMU_LOW_POWER_REG,\
                                         `$INSTANCE_NAME`_ACC_PMU_LOW_POWER_LOWPOWER_MODE);
+                    if(writeError != `$INSTANCE_NAME`_ERR_OK){return `$INSTANCE_NAME`_ERR_I2C;}
                     /* Prepare for low power mode */
                     powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_LOWPOWER_EN;
                     break;
@@ -113,7 +118,8 @@ uint32 `$INSTANCE_NAME`_Acc_SetPowerMode(`$INSTANCE_NAME`_ACC_STATE_T* accState,
                 /* Place device in Suspend mode (SUSPEND + !LowPower Bit) */
                 case `$INSTANCE_NAME`_ACC_PM_SUSPEND:{
                     /* Clear the lowpower bit in the LP register (@TODO: Should read and then clear) */
-                    `$i2cWriteFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_PMU_LOW_POWER_REG, ZERO);
+                    writeError = `$i2cWriteFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_PMU_LOW_POWER_REG, ZERO);
+                    if(writeError != `$INSTANCE_NAME`_ERR_OK){return `$INSTANCE_NAME`_ERR_I2C;}
                     /* Prepare for suspend */
                     powerRegVal = `$INSTANCE_NAME`_ACC_PMU_LPW_SUSPEND;
                     break;
@@ -249,9 +255,14 @@ uint32 `$INSTANCE_NAME`_Acc_SetPowerMode(`$INSTANCE_NAME`_ACC_STATE_T* accState,
             }
             break;
         } /*End `$INSTANCE_NAME`_ACC_PM_DEEP_SUSPEND */
+        /* Unknown state */
+        default:{
+            return `$INSTANCE_NAME`_ERR_MODE_UNKNOWN;
+        }
     }
     /* Write to the low power register value selected from above */
-    `$i2cWriteFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_PMU_LPW_REG, powerRegVal);
+    writeError = `$i2cWriteFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_PMU_LPW_REG, powerRegVal);
+    if(writeError != `$INSTANCE_NAME`_ERR_OK){return `$INSTANCE_NAME`_ERR_I2C;}
     /* Update the state (valid if reached this point) */
     accState->powerState = powerMode;
     /* Return Success */
@@ -259,87 +270,6 @@ uint32 `$INSTANCE_NAME`_Acc_SetPowerMode(`$INSTANCE_NAME`_ACC_STATE_T* accState,
 }
 
 
-/*******************************************************************************
-* Function Name: `$INSTANCE_NAME`_Acc_Int2Float
-****************************************************************************//**
-*
-* \brief
-*  Converts an accelerometer data sample from int16 to float type. 
-*
-* \param State
-*  Pointer to the Struct containing the settings of the device in order to scale correctly
-*
-* \param intData
-*  Pointer to the int16 data to be converted
-*       
-* \param floatData 
-*   Pointer to the output data in float format 
-*
-* \return 
-* uint32: An error code with the result of the conversion procedure. 
-* The possible error codes are:
-*
-*  Errors codes                             | Description
-*   ------------                            | -----------
-*   `$INSTANCE_NAME`_ERR_OK                 | On successful operation
-*   `$INSTANCE_NAME`_ERR_CHANNELS_NONE      | No channels indicated for conversion
-*******************************************************************************/
-uint32 `$INSTANCE_NAME`_Acc_Int2Float(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_T* intData, ACC_DATA_F* floatData){
-    /* Extract channels */
-    CHANNELS_XYZ_T chans = state->channels;
-    if( (!chans.X) && (!chans.Y) && (!chans.Z) ){
-        return `$INSTANCE_NAME`_ERR_CHANNELS_NONE;
-    }
-    /* Gain of the accelerometer */
-    float gain = state->scale;
-    /* Convert to float */
-    if(chans.X){ floatData->Ax = gain * (float) intData->Ax; }
-    if(chans.Y){ floatData->Ay = gain * (float) intData->Ay; }
-    if(chans.Z){ floatData->Az = gain * (float) intData->Az; }
-    /* Return success */
-    return `$INSTANCE_NAME`_ERR_OK;
-}
-
-/*******************************************************************************
-* Function Name: ``$INSTANCE_NAME`_Acc_Float2Int(); 
-****************************************************************************//**
-*
-* \brief
-*  Converts an accelerometer data sample from float to int16 type. 
-*
-* \param State
-*  Pointer to the Struct containing the settings of the device in order to scale correctly
-*
-* \param floatData
-*  Pointer to the float data to be converted
-*       
-* \param intData 
-*   Pointer to the output data in int16 format 
-*
-* \return 
-* uint32: An error code with the result of the conversion procedure. 
-* The possible error codes are:
-*
-*  Errors codes                             | Description
-*   ------------                            | -----------
-*   `$INSTANCE_NAME`_ERR_OK                 | On successful operation
-*******************************************************************************/
-uint32 `$INSTANCE_NAME`_Acc_Float2Int(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_F* floatData, ACC_DATA_T* intData) {
-    /* Extract channels */
-    CHANNELS_XYZ_T chans = state->channels;
-    /* Ensure at least one channel is enabled  */
-    if( (!chans.X) && (!chans.Y) && (!chans.Z) ){
-        return `$INSTANCE_NAME`_ERR_CHANNELS_NONE;
-    }
-    /* Gain of the accelerometer */
-    float gain = state->scale;
-    /* Convert to int */
-    if(chans.X){ intData->Ax = (int16) (floatData->Ax / gain); }
-    if(chans.Y){ intData->Ay = (int16) (floatData->Ay / gain); }
-    if(chans.Z){ intData->Az = (int16) (floatData->Az / gain); }
-    /* Return success */
-    return `$INSTANCE_NAME`_ERR_OK;
-}
 
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_Acc_Read()
@@ -446,4 +376,87 @@ uint32 `$INSTANCE_NAME`_Acc_Readf(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_
     readError = `$INSTANCE_NAME`_Acc_Int2Float(state, &accIntData, accData); 
     return readError;
 }
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_Acc_Int2Float
+****************************************************************************//**
+*
+* \brief
+*  Converts an accelerometer data sample from int16 to float type. 
+*
+* \param State
+*  Pointer to the Struct containing the settings of the device in order to scale correctly
+*
+* \param intData
+*  Pointer to the int16 data to be converted
+*       
+* \param floatData 
+*   Pointer to the output data in float format 
+*
+* \return 
+* uint32: An error code with the result of the conversion procedure. 
+* The possible error codes are:
+*
+*  Errors codes                             | Description
+*   ------------                            | -----------
+*   `$INSTANCE_NAME`_ERR_OK                 | On successful operation
+*   `$INSTANCE_NAME`_ERR_CHANNELS_NONE      | No channels indicated for conversion
+*******************************************************************************/
+uint32 `$INSTANCE_NAME`_Acc_Int2Float(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_T* intData, ACC_DATA_F* floatData){
+    /* Extract channels */
+    CHANNELS_XYZ_T chans = state->channels;
+    if( (!chans.X) && (!chans.Y) && (!chans.Z) ){
+        return `$INSTANCE_NAME`_ERR_CHANNELS_NONE;
+    }
+    /* Gain of the accelerometer */
+    float gain = state->scale;
+    /* Convert to float */
+    if(chans.X){ floatData->Ax = gain * (float) intData->Ax; }
+    if(chans.Y){ floatData->Ay = gain * (float) intData->Ay; }
+    if(chans.Z){ floatData->Az = gain * (float) intData->Az; }
+    /* Return success */
+    return `$INSTANCE_NAME`_ERR_OK;
+}
+
+/*******************************************************************************
+* Function Name: ``$INSTANCE_NAME`_Acc_Float2Int(); 
+****************************************************************************//**
+*
+* \brief
+*  Converts an accelerometer data sample from float to int16 type. 
+*
+* \param State
+*  Pointer to the Struct containing the settings of the device in order to scale correctly
+*
+* \param floatData
+*  Pointer to the float data to be converted
+*       
+* \param intData 
+*   Pointer to the output data in int16 format 
+*
+* \return 
+* uint32: An error code with the result of the conversion procedure. 
+* The possible error codes are:
+*
+*  Errors codes                             | Description
+*   ------------                            | -----------
+*   `$INSTANCE_NAME`_ERR_OK                 | On successful operation
+*******************************************************************************/
+uint32 `$INSTANCE_NAME`_Acc_Float2Int(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_F* floatData, ACC_DATA_T* intData) {
+    /* Extract channels */
+    CHANNELS_XYZ_T chans = state->channels;
+    /* Ensure at least one channel is enabled  */
+    if( (!chans.X) && (!chans.Y) && (!chans.Z) ){
+        return `$INSTANCE_NAME`_ERR_CHANNELS_NONE;
+    }
+    /* Gain of the accelerometer */
+    float gain = state->scale;
+    /* Convert to int */
+    if(chans.X){ intData->Ax = (int16) (floatData->Ax / gain); }
+    if(chans.Y){ intData->Ay = (int16) (floatData->Ay / gain); }
+    if(chans.Z){ intData->Az = (int16) (floatData->Az / gain); }
+    /* Return success */
+    return `$INSTANCE_NAME`_ERR_OK;
+}
+
 /* [] END OF FILE */

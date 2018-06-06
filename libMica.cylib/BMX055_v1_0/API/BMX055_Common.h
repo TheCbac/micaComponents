@@ -56,7 +56,7 @@
     /***************************************
     * Function Prototypes
     ***************************************/
-
+    int16 `$INSTANCE_NAME`_twosComp_12To16(uint16 baseTwelve);  /**< Convert from base 12 two'sComp to base 16 */   
     
 #endif /* `$INSTANCE_NAME`_COMMON_H */
 /* [] END OF FILE */

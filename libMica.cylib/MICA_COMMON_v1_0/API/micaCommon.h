@@ -23,6 +23,7 @@
     * Included files
     ***************************************/
     #include "`$delayHeader`.h"
+    #include <stdbool.h>
     /***************************************
     * Macro Definitions
     ***************************************/
@@ -98,7 +99,7 @@
         float Wx; /**< Angular velocity, X */
         float Wy; /**< Angular velocity, Y */
         float Wz; /**< Angular velocity, Z */
-    } GYRO_DATA_F;
+    } GYR_DATA_F;
     /* Struct for handling int16 accelerometer data */
     typedef struct {
         int16 Ax; /**< Acceleration X */
@@ -110,7 +111,7 @@
         int16 Wx; /**< Angular velocity, X */
         int16 Wy; /**< Angular velocity, Y */
         int16 Wz; /**< Angular velocity, Z */
-    } GYRO_DATA_T;
+    } GYR_DATA_T;
     
     
     /* Keep track of which channels are enabled */

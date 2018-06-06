@@ -90,6 +90,24 @@
     #define `$INSTANCE_NAME`_GYR_LPM1_SUSPEND            (1u << `$INSTANCE_NAME`_GYR_LPM1_SUSPEND_POS)        /**< Mask for "Suspend" mode */
     #define `$INSTANCE_NAME`_GYR_LPM1_DEEP_SUSPEND       (1u << `$INSTANCE_NAME`_GYR_LPM1_DEEP_SUSPEND_POS)   /**< Mask for "Deep Suspend" mode */
     #define `$INSTANCE_NAME`_GYR_LPM1_NORMAL             (0u)                                    /**< Mask for "Normal" mode */
+    /* Fast Powerup and external trigger */
+    #define `$INSTANCE_NAME`_GYR_LPM2_REG                   (0x12u)     /**< Address of the Low Power 2 Reg */
+    #define `$INSTANCE_NAME`_GYR_LPM2_AUTOSLEEP_DUR_POS     (0u)        /**< Position for LSB of autosleep duration */
+    #define `$INSTANCE_NAME`_GYR_LPM2_EXT_TRIG_SEL_POS      (4u)        /**< Position for the LSB of external trigger selection */
+    #define `$INSTANCE_NAME`_GYR_LPM2_POWER_SAVE_MODE_POS   (6u)        /**< Position for the Power Save mode bit */
+    #define `$INSTANCE_NAME`_GYR_LPM2_FAST_POWERUP_POS      (7u)        /**< Position for the Fast powerup bit */
+    #define `$INSTANCE_NAME`_GYR_LPM2_AUTOSLEEP_DUR_4_MS    (0b001 << `$INSTANCE_NAME`_GYR_LPM2_AUTOSLEEP_DUR_POS)  /**< Value for 4 ms second auto sleep */
+    #define `$INSTANCE_NAME`_GYR_LPM2_AUTOSLEEP_DUR_5_MS    (0b010 << `$INSTANCE_NAME`_GYR_LPM2_AUTOSLEEP_DUR_POS)  /**< Value for 5 ms second auto sleep */
+    #define `$INSTANCE_NAME`_GYR_LPM2_AUTOSLEEP_DUR_8_MS    (0b011 << `$INSTANCE_NAME`_GYR_LPM2_AUTOSLEEP_DUR_POS)  /**< Value for 8 ms second auto sleep */
+    #define `$INSTANCE_NAME`_GYR_LPM2_AUTOSLEEP_DUR_10_MS   (0b100 << `$INSTANCE_NAME`_GYR_LPM2_AUTOSLEEP_DUR_POS)  /**< Value for 10 ms second auto sleep */
+    #define `$INSTANCE_NAME`_GYR_LPM2_AUTOSLEEP_DUR_15_MS   (0b101 << `$INSTANCE_NAME`_GYR_LPM2_AUTOSLEEP_DUR_POS)  /**< Value for 15 ms second auto sleep */
+    #define `$INSTANCE_NAME`_GYR_LPM2_AUTOSLEEP_DUR_20_MS   (0b110 << `$INSTANCE_NAME`_GYR_LPM2_AUTOSLEEP_DUR_POS)  /**< Value for 20 ms second auto sleep */
+    #define `$INSTANCE_NAME`_GYR_LPM2_AUTOSLEEP_DUR_40_MS   (0b111 << `$INSTANCE_NAME`_GYR_LPM2_AUTOSLEEP_DUR_POS)  /**< Value for 40 ms second auto sleep */
+    #define `$INSTANCE_NAME`_GYR_LPM2_EXT_TRIG_SEL_INT1     (0b01 << `$INSTANCE_NAME`_GYR_LPM2_EXT_TRIG_SEL_POS)    /**< Value for INT1 as EXT */
+    #define `$INSTANCE_NAME`_GYR_LPM2_EXT_TRIG_SEL_INT2     (0b10 << `$INSTANCE_NAME`_GYR_LPM2_EXT_TRIG_SEL_POS)    /**< Value for INT2 as EXT */
+    #define `$INSTANCE_NAME`_GYR_LPM2_EXT_TRIG_SEL_SDO      (0b11 << `$INSTANCE_NAME`_GYR_LPM2_EXT_TRIG_SEL_POS)    /**< Value for SDO pin (SPI3 mode)*/
+    #define `$INSTANCE_NAME`_GYR_LPM2_POWER_SAVE_MODE       (1u << `$INSTANCE_NAME`_GYR_LPM2_POWER_SAVE_MODE_POS)   /**< Value for the Power Save mode bit */
+    #define `$INSTANCE_NAME`_GYR_LPM2_FAST_POWERUP          (1u << `$INSTANCE_NAME`_GYR_LPM2_FAST_POWERUP_POS)      /**< Value for the Fast powerup bit */
     /* Soft Reset Register */
     #define `$INSTANCE_NAME`_GYR_BGW_SOFTRESET_REG       (0x14u)     /**< Address of the soft reset register */
     #define `$INSTANCE_NAME`_GYR_BGW_SOFTRESET_VAL       (0xB6u)     /**< Value that initiates a soft reset */
@@ -100,11 +118,10 @@
     /* Gyroscope specific functions */
     uint32 `$INSTANCE_NAME`_Gyr_Reset(`$INSTANCE_NAME`_GYR_STATE_T* gyrState);    /**< Start the Gyroscope*/
     uint32 `$INSTANCE_NAME`_Gyr_SetPowerMode(`$INSTANCE_NAME`_GYR_STATE_T* gyrState, `$INSTANCE_NAME`_GYR_POWER_T powerMode);    /**< Put the Gyrscope into the specified power mode */
-    uint32 `$INSTANCE_NAME`_Gyr_Read(GYRO_DATA_T* gyroData);        /**< Read the value of the Gyroscope in int16 precision*/
-    uint32 `$INSTANCE_NAME`_Gyr_Readf(GYRO_DATA_F* gyroData);      /**< Read the value of the Gyroscope in float*/
-//    uint32 `$INSTANCE_NAME`_Gyr_Stop(void);     /**< Stop the Gyroscope*/
-//    uint32 `$INSTANCE_NAME`_Gyr_Sleep(uint8 powerMode);    /**< Put the Gyroscope to sleep */
-//    uint32 `$INSTANCE_NAME`_Gyr_Wakeup(void);   /**< Wakeup the Gyroscope*/
+    uint32 `$INSTANCE_NAME`_Gyr_Read(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_T* gyrData);                                            /**< Read data from the gyroscope */
+    uint32 `$INSTANCE_NAME`_Gyr_Readf(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_F* gyroData);      /**< Read the value of the Gyroscope in float*/
+    uint32 `$INSTANCE_NAME`_Gyr_Int2Float(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_T* intData, GYR_DATA_F* floatData);     /**< Converts the Gyro int type to float type*/
+    uint32 `$INSTANCE_NAME`_Gyr_Float2Int(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_F* floatData, GYR_DATA_T* intData);     /**< Converts the gyro float type to int type*/
     
 #endif /* `$INSTANCE_NAME`_GYR_H */
 

@@ -16,6 +16,7 @@
 *   2018.06.04 CC - Document created
 ********************************************************************************/
 #include "`$INSTANCE_NAME`_Mag.h"
+#include "`$i2cIncludeFile`.h"
 #include "`$INSTANCE_NAME`_Common.h"
 
 
@@ -36,7 +37,7 @@
 *   ------------                            | -----------
 *   `$INSTANCE_NAME`_ERR_OK                 | On successful Start
 *******************************************************************************/
-uint32 `$INSTANCE_NAME`_Mag_Reset(void) {
+ uint32 `$INSTANCE_NAME`_Mag_Reset(`$INSTANCE_NAME`_MAG_STATE_T* magState){
     /* @TODO: Implement function */
     return `$INSTANCE_NAME`_ERR_OK;
 }

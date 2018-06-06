@@ -220,6 +220,10 @@ uint32 `$INSTANCE_NAME`_Mag_SetPowerMode(`$INSTANCE_NAME`_MAG_STATE_T* magState,
     }
     /* Update the state (valid if reached this point) */
     magState->powerState = powerMode;
+    /* If mode was forced, go back to sleep */
+    if(powerMode == `$INSTANCE_NAME`_MAG_PM_FORCED) {
+        return `$INSTANCE_NAME`_Mag_SetPowerMode(magState, `$INSTANCE_NAME`_MAG_PM_SLEEP);
+    }
     /* Return Success */
     return `$INSTANCE_NAME`_ERR_OK;
 }

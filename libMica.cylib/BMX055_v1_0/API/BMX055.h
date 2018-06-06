@@ -53,8 +53,7 @@
     uint32 `$INSTANCE_NAME`_Sleep(`$INSTANCE_NAME`_STATE_T* deviceState);        /**< Put the IMU (Acc, Gyr, Mag) to sleep */
     uint32 `$INSTANCE_NAME`_Wakeup(`$INSTANCE_NAME`_STATE_T* deviceState);       /**< Wakeup all of the IMU (Acc, Gyr, Mag)*/
     uint32 `$INSTANCE_NAME`_SetParameters(uint8 deviceAddr, uint8 numParams, uint8* sensorParams); /**< Writes the parameters out to the device specified */
-    // uint32 `$INSTANCE_NAME`_GetDeviceState(uint8 deviceAddr, uint8 * returnState); /**< Get the value of the power state for a device */
-    uint32 `$INSTANCE_NAME`_testConnection(uint32* i2cError);          /**< Test basic I2C contact with device */
+
  
 
 #endif /* `$INSTANCE_NAME`_H */

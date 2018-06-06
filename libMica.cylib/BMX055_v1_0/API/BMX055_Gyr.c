@@ -19,6 +19,42 @@
 #include "`$i2cIncludeFile`.h"
 #include "`$INSTANCE_NAME`_Common.h"
 
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_Gyr_testConnection()
+********************************************************************************
+*
+* \brief Test I2C Connectivity of the Gyroscope
+* 
+
+*
+* \return
+* uint8: An error code with the result of the Wakeup procedure. 
+* The possible error codes are:
+*
+*  Errors codes                             | Description
+*   ------------                            | -----------
+*   `$INSTANCE_NAME`_ERR_OK                 | On Successful Wakeup
+*   `$INSTANCE_NAME`_ERR_WHOAMI             | Who am I value return did not match expected
+*   `$INSTANCE_NAME`_ERR_I2C                | I2C Error occured
+*******************************************************************************/
+uint32 `$INSTANCE_NAME`_Gyr_testConnection(uint32* i2cError){
+    uint8 whoAmI = ZERO;
+    /* Read the chip ID register */
+    uint32 readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_CHIPID_REG, &whoAmI);
+    /* Compare against known who am I */
+    if (readError == `$INSTANCE_NAME`_ERR_OK) {
+        /* Check the value received */
+        if(  whoAmI == `$INSTANCE_NAME`_GYR_CHIPID_VAL) {
+            return `$INSTANCE_NAME`_ERR_OK;
+        }
+        /* Bad Whoam i */
+        return `$INSTANCE_NAME`_ERR_WHOAMI;
+    }
+    /* I2C Error */
+    /* Pass the read error out */
+    *i2cError = readError;
+    return `$INSTANCE_NAME`_ERR_I2C;
+}
 
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_Gyr_Reset()

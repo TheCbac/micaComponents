@@ -219,6 +219,7 @@
     *        Function Prototypes
     ***************************************/
     /* Accelerometer specific functions */
+    uint32 `$INSTANCE_NAME`_Acc_testConnection(uint32* i2cError);          /**< Test basic I2C contact with Accelerometer */
     uint32 `$INSTANCE_NAME`_Acc_Reset(`$INSTANCE_NAME`_ACC_STATE_T* accState);    /**< Start the Accelerometer */
     uint32 `$INSTANCE_NAME`_Acc_SetPowerMode(`$INSTANCE_NAME`_ACC_STATE_T* accState, `$INSTANCE_NAME`_ACC_POWER_T powerMode);    /**< Put the Accelerometer into the specified power mode */
     uint32 `$INSTANCE_NAME`_Acc_Read(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_T* accData);      /**< Read the value of the Accelerometer in int16 precision*/

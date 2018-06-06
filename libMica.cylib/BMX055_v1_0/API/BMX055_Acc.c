@@ -19,6 +19,42 @@
 #include "`$i2cIncludeFile`.h"
 #include "`$INSTANCE_NAME`_Common.h"
 
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_Acc_testConnection()
+********************************************************************************
+*
+* \brief Test I2C Connectivity of the accelerometer
+* 
+
+*
+* \return
+* uint8: An error code with the result of the Wakeup procedure. 
+* The possible error codes are:
+*
+*  Errors codes                             | Description
+*   ------------                            | -----------
+*   `$INSTANCE_NAME`_ERR_OK                 | On Successful Wakeup
+*   `$INSTANCE_NAME`_ERR_WHOAMI             | Who am I value return did not match expected
+*   `$INSTANCE_NAME`_ERR_I2C                | I2C Error occured
+*******************************************************************************/
+uint32 `$INSTANCE_NAME`_Acc_testConnection(uint32* i2cError){
+    uint8 whoAmI = ZERO;
+    /* Read the chip ID register */
+    uint32 readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_CHIPID_REG, &whoAmI);
+    /* Compare against known who am I */
+    if (readError == `$INSTANCE_NAME`_ERR_OK) {
+        /* Check the value received */
+        if(  whoAmI == `$INSTANCE_NAME`_ACC_CHIPID_VAL) {
+            return `$INSTANCE_NAME`_ERR_OK;
+        }
+        /* Bad Whoam i */
+        return `$INSTANCE_NAME`_ERR_WHOAMI;
+    }
+    /* I2C Error */
+    /* Pass the read error out */
+    *i2cError = readError;
+    return `$INSTANCE_NAME`_ERR_I2C;
+}
 
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_Acc_Reset()
@@ -313,8 +349,8 @@ uint32 `$INSTANCE_NAME`_Acc_Read(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_T
         /* Read the MSB */
         readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_X_MSB, &msb);
         if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-        /* Write X value */
-        accData->Ax = `$INSTANCE_NAME`_twosComp_12To16( (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
+        /* Convert from base 12 two's comp to base 16 and Write X value */
+        accData->Ax = `$INSTANCE_NAME`_twosCompToBase16(TWELVE, (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
     }
     /************** Y Channel **************/
     if(chans.Y){
@@ -324,8 +360,8 @@ uint32 `$INSTANCE_NAME`_Acc_Read(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_T
         /* Read the MSB */
         readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Y_MSB, &msb);
         if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-        /* Write Y value */
-        accData->Ay = `$INSTANCE_NAME`_twosComp_12To16( (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
+        /* Convert from base 12 two's comp to base 16 and Write Y value */
+        accData->Ay = `$INSTANCE_NAME`_twosCompToBase16(TWELVE, (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
     }
     /************** Z Channel **************/
     if(chans.Z){
@@ -335,8 +371,8 @@ uint32 `$INSTANCE_NAME`_Acc_Read(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_T
         /* Read the MSB */
         readError = `$i2cReadFunction`(`$INSTANCE_NAME`_ACC_ADDR, `$INSTANCE_NAME`_ACC_Z_MSB, &msb);
         if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-        /* Write Z value */
-        accData->Az = `$INSTANCE_NAME`_twosComp_12To16( (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
+        /* Convert from base 12 two's comp to base 16 and Write Y value */
+        accData->Az = `$INSTANCE_NAME`_twosCompToBase16(TWELVE, (msb << SHIFT_BYTE_HALF) | ((lsb >> SHIFT_BYTE_HALF) & MASK_NIBBLE_LOW) );
     }
     /***************************************/
     /* Indicate success */

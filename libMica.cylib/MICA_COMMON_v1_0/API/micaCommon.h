@@ -40,6 +40,11 @@
     #define TEN             (10u)   /**< Constant 10 */
     #define ELEVEN          (11u)   /**< Constant 11 */
     #define TWELVE          (12u)   /**< Constant 12 */
+    #define THIRTEEN        (13u)   /**< Constant 13 */
+    #define FOURTEEN        (14u)   /**< Constant 14 */
+    #define FIFTEEN         (15u)   /**< Constant 15 */
+    #define SIXTEEN         (16u)   /**< Constant 16 */
+    
     #define NULL_OCTET      (0u)    /**< Null Octet */
     
     #define PI              (3.14159265358979f) /**< Pi */
@@ -88,18 +93,25 @@
     /***************************************
     * Structs
     ***************************************/   
-    /* Struct for handling Float accelerometer data */
+    /* Struct for handling Float accelerometer data [m/s^2] */
     typedef struct {
         float Ax; /**< Acceleration X */
         float Ay; /**< Acceleration Y */
         float Az; /**< Acceleration Z */
     } ACC_DATA_F;
-    /* Struct for handling Float Gyro data */
+    /* Struct for handling Float Gyro data [rad/s] */
     typedef struct {
         float Wx; /**< Angular velocity, X */
         float Wy; /**< Angular velocity, Y */
         float Wz; /**< Angular velocity, Z */
     } GYR_DATA_F;
+    /* Struct for handling Float magnetometer data [uT] */
+    typedef struct{
+        float X; /**< Field Strength, X */
+        float Y; /**< Field Strength, Y */
+        float Z; /**< Field Strength, Z */
+    } MAG_DATA_F;
+        
     /* Struct for handling int16 accelerometer data */
     typedef struct {
         int16 Ax; /**< Acceleration X */
@@ -112,6 +124,13 @@
         int16 Wy; /**< Angular velocity, Y */
         int16 Wz; /**< Angular velocity, Z */
     } GYR_DATA_T;
+    /* Struct for handling Float magnetometer data [uT] */
+    typedef struct{
+        int16 X; /**< Field Strength, X */
+        int16 Y; /**< Field Strength, Y */
+        int16 Z; /**< Field Strength, Z */
+    } MAG_DATA_T;
+        
     
     
     /* Keep track of which channels are enabled */

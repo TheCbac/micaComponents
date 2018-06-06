@@ -39,5 +39,32 @@ int16 `$INSTANCE_NAME`_twosComp_12To16(uint16 baseTwelve) {
     return baseTwelve;
 }
 
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_twosCompToBase16()
+********************************************************************************
+*
+* \brief Converts a value to two's complement base X to base 16, where X<16.
+* 
+* \param fromBase: Base of original number
+*
+* \param val: value to convert
+*
+* \return
+* int16: 16 bit two's comp number
+*
+*******************************************************************************/
+int16 `$INSTANCE_NAME`_twosCompToBase16(uint8 fromBase, uint16 val){
+    /* Ensure valid Base */
+    if(fromBase >= SIXTEEN){ return ZERO;}   
+    /* See if the negative bit is set */
+    if(val & (ONE << (fromBase - ONE) )){
+        /* Create the mask */
+        uint16 prepend = 0xFFFF << fromBase;
+        /* Prepend with one */
+        return prepend | val;
+    }
+    /* Positive number, return original */
+    return val;
+}
 
 /* [] END OF FILE */

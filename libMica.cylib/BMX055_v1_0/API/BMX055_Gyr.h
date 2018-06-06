@@ -115,7 +115,7 @@
     /***************************************
     * Function Prototypes
     ***************************************/
-    /* Gyroscope specific functions */
+    uint32 `$INSTANCE_NAME`_Gyr_testConnection(uint32* i2cError);          /**< Test basic I2C contact with Gyroscope */
     uint32 `$INSTANCE_NAME`_Gyr_Reset(`$INSTANCE_NAME`_GYR_STATE_T* gyrState);    /**< Start the Gyroscope*/
     uint32 `$INSTANCE_NAME`_Gyr_SetPowerMode(`$INSTANCE_NAME`_GYR_STATE_T* gyrState, `$INSTANCE_NAME`_GYR_POWER_T powerMode);    /**< Put the Gyrscope into the specified power mode */
     uint32 `$INSTANCE_NAME`_Gyr_Read(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_T* gyrData);                                            /**< Read data from the gyroscope */

@@ -26,6 +26,8 @@
     #include "`$INSTANCE_NAME`_Acc.h"
     #include "`$INSTANCE_NAME`_Gyr.h"
     #include "`$INSTANCE_NAME`_Mag.h"
+    #include "`$INSTANCE_NAME`_Common.h"
+    
     /***************************************
     * Enumerated Types
     ***************************************/
@@ -34,12 +36,7 @@
     * Structs
     ***************************************/
 
-    /* Struct used for keeping track of the IMU Settings */
-    typedef struct {
-        `$INSTANCE_NAME`_ACC_STATE_T acc;       /**< Device settings for the Accelerometer */
-        `$INSTANCE_NAME`_GYR_STATE_T gyr;       /**< Device settings for the Gyroscope */
-        `$INSTANCE_NAME`_MAG_STATE_T mag;       /**< Device settings for the Magnetometer */
-    }`$INSTANCE_NAME`_STATE_T;
+
     /***************************************
     * Macro Definitions
     ***************************************/
@@ -50,9 +47,7 @@
     /* Device wide Functions */
     uint32 `$INSTANCE_NAME`_Start(`$INSTANCE_NAME`_STATE_T* deviceState);        /**< Start the IMU (Acc, Gyr, Mag) */
     uint32 `$INSTANCE_NAME`_Stop(`$INSTANCE_NAME`_STATE_T* deviceState);         /**< Disable the IMU (Acc, Gyr, Mag)*/
-    uint32 `$INSTANCE_NAME`_Sleep(`$INSTANCE_NAME`_STATE_T* deviceState);        /**< Put the IMU (Acc, Gyr, Mag) to sleep */
-    uint32 `$INSTANCE_NAME`_Wakeup(`$INSTANCE_NAME`_STATE_T* deviceState);       /**< Wakeup all of the IMU (Acc, Gyr, Mag)*/
-    uint32 `$INSTANCE_NAME`_SetParameters(uint8 deviceAddr, uint8 numParams, uint8* sensorParams); /**< Writes the parameters out to the device specified */
+    uint32 `$INSTANCE_NAME`_SetParameters(uint8 deviceAddr, uint8 numParams, uint8* registerList, uint8* registerVal); /**< Writes the parameters out to the device specified */
 
  
 

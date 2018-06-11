@@ -248,9 +248,20 @@ uint32 `$INSTANCE_NAME`_Mag_SetPowerMode(`$INSTANCE_NAME`_MAG_STATE_T* magState,
 *   ------------                            | -----------
 *   `$INSTANCE_NAME`_ERR_OK                 | On successful operation
 *   `$INSTANCE_NAME`_ERR_CHANNELS_NONE      | Data was not requested from any channels
-*
+*   `$INSTANCE_NAME`_ERR_MODE_INVALID       | Device is in an invalid state
 *******************************************************************************/
 uint32 `$INSTANCE_NAME`_Mag_Read(`$INSTANCE_NAME`_MAG_STATE_T* state, MAG_DATA_T* magData){
+    /* Check the power state of the device */
+    switch(state->powerState){
+        /* Valid modes */
+        case `$INSTANCE_NAME`_MAG_PM_NORMAL:
+        case`$INSTANCE_NAME`_MAG_PM_FORCED:
+            break;
+        /* return an error */
+        default:{
+            return `$INSTANCE_NAME`_ERR_MODE_INVALID;
+         }
+    }
     /* Extract channels */
     CHANNELS_XYZ_T chans = state->channels;
     /* Ensure at least one channel is enabled  */

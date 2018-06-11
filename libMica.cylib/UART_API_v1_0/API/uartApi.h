@@ -22,14 +22,14 @@
     /***************************************
     * Function declarations 
     ***************************************/
-    void `$INSTANCE_NAME`(char8 *pszFmt,...);
+    void `$INSTANCE_NAME`_print(char8 *pszFmt,...);
     void `$INSTANCE_NAME`_txTest(uint8 runs);
     void `$INSTANCE_NAME`_putString(char * str);
     void `$INSTANCE_NAME`_putArray(uint8 * array, uint16 length);
     /***************************************
     * Macro Definitions
     ***************************************/
-    #define `$INSTANCE_NAME`_clearScreen()  `$INSTANCE_NAME`("\033[2J\033[1;1H")    /**< Clear the terminal screen */
+    #define `$INSTANCE_NAME`_clearScreen()  `$INSTANCE_NAME`_print("\033[2J\033[1;1H")    /**< Clear the terminal screen */
     /* TX Functions */
     #define `$INSTANCE_NAME`_putChar(ch) `$txFunction`(ch)  /**< Wrapper for UART TX function */
     
@@ -42,7 +42,7 @@
     /* Logging */ 
     #define `$INSTANCE_NAME`_DEBUG_EN `$enableLogging`   /**< Is log printing enabled? */
     #if `$INSTANCE_NAME`_DEBUG_EN
-        #define `$INSTANCE_NAME`_log(...) `$INSTANCE_NAME`(__VA_ARGS__)  /**< Log Function */
+        #define `$INSTANCE_NAME`_log(...) `$INSTANCE_NAME`_print(__VA_ARGS__)  /**< Log Function */
     #else
         #define `$INSTANCE_NAME`_log(...) do { (void)0; } while(0) /**< Without logging */
     #endif /*  */

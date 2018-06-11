@@ -23,26 +23,16 @@
     ***************************************/
     #include "cytypes.h"
     #include "micaCommon.h"
+    #include "`$INSTANCE_NAME`_Common.h"
+    
     /***************************************
     * Enumerated Types
     ***************************************/
-    /* Possible Magnetometer power states */
-    typedef enum  {
-        `$INSTANCE_NAME`_MAG_PM_SUSPEND = (0u),      /**< Mag Suspend power mode */
-        `$INSTANCE_NAME`_MAG_PM_SLEEP,               /**< Mag Sleep power mode */
-        `$INSTANCE_NAME`_MAG_PM_NORMAL,              /**< Mag Normal power mode */
-        `$INSTANCE_NAME`_MAG_PM_FORCED,              /**< Mag Forced power mode */
-    } `$INSTANCE_NAME`_MAG_POWER_T;
+
     /***************************************
     * Structs
     ***************************************/
-    /* Magnetometer settings */
-    typedef struct {
-        float scale;                             /**< Scale for the magnetometer */
-        CHANNELS_XYZ_T channels;                      /**< Channels that are enabled */
-        `$INSTANCE_NAME`_MAG_POWER_T powerState; /**< Power State of the magnetometer */
-    } `$INSTANCE_NAME`_MAG_STATE_T;
-    
+
     /***************************************
     * Macro Definitions
     ***************************************/

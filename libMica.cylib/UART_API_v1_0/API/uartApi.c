@@ -83,7 +83,7 @@ static inline uint8* `$INSTANCE_NAME`_changeBase(uint32 Index)
 }
 
 /*******************************************************************************
-* Function Name: `$INSTANCE_NAME`()
+* Function Name: `$INSTANCE_NAME`_print()
 ****************************************************************************//**
 *
 * \brief Prints out the string
@@ -94,7 +94,7 @@ static inline uint8* `$INSTANCE_NAME`_changeBase(uint32 Index)
 * \return
 * None
  *******************************************************************************/
-void `$INSTANCE_NAME`(char8 *pszFmt,...){
+void `$INSTANCE_NAME`_print(char8 *pszFmt,...){
     uint8 *pszVal;
     uint32 iVal, xVal, i = 0, buffer[12], index = 1;
     uint8 cVal;
@@ -189,11 +189,11 @@ void `$INSTANCE_NAME`_txTest(uint8 runs) {
     /* Run through a specified number of times */
     while( (i++ < runs) || runs == ZERO) {
         /* Print the date and time the program was compiled */
-        `$INSTANCE_NAME`("Compiled: ");
-        `$INSTANCE_NAME`(__TIME__);
-        `$INSTANCE_NAME`(" ");
-        `$INSTANCE_NAME`(__DATE__);
-        `$INSTANCE_NAME`("\r\n");
+        `$INSTANCE_NAME`_print("Compiled: ");
+        `$INSTANCE_NAME`_print(__TIME__);
+        `$INSTANCE_NAME`_print(" ");
+        `$INSTANCE_NAME`_print(__DATE__);
+        `$INSTANCE_NAME`_print("\r\n");
         /* Delay */
         MICA_delayMs(MICA_DELAY_MS_SEC_ONE);
     }

@@ -17,7 +17,6 @@
 ********************************************************************************/
 #include "`$INSTANCE_NAME`_Acc.h"
 #include "`$i2cIncludeFile`.h"
-#include "`$INSTANCE_NAME`_Common.h"
 
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_Acc_testConnection()
@@ -331,6 +330,19 @@ uint32 `$INSTANCE_NAME`_Acc_SetPowerMode(`$INSTANCE_NAME`_ACC_STATE_T* accState,
 *
 *******************************************************************************/
 uint32 `$INSTANCE_NAME`_Acc_Read(`$INSTANCE_NAME`_ACC_STATE_T* state, ACC_DATA_T* accData){
+    /* Check the power state of the device */
+    switch(state->powerState){
+        /* Valid modes */
+        case `$INSTANCE_NAME`_ACC_PM_NORMAL:
+        case `$INSTANCE_NAME`_ACC_PM_STANDBY:
+        case `$INSTANCE_NAME`_ACC_PM_LP1:
+        case `$INSTANCE_NAME`_ACC_PM_LP2:
+            break;
+        /* return an error */
+        default:{
+            return `$INSTANCE_NAME`_ERR_MODE_INVALID;
+         }
+    }
     /* Extract channels */
     CHANNELS_XYZ_T chans = state->channels;
     /* Ensure at least one channel is enabled  */

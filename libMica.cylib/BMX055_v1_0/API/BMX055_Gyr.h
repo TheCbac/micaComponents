@@ -23,25 +23,16 @@
     ***************************************/
     #include "cytypes.h"
     #include "micaCommon.h"
+    #include "`$INSTANCE_NAME`_Common.h"
+    
     /***************************************
     * Enumerated Types
     ***************************************/
-    /* Possible Gyroscope power states */
-    typedef enum  {
-        `$INSTANCE_NAME`_GYR_PM_NORMAL = (0u),      /**< Gyr Normal power mode */
-        `$INSTANCE_NAME`_GYR_PM_FAST_POWERUP,       /**< Gyr Fast Power up power mode */
-        `$INSTANCE_NAME`_GYR_PM_SUSPEND,            /**< Gyr suspend power mode */
-        `$INSTANCE_NAME`_GYR_PM_DEEP_SUSPEND,       /**< Gyr deep suspend power mode */
-    } `$INSTANCE_NAME`_GYR_POWER_T;
+
     /***************************************
     * Structs
     ***************************************/
-    /* Gyroscope settings */
-    typedef struct {
-        float scale;                             /**< Scale for the Gyroscope */
-        CHANNELS_XYZ_T channels;                      /**< Channels that are enabled */
-        `$INSTANCE_NAME`_GYR_POWER_T powerState; /**< Power State of the gyroscope */
-    } `$INSTANCE_NAME`_GYR_STATE_T;
+
     
     /***************************************
     * Macro Definitions
@@ -119,9 +110,14 @@
     uint32 `$INSTANCE_NAME`_Gyr_Reset(`$INSTANCE_NAME`_GYR_STATE_T* gyrState);    /**< Start the Gyroscope*/
     uint32 `$INSTANCE_NAME`_Gyr_SetPowerMode(`$INSTANCE_NAME`_GYR_STATE_T* gyrState, `$INSTANCE_NAME`_GYR_POWER_T powerMode);    /**< Put the Gyrscope into the specified power mode */
     uint32 `$INSTANCE_NAME`_Gyr_Read(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_T* gyrData);                                            /**< Read data from the gyroscope */
-    uint32 `$INSTANCE_NAME`_Gyr_Readf(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_F* gyroData);      /**< Read the value of the Gyroscope in float*/
-    uint32 `$INSTANCE_NAME`_Gyr_Int2Float(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_T* intData, GYR_DATA_F* floatData);     /**< Converts the Gyro int type to float type*/
-    uint32 `$INSTANCE_NAME`_Gyr_Float2Int(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_F* floatData, GYR_DATA_T* intData);     /**< Converts the gyro float type to int type*/
+    uint32 `$INSTANCE_NAME`_Gyr_Readf_deg(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_DEG_F* gyroDegData);      /**< Read the value of the Gyroscope in float [deg/s]*/
+    uint32 `$INSTANCE_NAME`_Gyr_Readf_rad(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_RAD_F* gyrRadData);      /**< Read the value of the Gyroscope in float [rad/s]*/
+    
+    uint32 `$INSTANCE_NAME`_Gyr_Int2FloatDeg(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_T* intData, GYR_DATA_DEG_F* floatData);     /**< Converts the Gyro int type to float type [deg/s]*/
+    uint32 `$INSTANCE_NAME`_Gyr_FloatDeg2Int(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_DEG_F* floatData, GYR_DATA_T* intData);     /**< Converts the gyro float type [deg/s] to int type */
+    uint32 `$INSTANCE_NAME`_Gyr_degToRad(GYR_DATA_DEG_F* degData, GYR_DATA_RAD_F* radData);
+    uint32 `$INSTANCE_NAME`_Gyr_radToDeg(GYR_DATA_RAD_F* radData, GYR_DATA_DEG_F* degData);
+    
     
 #endif /* `$INSTANCE_NAME`_GYR_H */
 

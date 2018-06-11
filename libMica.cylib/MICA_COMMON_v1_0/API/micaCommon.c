@@ -29,7 +29,7 @@
 *
 *
 *******************************************************************************/
-float to_degrees(float radians){
+inline float to_degrees(float radians){
     return radians * (180.0f) / PI;
 }
 /*******************************************************************************
@@ -44,7 +44,7 @@ float to_degrees(float radians){
 *
 *
 *******************************************************************************/
-float to_radians(float degrees){
+inline float to_radians(float degrees){
     return degrees *  PI / (180.0f);
 }
 

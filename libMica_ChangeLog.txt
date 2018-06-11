@@ -1,13 +1,19 @@
 CHANGE LOG
 libMICA - MICA Components - v1
 
+2.08.06.11 CC - UART_API
+* change from functions to uart name and SCB option?
+
 2018.06.04 - BMX component CC
 * Create two accelerometer data types - float and int16     ✓
 * Create two gyroscope data types - float and int16         ✓
 * Convert Power states to enumerated types                  ✓
 * Create devices state structs                              ✓
-* Update BMX device functions
-* Update ACC functions
-* Update GYR functions
-* Update MAG funcitons 
-* Create inclinometer Component
+* Update BMX device functions                               ✓
+* Update ACC functions                                      ✓
+* Update GYR functions                                      ✓
+* Update MAG functions                                      ✓
+* Switch read functions to state variable not device specific (&imuState.acc -> &imuState)
+* Create inclinometer Component                             ✓
+* Add state check to read functions                         ✓
+

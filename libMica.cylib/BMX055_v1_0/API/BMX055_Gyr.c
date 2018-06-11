@@ -253,7 +253,7 @@ uint32 `$INSTANCE_NAME`_Gyr_SetPowerMode(`$INSTANCE_NAME`_GYR_STATE_T* gyrState,
 *  Reads the specified channels of the Gyro. Places result into the gyrData
 *
 * \param state
-*  Pointer to the state of the accelerometer
+*  Pointer to the state of the gyroscope
 *
 * \param gyrData
 *  Pointer to struct to place the data into
@@ -269,13 +269,23 @@ uint32 `$INSTANCE_NAME`_Gyr_SetPowerMode(`$INSTANCE_NAME`_GYR_STATE_T* gyrState,
 *
 *******************************************************************************/
 uint32 `$INSTANCE_NAME`_Gyr_Read(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_T* gyrData){
+    /* Check the power state of the device */
+    switch(state->powerState){
+        /* Valid modes */
+        case `$INSTANCE_NAME`_GYR_PM_NORMAL:
+            break;
+        /* return an error */
+        default:{
+            return `$INSTANCE_NAME`_ERR_MODE_INVALID;
+         }
+    }
     /* Extract channels */
     CHANNELS_XYZ_T chans = state->channels;
     /* Ensure at least one channel is enabled  */
     if( (!chans.X) && (!chans.Y) && (!chans.Z) ){
         return `$INSTANCE_NAME`_ERR_CHANNELS_NONE;
     }
-    /* Read in the accelerometer data */
+    /* Read in the gyroscope data */
     uint8 msb = ZERO;
     uint8 lsb = ZERO;
     uint32 readError;
@@ -318,17 +328,17 @@ uint32 `$INSTANCE_NAME`_Gyr_Read(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_T
 }
 
 /*******************************************************************************
-* Function Name: `$INSTANCE_NAME`_Gyr_Readf()
+* Function Name: `$INSTANCE_NAME`_Gyr_Readf_deg()
 ****************************************************************************//**
 *
 * \brief
-*  Reads the specified channels of the Accelerometer and converts to a floating
-*  point number.
+*  Reads the specified channels of the Gyroscope and converts to a floating
+*  point number in units of [deg/s]
 *
 * \param state
-*  Pointer to the state of the Accelerometer\
+*  Pointer to the state of the Gyroscope
 *
-* \param accData
+* \param gyroDegData
 *  Pointer to struct to place the data into
 *
 * \return 
@@ -341,23 +351,62 @@ uint32 `$INSTANCE_NAME`_Gyr_Read(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_T
 *   `$INSTANCE_NAME`_ERR_CHANNELS_NONE      | Data was not requested from any channels
 *
 *******************************************************************************/
-uint32 `$INSTANCE_NAME`_Gyr_Readf(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_F* gyrData){
+uint32 `$INSTANCE_NAME`_Gyr_Readf_deg(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_DEG_F* gyroDegData){
     /* Read from the device */
     GYR_DATA_T gyrIntData;
     uint32 readError = `$INSTANCE_NAME`_Gyr_Read(state, &gyrIntData);
     if(readError != `$INSTANCE_NAME`_ERR_OK) {return readError;}
     /* Convert to a float */
-    readError = `$INSTANCE_NAME`_Gyr_Int2Float(state, &gyrIntData, gyrData); 
+    readError = `$INSTANCE_NAME`_Gyr_Int2FloatDeg(state, &gyrIntData, gyroDegData); 
+    return readError;
+}
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_Gyr_Readf_rad()
+****************************************************************************//**
+*
+* \brief
+*  Reads the specified channels of the Gyroscope and converts to a floating
+*  point number in units of [rad/s]
+*
+* \param state
+*  Pointer to the state of the Gyroscope
+*
+* \param gyrRadData
+*  Pointer to struct to place the data into
+*
+* \return 
+* uint32: An error code with the result of the read procedure. 
+* The possible error codes are:
+*
+*  Errors codes                             | Description
+*   ------------                            | -----------
+*   `$INSTANCE_NAME`_ERR_OK                 | On successful operation
+*   `$INSTANCE_NAME`_ERR_CHANNELS_NONE      | Data was not requested from any channels
+*
+*******************************************************************************/
+uint32 `$INSTANCE_NAME`_Gyr_Readf_rad(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_RAD_F* gyrRadData){
+    /* Intermediate variables */
+    GYR_DATA_DEG_F gyrDegData;
+    GYR_DATA_T gyrIntData;
+    /* Read from the device */
+    uint32 readError = `$INSTANCE_NAME`_Gyr_Read(state, &gyrIntData);
+    if(readError != `$INSTANCE_NAME`_ERR_OK) {return readError;}
+    /* Convert to a float [deg/s] */
+    readError = `$INSTANCE_NAME`_Gyr_Int2FloatDeg(state, &gyrIntData, &gyrDegData); 
+    if(readError != `$INSTANCE_NAME`_ERR_OK) {return readError;}
+    /* Convert to [rad/s] */
+    readError =  `$INSTANCE_NAME`_Gyr_degToRad(&gyrDegData, gyrRadData); 
     return readError;
 }
 
 
 /*******************************************************************************
-* Function Name: `$INSTANCE_NAME`_Gyr_Int2Float
+* Function Name: `$INSTANCE_NAME`_Gyr_Int2FloatDeg
 ****************************************************************************//**
 *
 * \brief
-*  Converts an accelerometer data sample from int16 to float type. 
+*  Converts an gyroscope data sample from int16 to float type. 
 *
 * \param State
 *  Pointer to the Struct containing the settings of the device in order to scale correctly
@@ -377,13 +426,13 @@ uint32 `$INSTANCE_NAME`_Gyr_Readf(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_
 *   `$INSTANCE_NAME`_ERR_OK                 | On successful operation
 *   `$INSTANCE_NAME`_ERR_CHANNELS_NONE      | No channels indicated for conversion
 *******************************************************************************/
-uint32 `$INSTANCE_NAME`_Gyr_Int2Float(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_T* intData, GYR_DATA_F* floatData){
+uint32 `$INSTANCE_NAME`_Gyr_Int2FloatDeg(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_T* intData, GYR_DATA_DEG_F* floatData){
     /* Extract channels */
     CHANNELS_XYZ_T chans = state->channels;
     if( (!chans.X) && (!chans.Y) && (!chans.Z) ){
         return `$INSTANCE_NAME`_ERR_CHANNELS_NONE;
     }
-    /* Gain of the accelerometer */
+    /* Gain of the gyroscope */
     float gain = state->scale;
     /* Convert to float */
     if(chans.X){ floatData->Wx = gain * (float) intData->Wx; }
@@ -394,11 +443,11 @@ uint32 `$INSTANCE_NAME`_Gyr_Int2Float(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_D
 }
 
 /*******************************************************************************
-* Function Name: ``$INSTANCE_NAME`_Gyr_Float2Int(); 
+* Function Name: ``$INSTANCE_NAME`_Gyr_FloatDeg2Int(); 
 ****************************************************************************//**
 *
 * \brief
-*  Converts an accelerometer data sample from float to int16 type. 
+*  Converts an gyroscope data sample from float to int16 type. 
 *
 * \param State
 *  Pointer to the Struct containing the settings of the device in order to scale correctly
@@ -417,14 +466,14 @@ uint32 `$INSTANCE_NAME`_Gyr_Int2Float(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_D
 *   ------------                            | -----------
 *   `$INSTANCE_NAME`_ERR_OK                 | On successful operation
 *******************************************************************************/
-uint32 `$INSTANCE_NAME`_Gyr_Float2Int(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_F* floatData, GYR_DATA_T* intData) {
+uint32 `$INSTANCE_NAME`_Gyr_FloatDeg2Int(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_DATA_DEG_F* floatData, GYR_DATA_T* intData) {
     /* Extract channels */
     CHANNELS_XYZ_T chans = state->channels;
     /* Ensure at least one channel is enabled  */
     if( (!chans.X) && (!chans.Y) && (!chans.Z) ){
         return `$INSTANCE_NAME`_ERR_CHANNELS_NONE;
     }
-    /* Gain of the accelerometer */
+    /* Gain of the gyroscope */
     float gain = state->scale;
     /* Convert to int */
     if(chans.X){ intData->Wx = (int16) (floatData->Wx / gain); }
@@ -434,69 +483,64 @@ uint32 `$INSTANCE_NAME`_Gyr_Float2Int(`$INSTANCE_NAME`_GYR_STATE_T* state, GYR_D
     return `$INSTANCE_NAME`_ERR_OK;
 }
 
-//
-///*******************************************************************************
-//* Function Name: `$INSTANCE_NAME`_Gyr_Read()
-//****************************************************************************//**
-//*
-//* \brief
-//*  Reads the specified channels of the gyroscope. Places result into the dataArray.
-//*   values are scaled and converted to radians.
-//*
-//* \param dataArray
-//*  Array to place the data into
-//*       
-//* \param sensorChannels 
-//* A bit mask of the channels to sample 
-//*
-//* \return 
-//* uint32: An error code with the result of the read procedure. 
-//* The possible error codes are:
-//*
-//*  Errors codes                             | Description
-//*   ------------                            | -----------
-//*   `$INSTANCE_NAME`_ERR_OK                 | On successful operation
-//*   `$INSTANCE_NAME`_ERR_CHANNELS_NONE      | Data was not requested from any channels
-//*
-//*******************************************************************************/
-////uint32 `$INSTANCE_NAME`_Gyr_Read(int16* dataArray, uint8 sensorChannels){
-//uint32 `$INSTANCE_NAME`_Gyr_Read(GYR_DATA_T* gyroData){
-//    /* Read in the gyroscope data */
-//    uint8 msb = ZERO;
-//    uint8 lsb = ZERO;
-//    uint32 readError;
-//    // TODO: scale based off settings
-//    float scale = 0.061f; /* Default settings 61 m°/s/lsb */
-//    /************** X Channel **************/
-//    /* Read the LSB first to lock MSB */
-//    readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_X_LSB, &lsb);
-//    if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-//    /* Read the MSB */
-//    readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_X_MSB, &msb);
-//    int16 x = (msb << SHIFT_BYTE_ONE) | lsb;
-//    /* Write X value */
-//    gyroData->Wx = to_radians(scale * (float) x);
-//    /************** Y Channel **************/
-//    /* Read the LSB first to lock MSB */
-//    readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_Y_LSB, &lsb);
-//    if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-//    /* Read the MSB */
-//    readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_Y_MSB, &msb);
-//    int16 y = (msb << SHIFT_BYTE_ONE) | lsb;
-//    /* Write Y value */
-//    gyroData->Wy = to_radians(scale * (float) y);
-//    /************** Z Channel **************/
-//    /* Read the LSB first to lock MSB */
-//    readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_Z_LSB, &lsb);
-//    if (readError != `$INSTANCE_NAME`_ERR_OK ) {return readError;}
-//    /* Read the MSB */
-//    readError = `$i2cReadFunction`(`$INSTANCE_NAME`_GYR_ADDR, `$INSTANCE_NAME`_GYR_Z_MSB, &msb);
-//    int16 z = (msb << SHIFT_BYTE_ONE) | lsb;
-//    /* Write Z value */
-//    gyroData->Wz = to_radians(scale * (float) z);
-//    
-//    /* Indicate success */
-//    return `$INSTANCE_NAME`_ERR_OK;
-//
-//}
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_Gyr_degToRad
+****************************************************************************//**
+*
+* \brief
+*  Converts an gyroscope data sample from [deg/s] to [rad/s]
+*
+* \param degData
+*  Pointer to the struct containing the data in [deg/s]
+*
+* \param radData
+*  Pointer to the output struct in [rad/s]
+*
+* \return 
+* uint32: An error code with the result of the conversion procedure. 
+* The possible error codes are:
+*
+*  Errors codes                             | Description
+*   ------------                            | -----------
+*   `$INSTANCE_NAME`_ERR_OK                 | On successful operation
+*******************************************************************************/
+uint32 `$INSTANCE_NAME`_Gyr_degToRad(GYR_DATA_DEG_F* degData, GYR_DATA_RAD_F* radData){
+    /* convert to degrees */
+    radData->Wx = to_radians(degData->Wx);
+    radData->Wy = to_radians(degData->Wy);
+    radData->Wz = to_radians(degData->Wz);
+    /* Return success */
+    return `$INSTANCE_NAME`_ERR_OK;
+}
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_Gyr_radToDeg
+****************************************************************************//**
+*
+* \brief
+*  Converts an gyroscope data sample from [rad/s] to [deg/s]
+*
+* \param radData
+*  Pointer to the Struct containing the data in [rad/s]
+*
+* \param degData
+*  Pointer to the output data in [deg/s]
+*
+* \return 
+* uint32: An error code with the result of the conversion procedure. 
+* The possible error codes are:
+*
+*  Errors codes                             | Description
+*   ------------                            | -----------
+*   `$INSTANCE_NAME`_ERR_OK                 | On successful operation
+*******************************************************************************/
+uint32 `$INSTANCE_NAME`_Gyr_radToDeg(GYR_DATA_RAD_F* radData, GYR_DATA_DEG_F* degData){
+    /* convert to degrees */
+    degData->Wx = to_degrees(radData->Wx);
+    degData->Wy = to_degrees(radData->Wy);
+    degData->Wz = to_degrees(radData->Wz);
+    /* Return success */
+    return `$INSTANCE_NAME`_ERR_OK;
+}
+
 /* [] END OF FILE */

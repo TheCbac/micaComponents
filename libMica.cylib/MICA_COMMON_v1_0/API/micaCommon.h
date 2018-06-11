@@ -87,6 +87,9 @@
     
     #define MICA_DELAY_US_SEC_TENTH     (100000)        /**< Delay in us for 0.1 second  */
     #define MICA_DELAY_US_SEC_QUARTER   (250000)        /**< Delay in us for 0.25 second  */
+    #define MICA_DELAY_US_SEC_HALF      (500000)        /**< Delay in us for 0.5 second  */
+    #define MICA_DELAY_US_SEC_ONE       (1000000)       /**< Delay in us for 1.0 second  */
+    
 
     #define MICA_delayMs(val)     `$msDelayFunction`(val)    /**< Delay function */
     
@@ -99,12 +102,18 @@
         float Ay; /**< Acceleration Y */
         float Az; /**< Acceleration Z */
     } ACC_DATA_F;
+    /* Struct for handling Float Gyro data [deg/s] */
+    typedef struct {
+        float Wx; /**< Angular velocity, X */
+        float Wy; /**< Angular velocity, Y */
+        float Wz; /**< Angular velocity, Z */
+    } GYR_DATA_DEG_F;
     /* Struct for handling Float Gyro data [rad/s] */
     typedef struct {
         float Wx; /**< Angular velocity, X */
         float Wy; /**< Angular velocity, Y */
         float Wz; /**< Angular velocity, Z */
-    } GYR_DATA_F;
+    } GYR_DATA_RAD_F;
     /* Struct for handling Float magnetometer data [uT] */
     typedef struct{
         float X; /**< Field Strength, X */

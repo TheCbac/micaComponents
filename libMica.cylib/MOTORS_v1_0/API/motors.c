@@ -97,8 +97,8 @@ void `$INSTANCE_NAME`_Disable(void) {
 *
 *******************************************************************************/
 void `$INSTANCE_NAME`_Move(`$INSTANCE_NAME`_DIRECTION_T direction, uint16 speed){
-    /* Enable both motors */
-    uint8 controlVal = (`$INSTANCE_NAME`_M1_EN | `$INSTANCE_NAME`_M2_EN);
+    /* Don't change Enable/disable state */
+    uint8 controlVal = `$INSTANCE_NAME`_ControlReg_Read() & `$INSTANCE_NAME`_MASK_ENABLE;
     /* Act according to direction */
     switch(direction) {
         /* Forward */

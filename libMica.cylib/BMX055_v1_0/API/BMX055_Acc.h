@@ -23,27 +23,16 @@
     ***************************************/
     #include "cytypes.h"
     #include "micaCommon.h"
+    #include "`$INSTANCE_NAME`_Common.h"
+    
     /***************************************
     * Enumerated Types
     ***************************************/
-        /* Possible Accelerometer power states */
-    typedef enum {
-        `$INSTANCE_NAME`_ACC_PM_NORMAL = (0u),      /**< Acc Normal power mode */
-        `$INSTANCE_NAME`_ACC_PM_STANDBY,            /**< Acc Standby mode */
-        `$INSTANCE_NAME`_ACC_PM_LP1,                /**< Acc Low Power 1 mode */
-        `$INSTANCE_NAME`_ACC_PM_LP2,                /**< Acc Low Power 2 mode */
-        `$INSTANCE_NAME`_ACC_PM_SUSPEND,            /**< Acc Suspend mode */
-        `$INSTANCE_NAME`_ACC_PM_DEEP_SUSPEND        /**< Acc Deep Suspend mode */
-    } `$INSTANCE_NAME`_ACC_POWER_T;
+
     /***************************************
     * Structs
     ***************************************/
-    /* Accelerometer settings */
-    typedef struct {
-        float scale;                             /**< Scale for the Accelerometer */
-        CHANNELS_XYZ_T channels;                      /**< Channels that are enabled */
-        `$INSTANCE_NAME`_ACC_POWER_T powerState; /**< Power State of the accelerometer */
-    } `$INSTANCE_NAME`_ACC_STATE_T;
+
 
     /***************************************
     * Macro Definitions

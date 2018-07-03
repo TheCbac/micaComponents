@@ -164,6 +164,11 @@
     } EULER_ANGLE_T;
     
     /***************************************
+    * Typedefs
+    ***************************************/  
+    typedef void FUNCTION_T(void); /**< void/void function type (for interrupts) */
+    
+    /***************************************
     * Function prototypes
     ***************************************/  
     float to_degrees(float radians);

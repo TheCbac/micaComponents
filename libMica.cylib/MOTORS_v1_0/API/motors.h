@@ -22,6 +22,7 @@
     * Included Files
     ***************************************/
     #include "cytypes.h"
+    #include <stdbool.h>
     /***************************************
     * Macro Definitions
     ***************************************/
@@ -72,6 +73,7 @@
     void `$INSTANCE_NAME`_Start(void);
     void `$INSTANCE_NAME`_Enable(void);
     void `$INSTANCE_NAME`_Disable(void);
+    void `$INSTANCE_NAME`_SetState(bool state);
     
     void `$INSTANCE_NAME`_M1_WriteSpeed(int16 speed);
     void `$INSTANCE_NAME`_M2_WriteSpeed(int16 speed);

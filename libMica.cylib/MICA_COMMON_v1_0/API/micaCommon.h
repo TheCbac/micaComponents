@@ -81,6 +81,7 @@
     #define MICA_TEST_INFINITE      (0u)                /**< Run test an infinite number of times  */
     #define MICA_TEST_ONCE          (1u)                /**< Run test one time */
    
+    #define MICA_DELAY_MS_SEC_TENTH     (100)           /**< Delay in ms for 0.1 seconds  */
     #define MICA_DELAY_MS_SEC_QUARTER   (250)           /**< Delay in ms for 0.25 seconds  */
     #define MICA_DELAY_MS_SEC_HALF      (500)           /**< Delay in ms for 0.5 second  */
     #define MICA_DELAY_MS_SEC_ONE       (1000)          /**< Delay in ms for 1 second  */
@@ -162,6 +163,12 @@
         float pitch; /**< pitch of system */
         float roll; /**< roll of system */
     } EULER_ANGLE_T;
+    
+    /* Struct for Encoders */
+    typedef struct {
+        uint32 rightCount;  /**< Right encoder count value */
+        uint32 leftCount;   /**< Left encoder count value */
+    } ENCODER_DUAL_T;
     
     /***************************************
     * Typedefs

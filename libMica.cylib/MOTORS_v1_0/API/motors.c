@@ -79,6 +79,26 @@ void `$INSTANCE_NAME`_Disable(void) {
     `$INSTANCE_NAME`_ControlReg_Write(val);
 }
 
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_SetState()
+********************************************************************************
+* Summary:
+*   Sets the state of the motors
+*
+* \param state
+*   Next state of the motor to write
+*
+* Return:
+*   None.
+*
+*******************************************************************************/
+void `$INSTANCE_NAME`_SetState(bool state){
+    if(state){
+        `$INSTANCE_NAME`_Enable();
+    } else {
+        `$INSTANCE_NAME`_Disable();   
+    }
+}
 
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_Move()

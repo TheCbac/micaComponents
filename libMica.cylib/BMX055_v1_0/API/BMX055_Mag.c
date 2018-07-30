@@ -255,7 +255,7 @@ uint32 `$INSTANCE_NAME`_Mag_Read(`$INSTANCE_NAME`_MAG_STATE_T* state, MAG_DATA_T
     switch(state->powerState){
         /* Valid modes */
         case `$INSTANCE_NAME`_MAG_PM_NORMAL:
-        case`$INSTANCE_NAME`_MAG_PM_FORCED:
+        case `$INSTANCE_NAME`_MAG_PM_FORCED:
             break;
         /* return an error */
         default:{

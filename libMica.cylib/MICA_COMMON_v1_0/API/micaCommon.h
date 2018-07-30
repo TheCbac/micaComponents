@@ -170,6 +170,11 @@
         uint32 leftCount;   /**< Left encoder count value */
     } ENCODER_DUAL_T;
     
+    
+    /* Structs for packets */
+    
+    
+    
     /***************************************
     * Typedefs
     ***************************************/  

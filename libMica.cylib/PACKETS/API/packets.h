@@ -83,22 +83,41 @@
     /***************************************
     * Enumerated Types
     ***************************************/
-    typedef enum {
-        `$INSTANCE_NAME`_ERR_SUCCESS = 0x00u, /**< Returned Success */
-        `$INSTANCE_NAME`_ERR_FORMAT,      /**< The packet is not in the correct format */
-        `$INSTANCE_NAME`_ERR_MODULE,      /**< An invalid module was specified */
-        `$INSTANCE_NAME`_ERR_LENGTH,      /**< The amount of data available is outside the expected range. */
-        `$INSTANCE_NAME`_ERR_DATA,        /**< The data is not of the proper form  */
-        `$INSTANCE_NAME`_ERR_CMD,         /**< The command is not recognized */
-        `$INSTANCE_NAME`_ERR_CHECKSUM,    /**< The packet checksum does not match the expected value */
-        `$INSTANCE_NAME`_ERR_STATE,        /**< Device was in the incorrect state to execute the command */
-        `$INSTANCE_NAME`_ERR_DEVICE,      /**< An Unknown device was addressed */
-        `$INSTANCE_NAME`_ERR_UNKNOWN = 0x7F,      /**< An unknown error occurred */
-        /* Async data */
-        `$INSTANCE_NAME`_ASYNC_REPORT_ADV = `$INSTANCE_NAME`_RESP_ASYNC,       /**< Report an advertisement packet */
-        `$INSTANCE_NAME`_ASYNC_REPORT_CONN,    /**< Report a connection success  */
-        `$INSTANCE_NAME`_ASYNC_REPORT_DCON    /**< Report a disconnection  */
-    } `$INSTANCE_NAME`_ERROR_T;  
+    
+    #define `$INSTANCE_NAME`_ERR_SUCCESS        (0x00u)     /**< Returned Success */
+    #define `$INSTANCE_NAME`_ERR_START_SYM      (0x01u)     /**< Incorrect start symbol was received */
+    #define `$INSTANCE_NAME`_ERR_END_SYM        (0x02u)     /**< Incorrect end symbol was received */
+    #define `$INSTANCE_NAME`_ERR_LENGTH         (0x03u)     /**< The amount of data available is outside the expected range. */
+    #define `$INSTANCE_NAME`_ERR_FORMAT         (0x04u)     /**< The packet is not in the correct format */
+    #define `$INSTANCE_NAME`_ERR_INCOMPLETE     (0x05u)     /**< The packet cannot be processed as it is incomplete */
+    #define `$INSTANCE_NAME`_ERR_MODULE         (0x06u)     /**< An invalid module was specified */
+    #define `$INSTANCE_NAME`_ERR_DATA           (0x07u)     /**< The data is not of the proper form  */
+    #define `$INSTANCE_NAME`_ERR_CMD            (0x08u)     /**< The command is not recognized */
+    #define `$INSTANCE_NAME`_ERR_CHECKSUM       (0x09u)     /**< The packet checksum does not match the expected value */
+    #define `$INSTANCE_NAME`_ERR_STATE          (0x0Au)     /**< Device was in the incorrect state to execute the command */
+    #define `$INSTANCE_NAME`_ERR_DEVICE         (0x0Bu)     /**< An Unknown device was addressed */
+    #define `$INSTANCE_NAME`_ERR_UNKNOWN        (0x7Fu)     /**< An unknown error occurred - End of error space */
+    /* Async data */
+    #define `$INSTANCE_NAME`_ASYNC_REPORT_ADV   (0x80u)     /**< Report an advertisement packet - Start of async space */
+    #define `$INSTANCE_NAME`_ASYNC_REPORT_CONN  (0x81u)     /**< Report a connection success  */
+    #define `$INSTANCE_NAME`_ASYNC_REPORT_DCON  (0x82u)     /**< Report a disconnection  */
+
+//    typedef enum {
+//        `$INSTANCE_NAME`_ERR_SUCCESS = 0x00u, /**< Returned Success */
+//        `$INSTANCE_NAME`_ERR_FORMAT,      /**< The packet is not in the correct format */
+//        `$INSTANCE_NAME`_ERR_MODULE,      /**< An invalid module was specified */
+//        `$INSTANCE_NAME`_ERR_LENGTH,      /**< The amount of data available is outside the expected range. */
+//        `$INSTANCE_NAME`_ERR_DATA,        /**< The data is not of the proper form  */
+//        `$INSTANCE_NAME`_ERR_CMD,         /**< The command is not recognized */
+//        `$INSTANCE_NAME`_ERR_CHECKSUM,    /**< The packet checksum does not match the expected value */
+//        `$INSTANCE_NAME`_ERR_STATE,        /**< Device was in the incorrect state to execute the command */
+//        `$INSTANCE_NAME`_ERR_DEVICE,      /**< An Unknown device was addressed */
+//        `$INSTANCE_NAME`_ERR_UNKNOWN = 0x7F,      /**< An unknown error occurred */
+//        /* Async data */
+//        `$INSTANCE_NAME`_ASYNC_REPORT_ADV = `$INSTANCE_NAME`_RESP_ASYNC,       /**< Report an advertisement packet */
+//        `$INSTANCE_NAME`_ASYNC_REPORT_CONN,    /**< Report a connection success  */
+//        `$INSTANCE_NAME`_ASYNC_REPORT_DCON    /**< Report a disconnection  */
+//    } `$INSTANCE_NAME`_ERROR_T;  
 
     typedef enum {
         `$INSTANCE_NAME`_STATE_WAIT_FOR_START,   /**< Waiting for the start byte to be received */
@@ -113,13 +132,17 @@
     typedef struct {
         uint8_t moduleId;       /**< ID of the module commanded */
         uint8_t cmd;            /**< Command issued */
-        uint16_t length;        /**< Length of the data received */
         uint8_t* payload;       /**< Pointer to the data */
+        uint16_t payloadLen;    /**< Length of the payload in the buffer*/
+        `$INSTANCE_NAME`_STATE_T state; /**< State of the packet */
+        uint8_t buffer[`$INSTANCE_NAME`_LEN_MAX_PACKET];  /**< Packet buffer*/
+        uint16_t bufferCount;   /**< Length of the data in the buffer*/
+        bool complete;          /**< Has all of the packet been received ? */
     } `$INSTANCE_NAME`_PACKET_T;
             
     typedef struct {
         uint8_t moduleId;       /**< ID of the module commanded */
-        `$INSTANCE_NAME`_ERROR_T status; /**< Status Code of the response packet */
+//        `$INSTANCE_NAME`_ERROR_T status; /**< Status Code of the response packet */
         uint16_t length;            /**< Length of the response payload */
         uint8_t* payload;           /**< Pointer to the payload */
     } `$INSTANCE_NAME`_RESPONSE_T;
@@ -127,11 +150,17 @@
     /***************************************
     * Function declarations 
     ***************************************/
-    uint16_t `$INSTANCE_NAME`_computeChecksum16(uint8_t* data, uint16_t length);
-    `$INSTANCE_NAME`_ERROR_T mica_parsePacket(uint8_t* dataBuffer, `$INSTANCE_NAME`_PACKET_T* packet);
-    bool `$INSTANCE_NAME`_processPacketByte(uint8_t dataByte, uint8_t* packetBuffer);
-    bool `$INSTANCE_NAME`_sendResponsePacket(`$INSTANCE_NAME`_RESPONSE_T* response);
+    uint32_t `$INSTANCE_NAME`_initializePacket(`$INSTANCE_NAME`_PACKET_T* packet);
+    uint32_t `$INSTANCE_NAME`_processPacketByte(uint8_t dataByte, `$INSTANCE_NAME`_PACKET_T* packet);
+    uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_PACKET_T* packet);
+    uint32_t `$INSTANCE_NAME`_createPacket(`$INSTANCE_NAME`_PACKET_T* packet);
     
+    uint16_t `$INSTANCE_NAME`_computeChecksum16(uint8_t* data, uint16_t length);
+//    bool `$INSTANCE_NAME`_sendResponsePacket(`$INSTANCE_NAME`_RESPONSE_T* response);
+//    `$INSTANCE_NAME`_ERROR_T `$INSTANCE_NAME`_parsePacket(uint8_t* dataBuffer, `$INSTANCE_NAME`_PACKET_T* packet);
+//    bool `$INSTANCE_NAME`_processPacketByte(uint8_t dataByte, uint8_t* packetBuffer);
+//    uint32_t `$INSTANCE_NAME`_processPacketByte(uint8_t dataByte, `$INSTANCE_NAME`_PACKET_T* packet);
+
 #endif /* `$INSTANCE_NAME`_H */
 /* [] END OF FILE */
 

@@ -1,8 +1,26 @@
 CHANGE LOG
 libMICA - MICA Components - v1
 
+2018.07.30 CC
+# PACKETS_v1_0
+* Modify packet struct to enable pure functions
+* Pick up on investigating why the receive side errors out
+* maybe split into send and receive packet format
+
+2018.07.25 CC 
+# MICA Components Library
+* Create a "Dual Quadrature Encoder"                        ✓
+* Revisit Packets component
+* Change function sendResponsePacket -> createResponse Packets
+    i.e. get rid of UART dependencies in the component
+* Build buffer and status into packet component
+
+# DriveBot v5
+* Abstract "boardTesting.c/.h" out of the design            ✓
+* Clean up all testing functions                            ✓
+
 2018.07.03 CC - PUSH_BUTTON
-* Create initial push button component
+* Create initial push button component                      ✓
 
 2018.06.11 CC - UART_API
 * change from functions to uart name and SCB option?

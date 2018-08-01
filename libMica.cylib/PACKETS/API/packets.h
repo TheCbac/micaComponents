@@ -210,6 +210,7 @@
 
     uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer);
     uint32_t `$INSTANCE_NAME`_createPacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer);
+    void `$INSTANCE_NAME`_flushBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer);
 
     uint16_t `$INSTANCE_NAME`_computeChecksum16(uint8_t* data, uint16_t length);
 

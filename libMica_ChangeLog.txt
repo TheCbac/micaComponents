@@ -1,6 +1,10 @@
 CHANGE LOG
 libMICA - MICA Components - v1
 
+2018.08.01 CC
+# packets.c
+* Move errors detecting to parse packets
+
 2018.07.31 CC
 # TODO - UART_API
 * Add macro for starting the designated UART

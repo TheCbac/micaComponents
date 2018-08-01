@@ -149,18 +149,24 @@ uint32_t `$INSTANCE_NAME`_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer, 
      switch (buffer->receive.bufferState) {
          /* Waiting for start, ensure that the data byte is valid */
          case `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START: {
-             /* Ensure start byte is valid */
-             if (byte == `$INSTANCE_NAME`_SYM_START) {
-                 /* Reset the count */
-                rxBuffer->bufferIndex = ZERO;
-                 /* Store the byte */
-                rxBuffer->buffer[(rxBuffer->bufferIndex)++] = byte;
-                 /* Advance to the next state */
-                 *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_HEADER;
-             /* Invalid start symbol */
-             } else {
-                 error |= `$INSTANCE_NAME`_ERR_START_SYM;
-             }
+            /* Reset the count */
+            rxBuffer->bufferIndex = ZERO;
+            /* Store the byte */
+            rxBuffer->buffer[(rxBuffer->bufferIndex)++] = byte;
+            /* Advance to the next state */
+            *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_HEADER;
+            //  /* Ensure start byte is valid */
+            //  if (byte == `$INSTANCE_NAME`_SYM_START) {
+            //      /* Reset the count */
+            //     rxBuffer->bufferIndex = ZERO;
+            //      /* Store the byte */
+            //     rxBuffer->buffer[(rxBuffer->bufferIndex)++] = byte;
+            //      /* Advance to the next state */
+            //      *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_HEADER;
+            //  /* Invalid start symbol */
+            //  } else {
+            //      error |= `$INSTANCE_NAME`_ERR_START_SYM;
+            //  }
              break;
          }
          /* Waiting for the header */
@@ -171,18 +177,19 @@ uint32_t `$INSTANCE_NAME`_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer, 
              if (rxBuffer->bufferIndex == `$INSTANCE_NAME`_LEN_HEADER) {
                 /* Store the payload length */
                 *payloadLen = (rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_LEN_MSB] << BITS_ONE_BYTE) | rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_LEN_LSB];
-                 /* Ensure payload len is valid */
-                 if (*payloadLen > `$INSTANCE_NAME`_LEN_MAX_PAYLOAD) {
-                     /* Error - Move back to start state */
-                     *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START;
-                     error |= `$INSTANCE_NAME`_ERR_LENGTH;
-                 } else if (*payloadLen == ZERO) {
+                //  /* Ensure payload len is valid */
+                //  if (*payloadLen > `$INSTANCE_NAME`_LEN_MAX_PAYLOAD) {
+                //      /* Error - Move back to start state */
+                //      *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START;
+                //      error |= `$INSTANCE_NAME`_ERR_LENGTH;
+                //  } else if (*payloadLen == ZERO) {
+                if (*payloadLen == ZERO) {
                      /* Skip payload collection */
                      *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_FOOTER;
-                 } else {
+                } else {
                      /* Advance to the next state */
                      *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_PAYLOAD;
-                 }
+                }
              }
              break;
          }
@@ -209,15 +216,17 @@ uint32_t `$INSTANCE_NAME`_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer, 
              /*If all data has been captured */
              uint16_t fullPacketLength = `$INSTANCE_NAME`_LEN_HEADER + *payloadLen + `$INSTANCE_NAME`_LEN_FOOTER;
              if (rxBuffer->bufferIndex == fullPacketLength) {
-                 /*  Ensure stop symbol is valid */
-                 if (byte == `$INSTANCE_NAME`_SYM_END) {
-                     /* Packet is complete */   
-                     *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_COMPLETE;
-                 } else {
-                     error |= `$INSTANCE_NAME`_ERR_END_SYM;    
-                 }
-             } else if (rxBuffer->bufferIndex > fullPacketLength){
-                 error |= `$INSTANCE_NAME`_ERR_LENGTH;
+                    /* Packet is complete */   
+                    *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_COMPLETE;
+            //      /*  Ensure stop symbol is valid */
+            //      if (byte == `$INSTANCE_NAME`_SYM_END) {
+            //          /* Packet is complete */   
+            //          *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_COMPLETE;
+            //      } else {
+            //          error |= `$INSTANCE_NAME`_ERR_END_SYM;    
+            //      }
+            //  } else if (rxBuffer->bufferIndex > fullPacketLength){
+                //  error |= `$INSTANCE_NAME`_ERR_LENGTH;
              }
              break;
          }
@@ -264,7 +273,8 @@ uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) {
         return `$INSTANCE_NAME`_ERR_INCOMPLETE;    
     }
     /* Ensure start of packet symbol */
-    if (rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_START] != `$INSTANCE_NAME`_LEN_SYM_START) {
+    uint8 startByte = rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_START];
+    if (startByte != `$INSTANCE_NAME`_SYM_START) {
         error |= `$INSTANCE_NAME`_ERR_START_SYM;
     }
     /* Get the Module */
@@ -348,6 +358,28 @@ uint32_t `$INSTANCE_NAME`_createPacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) {
     txBuffer->buffer[(txBuffer->bufferIndex)++] = `$INSTANCE_NAME`_SYM_END;
     /* Return Success */
     return `$INSTANCE_NAME`_ERR_SUCCESS;
+}
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_flushBuffers()
+****************************************************************************//**
+* \brief
+*  Flush the RX and TX process buffer
+*
+* \param buffer
+*  Pointer to the full buffers
+*
+* \return
+* A error code with the result of packing
+*
+*******************************************************************************/
+void `$INSTANCE_NAME`_flushBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer){
+     /* Reset TX buffers */
+    buffer->send.processBuffer.bufferIndex = ZERO;
+    buffer->send.bufferState = `$INSTANCE_NAME`_BUFFER_SEND_WAIT;
+    /* Reset RX buffers */
+    buffer->receive.processBuffer.bufferIndex = ZERO;
+    buffer->receive.bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START;   
 }
 
 // /*******************************************************************************

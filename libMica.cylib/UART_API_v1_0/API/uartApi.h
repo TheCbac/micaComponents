@@ -29,6 +29,8 @@
     /***************************************
     * Macro Definitions
     ***************************************/
+//    @TODO
+    // #define  `$INSTANCE_NAME`_Start()
     #define `$INSTANCE_NAME`_clearScreen()  `$INSTANCE_NAME`_print("\033[2J\033[1;1H")    /**< Clear the terminal screen */
     /* TX Functions */
     #define `$INSTANCE_NAME`_putChar(ch) `$txFunction`(ch)  /**< Wrapper for UART TX function */

@@ -1,6 +1,15 @@
 CHANGE LOG
 libMICA - MICA Components - v1
 
+2018.07.31 CC
+# TODO - UART_API
+* Add macro for starting the designated UART
+    e.g. UART_USB_Start() -> usbUart_Start()
+# TODO - Packets
+* Switch to using heap for buffers
+* Double buffer Packets
+* Switch to flag errors
+
 2018.07.30 CC
 # PACKETS_v1_0
 * Modify packet struct to enable pure functions

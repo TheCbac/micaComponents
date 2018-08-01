@@ -102,6 +102,95 @@
     #define `$INSTANCE_NAME`_ASYNC_REPORT_CONN  (0x81u)     /**< Report a connection success  */
     #define `$INSTANCE_NAME`_ASYNC_REPORT_DCON  (0x82u)     /**< Report a disconnection  */
 
+    
+    /* ### NEW ### */
+    
+    /* Possible states for receive buffer */
+    typedef enum {
+        `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START, /**< Waiting for the start byte to be received */
+        `$INSTANCE_NAME`_BUFFER_RECEIVE_HEADER,         /**< Receiving the header Module ID, command, Payload length */
+        `$INSTANCE_NAME`_BUFFER_RECEIVE_PAYLOAD,        /**< Receiving N bytes of payload data */
+        `$INSTANCE_NAME`_BUFFER_RECEIVE_FOOTER,         /**< Receiving Checksum and end of packet */
+        `$INSTANCE_NAME`_BUFFER_RECEIVE_COMPLETE        /**< Packet has finished being assembled  */
+    } `$INSTANCE_NAME`_BUFFER_STATE_RECEIVE_T;
+    
+        /* Possible states for send buffer */
+    typedef enum {
+        `$INSTANCE_NAME`_BUFFER_SEND_WAIT,              /**< Waiting for the buffer to be ready to send */
+        `$INSTANCE_NAME`_BUFFER_SEND_READY,             /**< Buffer is ready to be sent */
+        `$INSTANCE_NAME`_BUFFER_SEND_QUEUEING,          /**< Move the buffer to the FIFO UART TX buffer*/
+        `$INSTANCE_NAME`_BUFFER_SEND_COMPLETE,          /**< buffer has be sent*/
+    } `$INSTANCE_NAME`_BUFFER_STATE_SEND_T;
+    
+    /* State of packet */
+    typedef enum {
+        `$INSTANCE_NAME`_PACKET_UNHANDLED,          /**< Packet has not been handled in any way */
+        `$INSTANCE_NAME`_PACKET_ACK,                /**< Packet has been acknowledged*/
+    } `$INSTANCE_NAME`_PACKET_STATE_T;
+    /***************************************
+    * Structures
+    ***************************************/
+    /* Process buffer struct */
+    typedef struct {
+        uint8_t *buffer;                            /**< Pointer to the buffer */
+        uint16_t bufferLen;                         /**< Length of the buffer */
+        uint16_t bufferIndex;                       /**< Index of the current value */
+        uint32_t timeCount;                         /**< Time count of the last buffer action */
+    } `$INSTANCE_NAME`_BUFFER_PROCESS_S;
+
+
+    /* Populate this struct to then pack and outgoing message */
+    typedef struct {
+        uint8_t moduleId;       /**< ID of the module commanded */
+        uint8_t cmd;            /**< Command issued */
+        uint8_t* payload;       /**< Pointer to the data */
+        uint16_t payloadLen;    /**< Length of the payload in the buffer*/
+        uint32_t flags;         /**< Flags to include e.g. "ACK requested" */
+    } `$INSTANCE_NAME`_BUFFER_SEND_PROTO_S;
+
+    /* Packet buffer struct */
+    typedef struct {
+        uint8_t moduleId;       /**< ID of the module commanded */
+        uint8_t cmd;            /**< Command issued */
+        uint8_t* payload;       /**< Pointer to the data */
+        uint16_t payloadLen;    /**< Length of the payload in the buffer*/
+        uint32_t error;          /**< Error code of packet*/
+    } `$INSTANCE_NAME`_PACKET_RECEIVE_S;
+
+    /* Buffer struct for send and receive */
+    typedef struct {
+        `$INSTANCE_NAME`_BUFFER_SEND_PROTO_S packet;        /**< Receives data from the process buffer and passes to app */
+        `$INSTANCE_NAME`_BUFFER_PROCESS_S processBuffer;    /**< Send Buffer Structure */
+        `$INSTANCE_NAME`_BUFFER_STATE_SEND_T bufferState;         /**< State of the send buffer */
+    } `$INSTANCE_NAME`_BUFFER_SEND_S;
+
+    /* Buffer struct for send and receive */
+    typedef struct {
+        `$INSTANCE_NAME`_PACKET_RECEIVE_S packet;      /**< Receives data from the process buffer and passes to app */
+        `$INSTANCE_NAME`_BUFFER_PROCESS_S processBuffer;     /**< Receive Buffer Structure */
+        `$INSTANCE_NAME`_BUFFER_STATE_RECEIVE_T bufferState;       /**< State of the receive buffer */
+    } `$INSTANCE_NAME`_BUFFER_RECEIVE_S;
+
+/* Struct containing both a send and receive buffer */
+    typedef struct {
+        `$INSTANCE_NAME`_BUFFER_SEND_S send;
+        `$INSTANCE_NAME`_BUFFER_RECEIVE_S receive;
+    } `$INSTANCE_NAME`_BUFFER_FULL_S;
+
+
+    
+    /***************************************
+    * Function declarations 
+    ***************************************/
+    uint32_t `$INSTANCE_NAME`_initializePacket(`$INSTANCE_NAME`_PACKET_T* packet);
+    uint32_t `$INSTANCE_NAME`_processPacketByte(uint8_t dataByte, `$INSTANCE_NAME`_PACKET_T* packet);
+    uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_PACKET_T* packet);
+    uint32_t `$INSTANCE_NAME`_createPacket(`$INSTANCE_NAME`_PACKET_T* packet);
+
+    uint16_t `$INSTANCE_NAME`_computeChecksum16(uint8_t* data, uint16_t length);
+
+
+
 //    typedef enum {
 //        `$INSTANCE_NAME`_ERR_SUCCESS = 0x00u, /**< Returned Success */
 //        `$INSTANCE_NAME`_ERR_FORMAT,      /**< The packet is not in the correct format */
@@ -119,43 +208,40 @@
 //        `$INSTANCE_NAME`_ASYNC_REPORT_DCON    /**< Report a disconnection  */
 //    } `$INSTANCE_NAME`_ERROR_T;  
 
-    typedef enum {
-        `$INSTANCE_NAME`_STATE_WAIT_FOR_START,   /**< Waiting for the start byte to be received */
-        `$INSTANCE_NAME`_STATE_RECEIVE_HEADER,   /**< Receiving the header Module ID, command, Payload length */
-        `$INSTANCE_NAME`_STATE_RECEIVE_PAYLOAD,  /**< Receiving N bytes of payload data */
-        `$INSTANCE_NAME`_STATE_RECEIVE_FOOTER    /**< Receiving Checksum and end of packet */
-    } `$INSTANCE_NAME`_STATE_T;
+//     typedef enum {
+//         `$INSTANCE_NAME`_STATE_WAIT_FOR_START,   /**< Waiting for the start byte to be received */
+//         `$INSTANCE_NAME`_STATE_RECEIVE_HEADER,   /**< Receiving the header Module ID, command, Payload length */
+//         `$INSTANCE_NAME`_STATE_RECEIVE_PAYLOAD,  /**< Receiving N bytes of payload data */
+//         `$INSTANCE_NAME`_STATE_RECEIVE_FOOTER    /**< Receiving Checksum and end of packet */
+//     } `$INSTANCE_NAME`_STATE_T;
+
     
-    /***************************************
-    * Structures
-    ***************************************/
-    typedef struct {
-        uint8_t moduleId;       /**< ID of the module commanded */
-        uint8_t cmd;            /**< Command issued */
-        uint8_t* payload;       /**< Pointer to the data */
-        uint16_t payloadLen;    /**< Length of the payload in the buffer*/
-        `$INSTANCE_NAME`_STATE_T state; /**< State of the packet */
-        uint8_t buffer[`$INSTANCE_NAME`_LEN_MAX_PACKET];  /**< Packet buffer*/
-        uint16_t bufferCount;   /**< Length of the data in the buffer*/
-        bool complete;          /**< Has all of the packet been received ? */
-    } `$INSTANCE_NAME`_PACKET_T;
+//     /* **** DEPRECATED **** */
+//     typedef struct {
+//         uint8_t moduleId;       /**< ID of the module commanded */
+//         uint8_t cmd;            /**< Command issued */
+//         uint8_t* payload;       /**< Pointer to the data */
+//         uint16_t payloadLen;    /**< Length of the payload in the buffer*/
+//         `$INSTANCE_NAME`_STATE_T state; /**< State of the packet */
+//         uint8_t buffer[`$INSTANCE_NAME`_LEN_MAX_PACKET];  /**< Packet buffer*/
+//         uint16_t bufferCount;   /**< Length of the data in the buffer*/
+//         bool complete;          /**< Has all of the packet been received ? */
+//     } `$INSTANCE_NAME`_PACKET_T;
             
-    typedef struct {
-        uint8_t moduleId;       /**< ID of the module commanded */
-//        `$INSTANCE_NAME`_ERROR_T status; /**< Status Code of the response packet */
-        uint16_t length;            /**< Length of the response payload */
-        uint8_t* payload;           /**< Pointer to the payload */
-    } `$INSTANCE_NAME`_RESPONSE_T;
+//     typedef struct {
+//         uint8_t moduleId;       /**< ID of the module commanded */
+// //        `$INSTANCE_NAME`_ERROR_T status; /**< Status Code of the response packet */
+//         uint16_t length;            /**< Length of the response payload */
+//         uint8_t* payload;           /**< Pointer to the payload */
+//     } `$INSTANCE_NAME`_RESPONSE_T;
+
+    /* **** DEPRECATED **** */
+
+    // uint32_t `$INSTANCE_NAME`_initializePacket(`$INSTANCE_NAME`_PACKET_T* packet);
+    // uint32_t `$INSTANCE_NAME`_processPacketByte(uint8_t dataByte, `$INSTANCE_NAME`_PACKET_T* packet);
+    // uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_PACKET_T* packet);
+    // uint32_t `$INSTANCE_NAME`_createPacket(`$INSTANCE_NAME`_PACKET_T* packet);
     
-    /***************************************
-    * Function declarations 
-    ***************************************/
-    uint32_t `$INSTANCE_NAME`_initializePacket(`$INSTANCE_NAME`_PACKET_T* packet);
-    uint32_t `$INSTANCE_NAME`_processPacketByte(uint8_t dataByte, `$INSTANCE_NAME`_PACKET_T* packet);
-    uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_PACKET_T* packet);
-    uint32_t `$INSTANCE_NAME`_createPacket(`$INSTANCE_NAME`_PACKET_T* packet);
-    
-    uint16_t `$INSTANCE_NAME`_computeChecksum16(uint8_t* data, uint16_t length);
 //    bool `$INSTANCE_NAME`_sendResponsePacket(`$INSTANCE_NAME`_RESPONSE_T* response);
 //    `$INSTANCE_NAME`_ERROR_T `$INSTANCE_NAME`_parsePacket(uint8_t* dataBuffer, `$INSTANCE_NAME`_PACKET_T* packet);
 //    bool `$INSTANCE_NAME`_processPacketByte(uint8_t dataByte, uint8_t* packetBuffer);

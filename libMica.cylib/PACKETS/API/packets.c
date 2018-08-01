@@ -21,7 +21,7 @@
 #include <stdlib.h>
 
 /*******************************************************************************
-* Function Name: `$INSTANCE_NAME`_Buffer_Gen()
+* Function Name: `$INSTANCE_NAME`_generateBuffers()
 ****************************************************************************//**
 * \brief
 *  Allocates memory for a new packet buffer
@@ -35,66 +35,91 @@
 *   ------------                            | -----------
 *   `$INSTANCE_NAME`_ERR_SUCCESS            | On Successful init
 *******************************************************************************/
-uint32_t `$INSTANCE_NAME`_Buffer_Gen(`$INSTANCE_NAME`_BUFFER_FULL_S **packetBuffer) {
+uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packetBuffer, uint16_t bufferSize) {
     uint32_t result = ZERO;
-    /* Create the packetBuffer */
-    *packetBuffer = (`$INSTANCE_NAME`_BUFFER_FULL_S *) malloc(sizeof(`$INSTANCE_NAME`_BUFFER_FULL_S));
-    /* See if failed */
-    if(*packetBuffer == NULL){
-        result |= `$INSTANCE_NAME`_ERR_MEMORY; 
+
+    /* Create receive process buffer */
+    uint8* processRxBufferAdr = (uint8 *) malloc(bufferSize);
+    if(processRxBufferAdr == NULL){
+        result |= packets_ERR_MEMORY; 
         goto `$INSTANCE_NAME`_clean1;
     }
-    /* Create receive process buffer */
-    uint8* processRxBufferAdr = (uint8 *) malloc(`$INSTANCE_NAME`_LEN_BLOCK_PACKET);
-    if(processRxBufferAdr == NULL){
+    packetBuffer->receive.processBuffer.buffer = processRxBufferAdr;
+    packetBuffer->receive.processBuffer.bufferLen = bufferSize;
+    memset(processRxBufferAdr, ZERO, bufferSize);
+
+    /* Create Send process buffer */
+    uint8* processTxBufferAdr = (uint8 *) malloc(bufferSize);
+    if(processTxBufferAdr == NULL){
         result |= packets_ERR_MEMORY; 
         goto `$INSTANCE_NAME`_clean2;
     }
-    (**packetBuffer).receive.processBuffer.buffer = processRxBufferAdr;
-    memset(processRxBufferAdr, ZERO, `$INSTANCE_NAME`_LEN_BLOCK_PACKET);
-
-    /* Create Send process buffer */
-    uint8* processTxBufferAdr = (uint8 *) malloc(`$INSTANCE_NAME`_LEN_BLOCK_PACKET);
-    if(processTxBufferAdr == NULL){
-        result |= packets_ERR_MEMORY; 
-        goto `$INSTANCE_NAME`_clean3;
-    }
-    (**packetBuffer).send.processBuffer.buffer = processTxBufferAdr;
-    memset(processTxBufferAdr, ZERO, `$INSTANCE_NAME`_LEN_BLOCK_PACKET);
+    packetBuffer->send.processBuffer.buffer = processTxBufferAdr;
+    packetBuffer->send.processBuffer.bufferLen = bufferSize;
+    memset(processTxBufferAdr, ZERO, bufferSize);
 
     /* Create receive payload */
-    uint8* packetReceiveBuffer = (uint8 *) malloc(`$INSTANCE_NAME`_LEN_BLOCK_PACKET);
+    uint8* packetReceiveBuffer = (uint8 *) malloc(bufferSize);
     if(packetReceiveBuffer == NULL){
+        result |= `$INSTANCE_NAME`_ERR_MEMORY; 
+        goto `$INSTANCE_NAME`_clean3;
+    }
+    packetBuffer->receive.packet.payload = packetReceiveBuffer;
+    packetBuffer->receive.packet.payloadMax = bufferSize;
+    memset(packetReceiveBuffer, ZERO, bufferSize);
+
+    /* Create send payload */
+    uint8* packetSendBuffer = (uint8 *) malloc(bufferSize);
+    if(packetSendBuffer == NULL){
         result |= `$INSTANCE_NAME`_ERR_MEMORY; 
         goto `$INSTANCE_NAME`_clean4;
     }
-    (**packetBuffer).receive.packet.payload = packetReceiveBuffer;
-    memset(packetReceiveBuffer, ZERO, `$INSTANCE_NAME`_LEN_BLOCK_PACKET);
-
-    /* Create send payload */
-    uint8* packetSendBuffer = (uint8 *) malloc(`$INSTANCE_NAME`_LEN_BLOCK_PACKET);
-    if(packetSendBuffer == NULL){
-        result |= `$INSTANCE_NAME`_ERR_MEMORY; 
-        goto `$INSTANCE_NAME`_clean5;
-    }
-    (**packetBuffer).send.packet.payload = packetSendBuffer;
-    memset(packetSendBuffer, ZERO, `$INSTANCE_NAME`_LEN_BLOCK_PACKET);
-
+    packetBuffer->send.packet.payload = packetSendBuffer;
+    packetBuffer->send.packet.payloadMax = bufferSize;
+    memset(packetSendBuffer, ZERO, bufferSize);
+    
+    /* Clean up on error */
+    if(result) {
 /* Clean up failed memory */
-`$INSTANCE_NAME`_clean5:
-    free(packetSendBuffer);   
 `$INSTANCE_NAME`_clean4:
-    free(packetReceiveBuffer);    
+        free(packetSendBuffer);   
 `$INSTANCE_NAME`_clean3:
-    free(processTxBufferAdr);
+        free(packetReceiveBuffer);    
 `$INSTANCE_NAME`_clean2:
-    free(processRxBufferAdr);
+        free(processTxBufferAdr);
 `$INSTANCE_NAME`_clean1:
-    free(*packetBuffer);
-
-
+        free(processRxBufferAdr);
+    }
     /* return error flags */
     return result;
+}
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_destoryBuffers()
+****************************************************************************//**
+* \brief
+*  Deallocates memory from a packet
+*
+* \param buffer
+*   Pointer to the packet to be initialized. 
+*
+* \return
+*  A number indicating the error code
+*  Errors codes                             | Description
+*   ------------                            | -----------
+*   `$INSTANCE_NAME`_ERR_SUCCESS            | On Successful init
+*******************************************************************************/
+uint32_t `$INSTANCE_NAME`_destoryBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer) {
+    uint32_t result = ZERO;
+    /* Send */
+    free(buffer->send.processBuffer.buffer);   
+    free(buffer->send.packet.payload);
+    /* Receive */
+    free(buffer->receive.packet.payload);
+    free(buffer->receive.processBuffer.buffer);    
+    
+    return result;
+ 
 }
 
 /*******************************************************************************

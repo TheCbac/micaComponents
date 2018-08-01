@@ -151,6 +151,7 @@
         uint8_t moduleId;       /**< ID of the module commanded */
         uint8_t cmd;            /**< Command issued */
         uint8_t *payload;       /**< Pointer to the data */
+        uint16_t payloadMax;   /**< Size of the payload array */
         uint16_t payloadLen;    /**< Length of the payload in the buffer*/
         uint32_t flags;         /**< Flags to include e.g. "ACK requested" */
     } `$INSTANCE_NAME`_PACKET_SEND_PROTO_S;
@@ -160,6 +161,7 @@
         uint8_t moduleId;       /**< ID of the module commanded */
         uint8_t cmd;            /**< Command issued */
         uint8_t *payload;       /**< Pointer to the data */
+        uint16_t payloadMax;   /**< Size of the payload array */
         uint16_t payloadLen;    /**< Length of the payload in the buffer*/
         uint32_t error;          /**< Error code of packet*/
     } `$INSTANCE_NAME`_PACKET_RECEIVE_S;
@@ -189,8 +191,8 @@
     /***************************************
     * Function declarations 
     ***************************************/
-    uint32_t `$INSTANCE_NAME`_Buffer_Gen(`$INSTANCE_NAME`_BUFFER_FULL_S **buffer);
-    uint32_t `$INSTANCE_NAME`_Buffer_Destory(`$INSTANCE_NAME`_BUFFER_FULL_S **buffer);
+    uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packetBuffer, uint16_t bufferSize);
+    uint32_t `$INSTANCE_NAME`_destoryBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer);
 
     uint32_t `$INSTANCE_NAME`_Buffer_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer, uint8_t byte);
 

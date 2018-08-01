@@ -41,7 +41,7 @@ uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packet
     /* Create receive process buffer */
     uint8* processRxBufferAdr = (uint8 *) malloc(bufferSize);
     if(processRxBufferAdr == NULL){
-        result |= packets_ERR_MEMORY; 
+        result |= `$INSTANCE_NAME`_ERR_MEMORY; 
         goto `$INSTANCE_NAME`_clean1;
     }
     packetBuffer->receive.processBuffer.buffer = processRxBufferAdr;
@@ -51,7 +51,7 @@ uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packet
     /* Create Send process buffer */
     uint8* processTxBufferAdr = (uint8 *) malloc(bufferSize);
     if(processTxBufferAdr == NULL){
-        result |= packets_ERR_MEMORY; 
+        result |= `$INSTANCE_NAME`_ERR_MEMORY; 
         goto `$INSTANCE_NAME`_clean2;
     }
     packetBuffer->send.processBuffer.buffer = processTxBufferAdr;
@@ -68,21 +68,26 @@ uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packet
     packetBuffer->receive.packet.payloadMax = bufferSize;
     memset(packetReceiveBuffer, ZERO, bufferSize);
 
-    /* Create send payload */
-    uint8* packetSendBuffer = (uint8 *) malloc(bufferSize);
-    if(packetSendBuffer == NULL){
-        result |= `$INSTANCE_NAME`_ERR_MEMORY; 
-        goto `$INSTANCE_NAME`_clean4;
-    }
-    packetBuffer->send.packet.payload = packetSendBuffer;
-    packetBuffer->send.packet.payloadMax = bufferSize;
-    memset(packetSendBuffer, ZERO, bufferSize);
+    // /* Create send payload */
+    // uint8* packetSendBuffer = (uint8 *) malloc(bufferSize);
+    // if(packetSendBuffer == NULL){
+    //     result |= `$INSTANCE_NAME`_ERR_MEMORY; 
+    //     goto `$INSTANCE_NAME`_clean4;
+    // }
+    // packetBuffer->send.packet.payload = packetSendBuffer;
+    // packetBuffer->send.packet.payloadMax = bufferSize;
+    // memset(packetSendBuffer, ZERO, bufferSize);
+
+    /* Set initial values to zero */
+    packetBuffer->receive.bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START;
+    packetBuffer->send.bufferState = `$INSTANCE_NAME`_BUFFER_SEND_WAIT;
+
     
     /* Clean up on error */
     if(result) {
 /* Clean up failed memory */
-`$INSTANCE_NAME`_clean4:
-        free(packetSendBuffer);   
+// `$INSTANCE_NAME`_clean4:
+//         free(packetSendBuffer);   
 `$INSTANCE_NAME`_clean3:
         free(packetReceiveBuffer);    
 `$INSTANCE_NAME`_clean2:
@@ -117,13 +122,12 @@ uint32_t `$INSTANCE_NAME`_destoryBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer)
     /* Receive */
     free(buffer->receive.packet.payload);
     free(buffer->receive.processBuffer.buffer);    
-    
+    /* Return result */
     return result;
- 
 }
 
 /*******************************************************************************
-* Function Name: `$INSTANCE_NAME`_Buffer_processRxByte()
+* Function Name: `$INSTANCE_NAME`_processRxByte()
 ****************************************************************************//**
 * \brief
 *  Processes the lastest received byt . 
@@ -134,7 +138,215 @@ uint32_t `$INSTANCE_NAME`_destoryBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer)
 *   ------------                            | -----------
 *   `$INSTANCE_NAME`_ERR_SUCCESS            | On Successful init
 *******************************************************************************/
-uint32_t `$INSTANCE_NAME`_Buffer_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer, uint8_t byte) {
+uint32_t `$INSTANCE_NAME`_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer, uint8_t byte) {
+     uint32_t error = `$INSTANCE_NAME`_ERR_SUCCESS;
+    /* Create local references */
+    `$INSTANCE_NAME`_BUFFER_PROCESS_S* rxBuffer = &(buffer->receive.processBuffer);
+    `$INSTANCE_NAME`_BUFFER_STATE_RECEIVE_T* bufferState = &(buffer->receive.bufferState);
+    uint16_t* payloadLen = &(buffer->receive.packet.payloadLen);
+
+     /* Act according to the state of the packet buffer */
+     switch (buffer->receive.bufferState) {
+         /* Waiting for start, ensure that the data byte is valid */
+         case `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START: {
+             /* Ensure start byte is valid */
+             if (byte == `$INSTANCE_NAME`_SYM_START) {
+                 /* Reset the count */
+                rxBuffer->bufferIndex = ZERO;
+                 /* Store the byte */
+                rxBuffer->buffer[(rxBuffer->bufferIndex)++] = byte;
+                 /* Advance to the next state */
+                 *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_HEADER;
+             /* Invalid start symbol */
+             } else {
+                 error |= `$INSTANCE_NAME`_ERR_START_SYM;
+             }
+             break;
+         }
+         /* Waiting for the header */
+         case `$INSTANCE_NAME`_BUFFER_RECEIVE_HEADER: {
+             /* Store the byte */
+             rxBuffer->buffer[(rxBuffer->bufferIndex)++] = byte;
+             /* Check to see if more data is required */
+             if (rxBuffer->bufferIndex == `$INSTANCE_NAME`_LEN_HEADER) {
+                /* Store the payload length */
+                *payloadLen = (rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_LEN_MSB] << BITS_ONE_BYTE) | rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_LEN_LSB];
+                 /* Ensure payload len is valid */
+                 if (*payloadLen > `$INSTANCE_NAME`_LEN_MAX_PAYLOAD) {
+                     /* Error - Move back to start state */
+                     *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START;
+                     error |= `$INSTANCE_NAME`_ERR_LENGTH;
+                 } else if (*payloadLen == ZERO) {
+                     /* Skip payload collection */
+                     *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_FOOTER;
+                 } else {
+                     /* Advance to the next state */
+                     *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_PAYLOAD;
+                 }
+             }
+             break;
+         }
+         /* Receiving Payload info */
+         case `$INSTANCE_NAME`_BUFFER_RECEIVE_PAYLOAD: {
+             /* Store the data  */
+             rxBuffer->buffer[(rxBuffer->bufferIndex)++] = byte;
+             /* See if all data has been captured */
+             if (rxBuffer->bufferIndex == (`$INSTANCE_NAME`_LEN_HEADER +  *payloadLen)){
+                 /* Advance to next state */
+                 *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_FOOTER;   
+             /* Data out of range */
+             } else if (rxBuffer->bufferIndex > (`$INSTANCE_NAME`_LEN_HEADER +  *payloadLen)){
+                 /* Reset count */
+                 *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START;
+                 error |= `$INSTANCE_NAME`_ERR_LENGTH;
+             }
+             break;
+         }
+         /* Wait for the footer */
+         case `$INSTANCE_NAME`_BUFFER_RECEIVE_FOOTER: {
+             /* Store the data */
+             rxBuffer->buffer[(rxBuffer->bufferIndex)++] = byte;
+             /*If all data has been captured */
+             uint16_t fullPacketLength = `$INSTANCE_NAME`_LEN_HEADER + *payloadLen + `$INSTANCE_NAME`_LEN_FOOTER;
+             if (rxBuffer->bufferIndex == fullPacketLength) {
+                 /*  Ensure stop symbol is valid */
+                 if (byte == `$INSTANCE_NAME`_SYM_END) {
+                     /* Packet is complete */   
+                     *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_COMPLETE;
+                 } else {
+                     error |= `$INSTANCE_NAME`_ERR_END_SYM;    
+                 }
+             } else if (rxBuffer->bufferIndex > fullPacketLength){
+                 error |= `$INSTANCE_NAME`_ERR_LENGTH;
+             }
+             break;
+         }
+         /* Packet is complete, but has not been handled, throw error */
+         case `$INSTANCE_NAME`_BUFFER_RECEIVE_COMPLETE: {
+                error |= `$INSTANCE_NAME`_ERR_STATE;
+             break;
+         }
+     }
+     /* Return the packet state */
+     return error;
+}
+
+/*******************************************************************************
+* Function Name:`$INSTANCE_NAME`_parsePacket()
+****************************************************************************//**
+* \brief
+*  Parses a data packet from the received data.
+*
+* \param packet
+* Pointer to a packet structure to place the infomation in
+*
+* \return
+* The error code of the result packet parsing
+* The possible error codes are:
+*
+*  Errors codes                         | Description
+*   ------------                        | -----------
+*   `$INSTANCE_NAME`_ERR_SUCCESS        | The packet was successfully parsed.
+*   `$INSTANCE_NAME`_ERR_FORMAT         | The packet was in the incorrect format.
+*   `$INSTANCE_NAME`_ERR_MODULE         | An unknown module was requested.
+*   `$INSTANCE_NAME`_ERR_LENGTH         | The packet payload length was outside the allowed value.
+*   `$INSTANCE_NAME`_ERR_CHECKSUM       | The calculated checksum did not match the reported checksum.
+*******************************************************************************/
+uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) {
+    uint32_t error = `$INSTANCE_NAME`_ERR_SUCCESS;
+    /* Create local references */
+    `$INSTANCE_NAME`_BUFFER_PROCESS_S* rxBuffer = &(buffer->receive.processBuffer);
+    `$INSTANCE_NAME`_BUFFER_STATE_RECEIVE_T* bufferState = &(buffer->receive.bufferState);
+    `$INSTANCE_NAME`_PACKET_RECEIVE_S* packet = &(buffer->receive.packet);
+    
+    /* Ensure packet is complete */
+    if (*bufferState != `$INSTANCE_NAME`_BUFFER_RECEIVE_COMPLETE){
+        return `$INSTANCE_NAME`_ERR_INCOMPLETE;    
+    }
+    /* Ensure start of packet symbol */
+    if (rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_START] != `$INSTANCE_NAME`_LEN_SYM_START) {
+        error |= `$INSTANCE_NAME`_ERR_START_SYM;
+    }
+    /* Get the Module */
+    packet->moduleId = rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_MODULE_ID];
+    if (packet->moduleId > `$INSTANCE_NAME`_ID_MODULE_MAX) {
+        error |= `$INSTANCE_NAME`_ERR_MODULE;
+    }
+    /* Get the Command - Cannot tell if valid at this point */
+    packet->cmd = rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_CMD];
+    /* Get the payload length */
+    packet->payloadLen = (rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_LEN_MSB] << BITS_ONE_BYTE) | rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_LEN_LSB];
+    if (packet->payloadLen > `$INSTANCE_NAME`_LEN_MAX_PAYLOAD) {
+        error |= `$INSTANCE_NAME`_ERR_LENGTH;  
+    }
+    /* Transfer the payload to the new buffer */
+    memmove(packet->payload, &(rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_PAYLOAD]), packet->payloadLen); 
+
+    /* Validate checksum */
+    uint16_t calculatedChecksum = `$INSTANCE_NAME`_computeChecksum16(rxBuffer->buffer, `$INSTANCE_NAME`_LEN_HEADER + packet->payloadLen);
+    uint8_t* packetEndPtr = &(rxBuffer->buffer[`$INSTANCE_NAME`_LEN_HEADER + packet->payloadLen]);
+    uint8 checkSumMsb = *packetEndPtr++;
+    uint8 checkSumLsb = *packetEndPtr++;
+    uint16_t reportedChecksum = (checkSumMsb << BITS_ONE_BYTE) | checkSumLsb;
+    if( calculatedChecksum != reportedChecksum) {
+        error |= `$INSTANCE_NAME`_ERR_CHECKSUM;
+    }
+    /* Check end of packet symbol */
+    uint8 endSymbol = *packetEndPtr;
+    if (endSymbol != `$INSTANCE_NAME`_SYM_END) {
+        error|= `$INSTANCE_NAME`_ERR_END_SYM;
+    }
+    /* Advance the rxBuffer to original state */
+    *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START;
+    /* Return the error code */
+    return error;
+} 
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_createPacket()
+****************************************************************************//**
+* \brief
+*  Pack the data in the TX packet to the TX processBuffer
+*
+* \param packet
+*  Pointer to the packet to pack
+*
+*
+* \return
+* A error code with the result of packing
+*
+*******************************************************************************/
+uint32_t `$INSTANCE_NAME`_createPacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) {
+    uint32_t error = `$INSTANCE_NAME`_ERR_SUCCESS;
+    /* Create local references */
+    `$INSTANCE_NAME`_BUFFER_PROCESS_S* txBuffer = &(buffer->send.processBuffer);
+    `$INSTANCE_NAME`_BUFFER_STATE_SEND_T* bufferState = &(buffer->send.bufferState);
+    `$INSTANCE_NAME`_PACKET_SEND_S* packet = &(buffer->send.packet);
+    
+    
+    /* Reset the buffer count */
+    txBuffer->bufferIndex = ZERO;
+
+    /* Header */
+    txBuffer->buffer[(txBuffer->bufferIndex)++] = `$INSTANCE_NAME`_SYM_START;
+    txBuffer->buffer[(txBuffer->bufferIndex)++] = packet->moduleId;
+    txBuffer->buffer[(txBuffer->bufferIndex)++] = packet->cmd;
+    /* Payload length MSB */
+    txBuffer->buffer[(txBuffer->bufferIndex)++] = (packet->payloadLen >> BITS_ONE_BYTE) & MASK_BYTE_ONE;
+    /* Payload length MSB */
+    txBuffer->buffer[(txBuffer->bufferIndex)++] = (packet->payloadLen) & MASK_BYTE_ONE;
+    /* Payload */
+    uint16_t j;
+    // @TODO: ensure data will fit in buffer
+    for(j = ZERO; j < packet->payloadLen; j++) {
+        txBuffer->buffer[(txBuffer->bufferIndex)++] = packet->payload[j];
+    }
+    /* Footer */
+    uint16_t checksum = `$INSTANCE_NAME`_computeChecksum16(txBuffer->buffer, `$INSTANCE_NAME`_LEN_HEADER + packet->payloadLen);
+    txBuffer->buffer[(txBuffer->bufferIndex)++] = (checksum >> BITS_ONE_BYTE) & MASK_BYTE_ONE;
+    txBuffer->buffer[(txBuffer->bufferIndex)++] = (checksum) & MASK_BYTE_ONE;
+    txBuffer->buffer[(txBuffer->bufferIndex)++] = `$INSTANCE_NAME`_SYM_END;
+    /* Return Success */
     return `$INSTANCE_NAME`_ERR_SUCCESS;
 }
 

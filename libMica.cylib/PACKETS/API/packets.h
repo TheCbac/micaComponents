@@ -89,6 +89,18 @@
     
     #define `$INSTANCE_NAME`_ERR_SUCCESS        (0x00u)     /**< Returned Success */
     #define `$INSTANCE_NAME`_ERR_MEMORY         (1u << `$INSTANCE_NAME`_ERR_SHIFT_MEMORY )     /**< Failed to allocate memory*/
+    #define `$INSTANCE_NAME`_ERR_START_SYM      (1u << `$INSTANCE_NAME`_ERR_SHIFT_START_SYM)   /**< Incorrect start symbol was received */
+    #define `$INSTANCE_NAME`_ERR_END_SYM        (1u << `$INSTANCE_NAME`_ERR_SHIFT_END_SYM)      /**< Incorrect end symbol was received */
+    #define `$INSTANCE_NAME`_ERR_LENGTH         (1u << `$INSTANCE_NAME`_ERR_SHIFT_LENGTH)   /**< The amount of data available is outside the expected range. */
+    #define `$INSTANCE_NAME`_ERR_FORMAT         (1u << `$INSTANCE_NAME`_ERR_SHIFT_FORMAT)    /**< The packet is not in the correct format */
+    #define `$INSTANCE_NAME`_ERR_INCOMPLETE     (1u << `$INSTANCE_NAME`_ERR_SHIFT_INCOMPLETE)    /**< The packet cannot be processed as it is incomplete */
+    #define `$INSTANCE_NAME`_ERR_MODULE         (1u << `$INSTANCE_NAME`_ERR_SHIFT_MODULE)    /**< An invalid module was specified */
+    #define `$INSTANCE_NAME`_ERR_DATA           (1u << `$INSTANCE_NAME`_ERR_SHIFT_DATA)    /**< The data is not of the proper form  */
+    #define `$INSTANCE_NAME`_ERR_CMD            (1u << `$INSTANCE_NAME`_ERR_SHIFT_CMD)    /**< The command is not recognized */
+    #define `$INSTANCE_NAME`_ERR_CHECKSUM       (1u << `$INSTANCE_NAME`_ERR_SHIFT_CHECKSUM)    /**< The packet checksum does not match the expected value */
+    #define `$INSTANCE_NAME`_ERR_STATE          (1u << `$INSTANCE_NAME`_ERR_SHIFT_STATE)     /**< Device was in the incorrect state to execute the command */
+    #define `$INSTANCE_NAME`_ERR_DEVICE         (1u << `$INSTANCE_NAME`_ERR_SHIFT_DEVICE)     /**< An Unknown device was addressed */
+
 
     #define `$INSTANCE_NAME`_ERR_SHIFT_MEMORY           (0u)    /**< Failed to allocate memory */
     #define `$INSTANCE_NAME`_ERR_SHIFT_START_SYM      (1u)     /**< Incorrect start symbol was received */
@@ -154,7 +166,7 @@
         uint16_t payloadMax;   /**< Size of the payload array */
         uint16_t payloadLen;    /**< Length of the payload in the buffer*/
         uint32_t flags;         /**< Flags to include e.g. "ACK requested" */
-    } `$INSTANCE_NAME`_PACKET_SEND_PROTO_S;
+    } `$INSTANCE_NAME`_PACKET_SEND_S;
 
     /* Packet buffer struct */
     typedef struct {
@@ -168,7 +180,7 @@
 
     /* Buffer struct for send and receive */
     typedef struct {
-        `$INSTANCE_NAME`_PACKET_SEND_PROTO_S packet;        /**< Receives data from the process buffer and passes to app */
+        `$INSTANCE_NAME`_PACKET_SEND_S packet;        /**< Receives data from the process buffer and passes to app */
         `$INSTANCE_NAME`_BUFFER_PROCESS_S processBuffer;    /**< Send Buffer Structure */
         `$INSTANCE_NAME`_BUFFER_STATE_SEND_T bufferState;         /**< State of the send buffer */
     } `$INSTANCE_NAME`_BUFFER_SEND_S;
@@ -194,10 +206,10 @@
     uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packetBuffer, uint16_t bufferSize);
     uint32_t `$INSTANCE_NAME`_destoryBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer);
 
-    uint32_t `$INSTANCE_NAME`_Buffer_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer, uint8_t byte);
+    uint32_t `$INSTANCE_NAME`_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer, uint8_t byte);
 
-    uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* packet);
-    uint32_t `$INSTANCE_NAME`_createPacket(`$INSTANCE_NAME`_BUFFER_FULL_S* packet);
+    uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer);
+    uint32_t `$INSTANCE_NAME`_createPacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer);
 
     uint16_t `$INSTANCE_NAME`_computeChecksum16(uint8_t* data, uint16_t length);
 

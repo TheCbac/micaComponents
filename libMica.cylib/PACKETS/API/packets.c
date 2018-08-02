@@ -21,6 +21,44 @@
 #include <stdlib.h>
 
 /*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_initialize()
+****************************************************************************//**
+* \brief
+*  Initializes the packet structure to default values
+*
+* \param buffer
+*   Pointer to the packet to be initialized. 
+*
+* \return
+*  A number indicating the error code
+*  Errors codes                             | Description
+*   ------------                            | -----------
+*   `$INSTANCE_NAME`_ERR_SUCCESS            | On Successful init
+*******************************************************************************/
+uint32_t `$INSTANCE_NAME`_initialize(`$INSTANCE_NAME`_BUFFER_FULL_S *packetBuffer) {
+    uint32_t error = `$INSTANCE_NAME`_ERR_SUCCESS;
+    /* Set send process buffer to zero */
+    packetBuffer->send.processBuffer.buffer = NULL;
+    packetBuffer->send.processBuffer.bufferLen = ZERO;
+    packetBuffer->send.processBuffer.timeCount = ZERO;
+    packetBuffer->send.processBuffer.bufferIndex = ZERO;
+    packetBuffer->send.bufferState = `$INSTANCE_NAME`_BUFFER_SEND_WAIT;
+    packetBuffer->send.packet.payload = NULL;
+    packetBuffer->send.packet.payloadLen = ZERO;
+    packetBuffer->send.packet.payloadMax = ZERO;
+    /* Set receive process buffer to zero */
+    packetBuffer->receive.processBuffer.buffer = NULL;
+    packetBuffer->receive.processBuffer.bufferLen = ZERO;
+    packetBuffer->receive.processBuffer.timeCount = ZERO;
+    packetBuffer->receive.processBuffer.bufferIndex = ZERO;
+    packetBuffer->receive.bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START;
+    packetBuffer->receive.packet.payload = NULL;
+    packetBuffer->receive.packet.payloadLen = ZERO;
+    packetBuffer->receive.packet.payloadMax = ZERO;
+    return error;
+}
+
+/*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_generateBuffers()
 ****************************************************************************//**
 * \brief
@@ -36,67 +74,53 @@
 *   `$INSTANCE_NAME`_ERR_SUCCESS            | On Successful init
 *******************************************************************************/
 uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packetBuffer, uint16_t bufferSize) {
-    uint32_t result = ZERO;
-
-    /* Create receive process buffer */
-    uint8* processRxBufferAdr = (uint8 *) malloc(bufferSize);
-    if(processRxBufferAdr == NULL){
-        result |= `$INSTANCE_NAME`_ERR_MEMORY; 
-        goto `$INSTANCE_NAME`_clean1;
-    }
-    packetBuffer->receive.processBuffer.buffer = processRxBufferAdr;
-    packetBuffer->receive.processBuffer.bufferLen = bufferSize;
-    memset(processRxBufferAdr, ZERO, bufferSize);
-
-    /* Create Send process buffer */
-    uint8* processTxBufferAdr = (uint8 *) malloc(bufferSize);
-    if(processTxBufferAdr == NULL){
-        result |= `$INSTANCE_NAME`_ERR_MEMORY; 
-        goto `$INSTANCE_NAME`_clean2;
-    }
-    packetBuffer->send.processBuffer.buffer = processTxBufferAdr;
-    packetBuffer->send.processBuffer.bufferLen = bufferSize;
-    memset(processTxBufferAdr, ZERO, bufferSize);
-
-    /* Create receive payload */
-    uint8* packetReceiveBuffer = (uint8 *) malloc(bufferSize);
-    if(packetReceiveBuffer == NULL){
-        result |= `$INSTANCE_NAME`_ERR_MEMORY; 
-        goto `$INSTANCE_NAME`_clean3;
-    }
-    packetBuffer->receive.packet.payload = packetReceiveBuffer;
-    packetBuffer->receive.packet.payloadMax = bufferSize;
-    memset(packetReceiveBuffer, ZERO, bufferSize);
-
-    // /* Create send payload */
-    // uint8* packetSendBuffer = (uint8 *) malloc(bufferSize);
-    // if(packetSendBuffer == NULL){
-    //     result |= `$INSTANCE_NAME`_ERR_MEMORY; 
-    //     goto `$INSTANCE_NAME`_clean4;
-    // }
-    // packetBuffer->send.packet.payload = packetSendBuffer;
-    // packetBuffer->send.packet.payloadMax = bufferSize;
-    // memset(packetSendBuffer, ZERO, bufferSize);
-
-    /* Set initial values to zero */
-    packetBuffer->receive.bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START;
-    packetBuffer->send.bufferState = `$INSTANCE_NAME`_BUFFER_SEND_WAIT;
-
+    uint32_t error = `$INSTANCE_NAME`_ERR_SUCCESS;
+    /* Local References */
+    packets_BUFFER_PROCESS_S* rxBuffer = &(packetBuffer->receive.processBuffer);
+    packets_BUFFER_PROCESS_S* txBuffer = &(packetBuffer->send.processBuffer);
     
-    /* Clean up on error */
-    if(result) {
-/* Clean up failed memory */
-// `$INSTANCE_NAME`_clean4:
-//         free(packetSendBuffer);   
-`$INSTANCE_NAME`_clean3:
-        free(packetReceiveBuffer);    
+    /* Make sure that buffers have not already been allocated */
+    if(rxBuffer->buffer != NULL || txBuffer->buffer != NULL){
+        error |= `$INSTANCE_NAME`_ERR_STATE;
+    }
+
+    if(!error) {
+        /* Create receive process buffer */
+        uint8* processRxBufferAdr = (uint8 *) malloc(bufferSize);
+        if(processRxBufferAdr == NULL){
+            error |= `$INSTANCE_NAME`_ERR_MEMORY; 
+            goto `$INSTANCE_NAME`_clean1;
+        }
+        packetBuffer->receive.processBuffer.buffer = processRxBufferAdr;
+        packetBuffer->receive.processBuffer.bufferLen = bufferSize;
+        memset(processRxBufferAdr, ZERO, bufferSize);
+
+        /* Create Send process buffer */
+        uint8* processTxBufferAdr = (uint8 *) malloc(bufferSize);
+        if(processTxBufferAdr == NULL){
+            error |= `$INSTANCE_NAME`_ERR_MEMORY; 
+            goto `$INSTANCE_NAME`_clean2;
+        }
+        packetBuffer->send.processBuffer.buffer = processTxBufferAdr;
+        packetBuffer->send.processBuffer.bufferLen = bufferSize;
+        memset(processTxBufferAdr, ZERO, bufferSize);
+
+        /* Set initial values to zero */
+        packetBuffer->receive.bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START;
+        packetBuffer->send.bufferState = `$INSTANCE_NAME`_BUFFER_SEND_WAIT;
+        packetBuffer->receive.packet.payloadMax = ZERO;
+        packetBuffer->send.packet.payloadMax = ZERO;
+
+        /* Clean up on error */
+        if(error) {  
 `$INSTANCE_NAME`_clean2:
-        free(processTxBufferAdr);
+            free(processTxBufferAdr);
 `$INSTANCE_NAME`_clean1:
-        free(processRxBufferAdr);
+            free(processRxBufferAdr);
+        }
     }
     /* return error flags */
-    return result;
+    return error;
 }
 
 /*******************************************************************************
@@ -115,15 +139,25 @@ uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packet
 *   `$INSTANCE_NAME`_ERR_SUCCESS            | On Successful init
 *******************************************************************************/
 uint32_t `$INSTANCE_NAME`_destoryBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer) {
-    uint32_t result = ZERO;
-    /* Send */
-    free(buffer->send.processBuffer.buffer);   
-    free(buffer->send.packet.payload);
-    /* Receive */
-    free(buffer->receive.packet.payload);
-    free(buffer->receive.processBuffer.buffer);    
-    /* Return result */
-    return result;
+    uint32_t error = `$INSTANCE_NAME`_ERR_SUCCESS;
+    /* Free the Send process buffer is it exists */
+    if( (buffer->send.processBuffer.bufferLen != ZERO) && (buffer->send.processBuffer.buffer != NULL) ) { 
+        free(buffer->send.processBuffer.buffer);   
+        buffer->send.processBuffer.buffer = NULL;
+        buffer->send.processBuffer.bufferLen = ZERO;
+    } else {
+        error |= `$INSTANCE_NAME`_ERR_MEMORY;
+    }
+    /* Free the receive process buffer is it exists */
+    if( (buffer->receive.processBuffer.bufferLen != ZERO) && (buffer->receive.processBuffer.buffer != NULL) ) { 
+        free(buffer->receive.processBuffer.buffer);   
+        buffer->receive.processBuffer.buffer = NULL;
+        buffer->receive.processBuffer.bufferLen = ZERO;
+    } else {
+        error |= `$INSTANCE_NAME`_ERR_MEMORY;
+    }
+    /* Return error */
+    return error;
 }
 
 /*******************************************************************************
@@ -333,31 +367,49 @@ uint32_t `$INSTANCE_NAME`_createPacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) {
     `$INSTANCE_NAME`_BUFFER_STATE_SEND_T* bufferState = &(buffer->send.bufferState);
     `$INSTANCE_NAME`_PACKET_SEND_S* packet = &(buffer->send.packet);
     
-    
-    /* Reset the buffer count */
-    txBuffer->bufferIndex = ZERO;
-
-    /* Header */
-    txBuffer->buffer[(txBuffer->bufferIndex)++] = `$INSTANCE_NAME`_SYM_START;
-    txBuffer->buffer[(txBuffer->bufferIndex)++] = packet->moduleId;
-    txBuffer->buffer[(txBuffer->bufferIndex)++] = packet->cmd;
-    /* Payload length MSB */
-    txBuffer->buffer[(txBuffer->bufferIndex)++] = (packet->payloadLen >> BITS_ONE_BYTE) & MASK_BYTE_ONE;
-    /* Payload length MSB */
-    txBuffer->buffer[(txBuffer->bufferIndex)++] = (packet->payloadLen) & MASK_BYTE_ONE;
-    /* Payload */
-    uint16_t j;
-    // @TODO: ensure data will fit in buffer
-    for(j = ZERO; j < packet->payloadLen; j++) {
-        txBuffer->buffer[(txBuffer->bufferIndex)++] = packet->payload[j];
+    /* Validate packet */
+    /* Module ID */
+    if(packet->moduleId > `$INSTANCE_NAME`_ID_MODULE_MAX) {
+        error |= `$INSTANCE_NAME`_ERR_MODULE;
     }
-    /* Footer */
-    uint16_t checksum = `$INSTANCE_NAME`_computeChecksum16(txBuffer->buffer, `$INSTANCE_NAME`_LEN_HEADER + packet->payloadLen);
-    txBuffer->buffer[(txBuffer->bufferIndex)++] = (checksum >> BITS_ONE_BYTE) & MASK_BYTE_ONE;
-    txBuffer->buffer[(txBuffer->bufferIndex)++] = (checksum) & MASK_BYTE_ONE;
-    txBuffer->buffer[(txBuffer->bufferIndex)++] = `$INSTANCE_NAME`_SYM_END;
-    /* Return Success */
-    return `$INSTANCE_NAME`_ERR_SUCCESS;
+    /* LEN less than max */
+    if (packet->payloadLen > `$INSTANCE_NAME`_LEN_MAX_PAYLOAD ) {
+        error |= `$INSTANCE_NAME`_ERR_LENGTH;
+    }
+    /* LEN less than process buffer max */
+    if (packet->payloadLen > txBuffer->bufferLen) {
+        error |= `$INSTANCE_NAME`_ERR_MEMORY;
+    }
+    /* Send buffer must not be busy */
+    if(*bufferState != `$INSTANCE_NAME`_BUFFER_SEND_WAIT) {
+       error |= `$INSTANCE_NAME`_ERR_STATE;
+    }
+    /* Assemble the packet if no error */
+    if(!error) {
+        /* Reset the buffer count */
+        txBuffer->bufferIndex = ZERO;
+        /* Header */
+        txBuffer->buffer[(txBuffer->bufferIndex)++] = `$INSTANCE_NAME`_SYM_START;
+        txBuffer->buffer[(txBuffer->bufferIndex)++] = packet->moduleId;
+        txBuffer->buffer[(txBuffer->bufferIndex)++] = packet->cmd;
+        /* Payload length MSB */
+        txBuffer->buffer[(txBuffer->bufferIndex)++] = (packet->payloadLen >> BITS_ONE_BYTE) & MASK_BYTE_ONE;
+        /* Payload length MSB */
+        txBuffer->buffer[(txBuffer->bufferIndex)++] = (packet->payloadLen) & MASK_BYTE_ONE;
+        /* Payload */
+        uint16_t j;
+        // @TODO: ensure data will fit in buffer
+        for(j = ZERO; j < packet->payloadLen; j++) {
+            txBuffer->buffer[(txBuffer->bufferIndex)++] = packet->payload[j];
+        }
+        /* Footer */
+        uint16_t checksum = `$INSTANCE_NAME`_computeChecksum16(txBuffer->buffer, `$INSTANCE_NAME`_LEN_HEADER + packet->payloadLen);
+        txBuffer->buffer[(txBuffer->bufferIndex)++] = (checksum >> BITS_ONE_BYTE) & MASK_BYTE_ONE;
+        txBuffer->buffer[(txBuffer->bufferIndex)++] = (checksum) & MASK_BYTE_ONE;
+        txBuffer->buffer[(txBuffer->bufferIndex)++] = `$INSTANCE_NAME`_SYM_END;
+    }
+    /* Return error code */
+    return error;
 }
 
 /*******************************************************************************

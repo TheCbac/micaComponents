@@ -1,6 +1,20 @@
 CHANGE LOG
 libMICA - MICA Components - v1
 
+2018.08.08 CC
+# Buttons.c/h
+* Add wasButtonReleased                                  ✓
+* Add release isr callback                               ✓
+
+# packets.h
+* Make packet structures conform to v1.3 standard
+    * Merge PACKET_RECEIVE_S and PACKET_SEND_S
+    * Update BUFFER_SEND_S and BUFFER_RECEIVE_S
+
+2018.08.03 CC
+* Create a testing component
+* Move the Packet unit tests to own project
+
 2018.08.01 CC
 # packets.c
 * Move errors detecting to parse packets

@@ -26,6 +26,7 @@
     void `$INSTANCE_NAME`_txTest(uint8 runs);
     void `$INSTANCE_NAME`_putString(char * str);
     void `$INSTANCE_NAME`_putArray(uint8 * array, uint16 length);
+    void `$INSTANCE_NAME`_printHeader(char* time, char* date, char * name);
     /***************************************
     * Macro Definitions
     ***************************************/

@@ -199,4 +199,32 @@ void `$INSTANCE_NAME`_txTest(uint8 runs) {
     }
 }  
 
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_printHeader()
+****************************************************************************//**
+*
+* \brief Displays the program header
+*
+* \param time
+*    Pass in __TIME__ macro
+*
+* \param date
+*    Pass in __DATE__ macro
+*
+* \param name
+*    Name of the program to display 
+*
+* \return
+* None
+*******************************************************************************/
+    void `$INSTANCE_NAME`_printHeader(char* time, char* date, char * name){
+    `$INSTANCE_NAME`_print("**************************************\r\n* ");
+    `$INSTANCE_NAME`_print(name);
+    `$INSTANCE_NAME`_print("\r\n*\r\n* Compiled at: ");
+    `$INSTANCE_NAME`_print(time);
+    `$INSTANCE_NAME`_print(" on ");
+    `$INSTANCE_NAME`_print(date);
+    `$INSTANCE_NAME`_print("\r\n**************************************\r\n");
+}
+
 /* [] END OF FILE */

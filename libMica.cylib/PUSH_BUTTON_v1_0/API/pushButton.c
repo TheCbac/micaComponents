@@ -24,9 +24,12 @@
 volatile uint32 `$INSTANCE_NAME`_btnPressCount = ZERO;
 volatile uint32 `$INSTANCE_NAME`_btnReleaseCount = ZERO; /**< Number of times button has been released */
 volatile bool `$INSTANCE_NAME`_btnPressed = false;       /**< Whether or not a button has been pressed since last check */
+volatile bool `$INSTANCE_NAME`_btnReleased = false;       /**< Whether or not a button has been released since last check */
 
 /* Call callback functions */
 FUNCTION_T* `$INSTANCE_NAME`_btnPressCallback = NULL;    /**< Pointer to ISR callback */
+FUNCTION_T* `$INSTANCE_NAME`_btnReleaseCallback = NULL;    /**< Pointer to ISR callback */
+
 
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_getPressCount()
@@ -104,6 +107,30 @@ bool `$INSTANCE_NAME`_wasButtonPressed(void){
 }  
 
 /*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_wasButtonReleased()
+********************************************************************************
+* Summary: 
+*  Checks if the button released flag is true and resets it
+*
+* Return:
+*   True if the button has been pressed since the last check
+*
+*******************************************************************************/
+bool `$INSTANCE_NAME`_wasButtonReleased(void){
+    /* Disable interrupts */
+    uint8 ints = CyEnterCriticalSection();
+    /* Check if pressed */
+    bool released = `$INSTANCE_NAME`_btnReleased;
+    /* Reset the flag */
+    `$INSTANCE_NAME`_btnReleased = false;
+    /* Enable interrupts */
+    CyExitCriticalSection(ints);
+    /* Return if the button was pressed */
+    return released;
+    
+}  
+
+/*******************************************************************************
 * Function Name:`$INSTANCE_NAME`_EnableBtnInterrupts()
 ********************************************************************************
 * Summary: 
@@ -139,6 +166,25 @@ void `$INSTANCE_NAME`_SetBtnPressIsr(FUNCTION_T * callback){
 }
 
 /*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_SetBtnReleaseIsr()
+********************************************************************************
+* Summary: 
+*  Passes in an ISR to call when the button in released
+*
+* \param callback
+*   Function to call when the btn is released. Of type 'void func(void)'
+*
+* Return:
+*   None
+*
+*******************************************************************************/
+void `$INSTANCE_NAME`_SetBtnReleaseIsr(FUNCTION_T * callback){
+    /* Change address of global variable */
+    `$INSTANCE_NAME`_btnReleaseCallback = callback;   
+}
+
+
+/*******************************************************************************
 * ISR Name: `$INSTANCE_NAME`_ISR_testButton_press()
 ********************************************************************************
 * Summary:
@@ -150,17 +196,15 @@ void `$INSTANCE_NAME`_SetBtnPressIsr(FUNCTION_T * callback){
 *
 *******************************************************************************/
 void `$INSTANCE_NAME`_ISR_testButton_press(void){
-    /* Clear Interrupt */
-//    button_pin_ClearInterrupt();
     /* Log the Press */
     `$INSTANCE_NAME`_btnPressCount++;
+    `$INSTANCE_NAME`_btnPressed = true; 
     /* Call the button interrupt code if present */
     if(`$INSTANCE_NAME`_btnPressCallback != NULL){
         /* Call the function */
         `$INSTANCE_NAME`_btnPressCallback();   
     }
-    /* Register that a button was pressed */
-    `$INSTANCE_NAME`_btnPressed = true; 
+
 }
 
 /*******************************************************************************
@@ -174,9 +218,13 @@ void `$INSTANCE_NAME`_ISR_testButton_press(void){
 *
 *******************************************************************************/
 void `$INSTANCE_NAME`_ISR_testButton_release(void){
-    /* Clear Interrupt */
-//    button_pin_ClearInterrupt();
     /* Log the release */
     `$INSTANCE_NAME`_btnReleaseCount++;
+    `$INSTANCE_NAME`_btnReleased = true; 
+    /* Call the button interrupt code if present */
+    if(`$INSTANCE_NAME`_btnReleaseCallback != NULL){
+        /* Call the function */
+        `$INSTANCE_NAME`_btnReleaseCallback();   
+    }
 }
 /* [] END OF FILE */

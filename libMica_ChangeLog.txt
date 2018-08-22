@@ -1,11 +1,15 @@
 CHANGE LOG
 libMICA - MICA Components - v1
 
+2018.08.22 CC
+* Writing unit tests for the packets in DriveBot
+* Should add an sprintf equivalent to uartApi
+* PICKUP: fix creation tests - No reason to use the TX payloadMax param
+
 2018.08.08 CC
 # Buttons.c/h
 * Add wasButtonReleased                                  ✓
 * Add release isr callback                               ✓
-
 # packets.h
 * Make packet structures conform to v1.3 standard
     * Merge PACKET_RECEIVE_S and PACKET_SEND_S

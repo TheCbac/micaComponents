@@ -27,6 +27,8 @@
     void `$INSTANCE_NAME`_putString(char * str);
     void `$INSTANCE_NAME`_putArray(uint8 * array, uint16 length);
     void `$INSTANCE_NAME`_printHeader(char* time, char* date, char * name);
+    void `$INSTANCE_NAME`_dummyTxArray(uint8 * array, uint16 len);
+    
     /***************************************
     * Macro Definitions
     ***************************************/

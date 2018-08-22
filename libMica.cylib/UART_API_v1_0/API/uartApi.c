@@ -226,5 +226,16 @@ void `$INSTANCE_NAME`_txTest(uint8 runs) {
     `$INSTANCE_NAME`_print(date);
     `$INSTANCE_NAME`_print("\r\n**************************************\r\n");
 }
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_dummyTxArray()
+****************************************************************************//**
+* \brief
+*  Dummy tx function for supressing output. Has no effect.
+*
+*******************************************************************************/
+void  `$INSTANCE_NAME`_dummyTxArray(uint8 * array, uint16 len){
+    (void) array;
+    (void) len;
+}
 
 /* [] END OF FILE */

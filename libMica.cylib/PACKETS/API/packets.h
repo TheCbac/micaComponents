@@ -83,10 +83,6 @@
     /* **** COMMANDS **** */
     #define `$INSTANCE_NAME`_RESP_SUCCESS        (0x00) /**< Successfully executed the previous command */
     #define `$INSTANCE_NAME`_RESP_ASYNC          (0x80) /**< All response code that are greater than or equal to this are not responses but rather async data */
-
-    /***************************************
-    * Enumerated Types
-    ***************************************/
     
     #define `$INSTANCE_NAME`_ERR_SUCCESS        (0x00u)     /**< Returned Success */
     #define `$INSTANCE_NAME`_ERR_MEMORY         (1u << `$INSTANCE_NAME`_ERR_SHIFT_MEMORY )     /**< Failed to allocate memory*/
@@ -102,8 +98,7 @@
     #define `$INSTANCE_NAME`_ERR_STATE          (1u << `$INSTANCE_NAME`_ERR_SHIFT_STATE)     /**< Device was in the incorrect state to execute the command */
     #define `$INSTANCE_NAME`_ERR_DEVICE         (1u << `$INSTANCE_NAME`_ERR_SHIFT_DEVICE)     /**< An Unknown device was addressed */
 
-
-    #define `$INSTANCE_NAME`_ERR_SHIFT_MEMORY           (0u)    /**< Failed to allocate memory */
+    #define `$INSTANCE_NAME`_ERR_SHIFT_MEMORY         (0u)    /**< Failed to allocate memory */
     #define `$INSTANCE_NAME`_ERR_SHIFT_START_SYM      (1u)     /**< Incorrect start symbol was received */
     #define `$INSTANCE_NAME`_ERR_SHIFT_END_SYM        (2u)     /**< Incorrect end symbol was received */
     #define `$INSTANCE_NAME`_ERR_SHIFT_LENGTH         (3u)     /**< The amount of data available is outside the expected range. */
@@ -122,9 +117,15 @@
     #define `$INSTANCE_NAME`_ASYNC_REPORT_CONN  (0x81u)     /**< Report a connection success  */
     #define `$INSTANCE_NAME`_ASYNC_REPORT_DCON  (0x82u)     /**< Report a disconnection  */
 
+    /* FLAGS */
+    #define `$INSTANCE_NAME`_FLAG_SHIFT_RESP            (0u) /**< A response is requested from the packet */
     
-    /* ### NEW ### */
+    #define `$INSTANCE_NAME`_FLAG_RESP                  (1u << `$INSTANCE_NAME`_FLAG_SHIFT_RESP) /**< A response is requested from the packet */
     
+
+    /***************************************
+    * Enumerated Types
+    ***************************************/
     /* Possible states for receive buffer */
     typedef enum {
         `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START, /**< Waiting for the start byte to be received */

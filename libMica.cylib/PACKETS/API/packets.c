@@ -20,6 +20,7 @@
 #include "`$uartIncludeFile`.h"
 #include <stdlib.h>
 
+
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_initialize()
 ****************************************************************************//**
@@ -99,9 +100,10 @@ uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packet
     /* Local References */
     `$INSTANCE_NAME`_BUFFER_PROCESS_S* rxBuffer = &(packetBuffer->receive.processBuffer);
     `$INSTANCE_NAME`_BUFFER_PROCESS_S* txBuffer = &(packetBuffer->send.processBuffer);
+    uint8_t* rxPayload = packetBuffer->receive.packet.payload;
     
     /* Make sure that buffers have not already been allocated */
-    if(rxBuffer->buffer != NULL || txBuffer->buffer != NULL){
+    if(rxBuffer->buffer != NULL || txBuffer->buffer != NULL || rxPayload != NULL){
         error |= `$INSTANCE_NAME`_ERR_STATE;
     }
 
@@ -126,15 +128,25 @@ uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packet
         packetBuffer->send.processBuffer.buffer = processTxBufferAdr;
         packetBuffer->send.processBuffer.bufferLen = bufferSize;
         memset(processTxBufferAdr, ZERO, bufferSize);
-
+        /*  Create the rxPayload */
+        uint8* rxPayloadAdr = (uint8 *) malloc(bufferSize);
+        if(rxPayloadAdr == NULL){
+            error |= `$INSTANCE_NAME`_ERR_MEMORY; 
+            goto `$INSTANCE_NAME`_clean3;
+        }
+        packetBuffer->receive.packet.payload = rxPayloadAdr;
+        packetBuffer->receive.packet.payloadMax = bufferSize;
+        memset(rxPayloadAdr, ZERO, bufferSize);
+        
         /* Set initial values to zero */
         packetBuffer->receive.bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START;
         packetBuffer->send.bufferState = `$INSTANCE_NAME`_BUFFER_SEND_WAIT;
-        packetBuffer->receive.packet.payloadMax = ZERO;
         packetBuffer->send.packet.payloadMax = ZERO;
 
         /* Clean up on error */
         if(error) {  
+`$INSTANCE_NAME`_clean3:
+            free(rxPayloadAdr);
 `$INSTANCE_NAME`_clean2:
             free(processTxBufferAdr);
 `$INSTANCE_NAME`_clean1:
@@ -179,6 +191,15 @@ uint32_t `$INSTANCE_NAME`_destoryBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer)
         buffer->receive.processBuffer.bufferLen = ZERO;
         buffer->receive.processBuffer.bufferIndex = ZERO;
         buffer->receive.processBuffer.timeCount = ZERO;
+    } else {
+        error |= `$INSTANCE_NAME`_ERR_MEMORY;
+    }
+        /* Free the receive payload buffer is it exists */
+    if( (buffer->receive.packet.payloadMax != ZERO) && (buffer->receive.packet.payload != NULL) ) { 
+        free(buffer->receive.packet.payload);   
+        buffer->receive.packet.payload = NULL;
+        buffer->receive.packet.payloadMax = ZERO;
+        buffer->receive.packet.payloadLen = ZERO;
     } else {
         error |= `$INSTANCE_NAME`_ERR_MEMORY;
     }
@@ -271,7 +292,7 @@ uint32_t `$INSTANCE_NAME`_constructPacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer
         error |= `$INSTANCE_NAME`_ERR_MODULE;
     }
     /* LEN less than max */
-    if (packet->payloadLen > `$INSTANCE_NAME`_LEN_MAX_PAYLOAD ) {
+    if (packet->payloadLen > `$INSTANCE_NAME`_LEN_MAX_PAYLOAD || packet->payloadLen > packet->payloadMax  ) {
         error |= `$INSTANCE_NAME`_ERR_LENGTH;
     }
     /* LEN less than process buffer max */
@@ -322,7 +343,7 @@ uint32_t `$INSTANCE_NAME`_constructPacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer
 * Function Name: `$INSTANCE_NAME`_sendPacket()
 ****************************************************************************//**
 * \brief
-*   Sends of the data stored in the TX process buffer 
+*   Constructs and then sends of the data stored in the TX process buffer 
 *
 * \param packet
 *  Pointer to the packet to send of out the rx buffer
@@ -333,6 +354,8 @@ uint32_t `$INSTANCE_NAME`_constructPacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer
 *******************************************************************************/
 uint32_t `$INSTANCE_NAME`_sendPacket(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer){
     uint32_t error = `$INSTANCE_NAME`_ERR_SUCCESS;
+    /* Construct the tx packet */
+    error |= `$INSTANCE_NAME`_constructPacket(buffer);
     /* Create local references */
     `$INSTANCE_NAME`_BUFFER_PROCESS_S* txBuffer = &(buffer->send.processBuffer);
     `$INSTANCE_NAME`_BUFFER_STATE_SEND_T* bufferState = &(buffer->send.bufferState);
@@ -345,6 +368,8 @@ uint32_t `$INSTANCE_NAME`_sendPacket(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer){
         `$txFunction`(txBuffer->buffer, txBuffer->bufferLen );
         /* Move back to the original state */
         *bufferState = `$INSTANCE_NAME`_BUFFER_SEND_WAIT;
+        /* Flush the TX buffer */
+        `$INSTANCE_NAME`_flushTxBuffers(buffer);   
     }
     return error;
 }
@@ -501,35 +526,40 @@ uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) {
     if (packet->payloadLen > `$INSTANCE_NAME`_LEN_MAX_PAYLOAD) {
         error |= `$INSTANCE_NAME`_ERR_LENGTH;  
     }
-    /* Transfer the payload to the new buffer */
-    memmove(packet->payload, &(rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_PAYLOAD]), packet->payloadLen); 
+    
+    /* Ensure Payload array is allocated */
+    if(packet->payload == NULL){
+        error |= packets_ERR_MEMORY;   
+    }
+    if(!error){
+        /* Transfer the payload to the new buffer */
+        memmove(packet->payload, &(rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_PAYLOAD]), packet->payloadLen); 
 
-    /* Start of the footer */
-    uint8_t* footerPtr = &(rxBuffer->buffer[`$INSTANCE_NAME`_LEN_HEADER + packet->payloadLen]);
-    /* Get the flags */
-    uint8 flags3 = *footerPtr++;
-    uint8 flags2 = *footerPtr++;
-    uint8 flags1 = *footerPtr++;
-    uint8 flags0 = *footerPtr++;
-    packet->flags = (uint32_t) ((flags3 << BITS_THREE_BYTES) | (flags2 << BITS_TWO_BYTES) | (flags1 << BITS_ONE_BYTE) | flags0);
-    /* Validate checksum */
-    uint16_t calculatedChecksum = `$INSTANCE_NAME`_computeChecksum16(rxBuffer->buffer, `$INSTANCE_NAME`_LEN_HEADER + packet->payloadLen + `$INSTANCE_NAME`_LEN_FLAGS);
-    uint8 checkSumMsb = *footerPtr++;
-    uint8 checkSumLsb = *footerPtr++;
-    uint16_t reportedChecksum = (checkSumMsb << BITS_ONE_BYTE) | checkSumLsb;
-    if( calculatedChecksum != reportedChecksum) {
-        error |= `$INSTANCE_NAME`_ERR_CHECKSUM;
+        /* Start of the footer */
+        uint8_t* footerPtr = &(rxBuffer->buffer[`$INSTANCE_NAME`_LEN_HEADER + packet->payloadLen]);
+        /* Get the flags */
+        uint8 flags3 = *footerPtr++;
+        uint8 flags2 = *footerPtr++;
+        uint8 flags1 = *footerPtr++;
+        uint8 flags0 = *footerPtr++;
+        packet->flags = (uint32_t) ((flags3 << BITS_THREE_BYTES) | (flags2 << BITS_TWO_BYTES) | (flags1 << BITS_ONE_BYTE) | flags0);
+        /* Validate checksum */
+        uint16_t calculatedChecksum = `$INSTANCE_NAME`_computeChecksum16(rxBuffer->buffer, `$INSTANCE_NAME`_LEN_HEADER + packet->payloadLen + `$INSTANCE_NAME`_LEN_FLAGS);
+        uint8 checkSumMsb = *footerPtr++;
+        uint8 checkSumLsb = *footerPtr++;
+        uint16_t reportedChecksum = (checkSumMsb << BITS_ONE_BYTE) | checkSumLsb;
+        if( calculatedChecksum != reportedChecksum) {
+            error |= `$INSTANCE_NAME`_ERR_CHECKSUM;
+        }
+        /* Check end of packet symbol */
+        uint8 endSymbol = *footerPtr;
+        if (endSymbol != `$INSTANCE_NAME`_SYM_END) {
+            error|= `$INSTANCE_NAME`_ERR_END_SYM;
+        }
+        /* Flush the buffer */
+        `$INSTANCE_NAME`_flushRxBuffers(buffer);
+        /* Return the error code */
     }
-    /* Check end of packet symbol */
-    uint8 endSymbol = *footerPtr;
-    if (endSymbol != `$INSTANCE_NAME`_SYM_END) {
-        error|= `$INSTANCE_NAME`_ERR_END_SYM;
-    }
-    /* Flush the buffer */
-    `$INSTANCE_NAME`_flushRxBuffers(buffer);
-    // /* Advance the rxBuffer to original state */
-    // *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START;
-    /* Return the error code */
     return error;
 } 
 
@@ -560,5 +590,7 @@ uint16_t `$INSTANCE_NAME`_computeChecksum16(uint8_t* data, uint16_t length){
     /* Return the sum in two's complement */
     return (1 + ~sum);
 }
+
+
 
 /* [] END OF FILE */

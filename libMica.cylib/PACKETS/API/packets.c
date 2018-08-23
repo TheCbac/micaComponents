@@ -109,7 +109,7 @@ uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packet
 
     if(!error) {
         /* Create receive process buffer */
-        uint8* processRxBufferAdr = (uint8 *) malloc(bufferSize);
+        uint8* processRxBufferAdr = (uint8 *) calloc(ONE, bufferSize);
         if(processRxBufferAdr == NULL){
             error |= `$INSTANCE_NAME`_ERR_MEMORY; 
             /* Do not try to allocate again */
@@ -117,26 +117,24 @@ uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packet
         }
         packetBuffer->receive.processBuffer.buffer = processRxBufferAdr;
         packetBuffer->receive.processBuffer.bufferLen = bufferSize;
-        memset(processRxBufferAdr, ZERO, bufferSize);
 
         /* Create Send process buffer */
-        uint8* processTxBufferAdr = (uint8 *) malloc(bufferSize);
+        uint8* processTxBufferAdr = (uint8 *) calloc(ONE, bufferSize);
         if(processTxBufferAdr == NULL){
             error |= `$INSTANCE_NAME`_ERR_MEMORY; 
             goto `$INSTANCE_NAME`_clean2;
         }
         packetBuffer->send.processBuffer.buffer = processTxBufferAdr;
         packetBuffer->send.processBuffer.bufferLen = bufferSize;
-        memset(processTxBufferAdr, ZERO, bufferSize);
+        
         /*  Create the rxPayload */
-        uint8* rxPayloadAdr = (uint8 *) malloc(bufferSize);
+        uint8* rxPayloadAdr = (uint8 *) calloc(ONE, bufferSize);
         if(rxPayloadAdr == NULL){
             error |= `$INSTANCE_NAME`_ERR_MEMORY; 
             goto `$INSTANCE_NAME`_clean3;
         }
         packetBuffer->receive.packet.payload = rxPayloadAdr;
         packetBuffer->receive.packet.payloadMax = bufferSize;
-        memset(rxPayloadAdr, ZERO, bufferSize);
         
         /* Set initial values to zero */
         packetBuffer->receive.bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START;
@@ -175,7 +173,7 @@ uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packet
 uint32_t `$INSTANCE_NAME`_destoryBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer) {
     uint32_t error = `$INSTANCE_NAME`_ERR_SUCCESS;
     /* Free the Send process buffer is it exists */
-    if( (buffer->send.processBuffer.bufferLen != ZERO) && (buffer->send.processBuffer.buffer != NULL) ) { 
+    if(buffer->send.processBuffer.buffer != NULL){ 
         free(buffer->send.processBuffer.buffer);   
         buffer->send.processBuffer.buffer = NULL;
         buffer->send.processBuffer.bufferLen = ZERO;
@@ -185,7 +183,7 @@ uint32_t `$INSTANCE_NAME`_destoryBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer)
         error |= `$INSTANCE_NAME`_ERR_MEMORY;
     }
     /* Free the receive process buffer is it exists */
-    if( (buffer->receive.processBuffer.bufferLen != ZERO) && (buffer->receive.processBuffer.buffer != NULL) ) { 
+    if(buffer->receive.processBuffer.buffer != NULL){ 
         free(buffer->receive.processBuffer.buffer);   
         buffer->receive.processBuffer.buffer = NULL;
         buffer->receive.processBuffer.bufferLen = ZERO;
@@ -194,8 +192,8 @@ uint32_t `$INSTANCE_NAME`_destoryBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer)
     } else {
         error |= `$INSTANCE_NAME`_ERR_MEMORY;
     }
-        /* Free the receive payload buffer is it exists */
-    if( (buffer->receive.packet.payloadMax != ZERO) && (buffer->receive.packet.payload != NULL) ) { 
+    /* Free the receive payload buffer is it exists */
+    if(buffer->receive.packet.payload != NULL) { 
         free(buffer->receive.packet.payload);   
         buffer->receive.packet.payload = NULL;
         buffer->receive.packet.payloadMax = ZERO;
@@ -292,7 +290,7 @@ uint32_t `$INSTANCE_NAME`_constructPacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer
         error |= `$INSTANCE_NAME`_ERR_MODULE;
     }
     /* LEN less than max */
-    if (packet->payloadLen > `$INSTANCE_NAME`_LEN_MAX_PAYLOAD || packet->payloadLen > packet->payloadMax  ) {
+    if (packet->payloadLen > `$INSTANCE_NAME`_LEN_MAX_PAYLOAD) {
         error |= `$INSTANCE_NAME`_ERR_LENGTH;
     }
     /* LEN less than process buffer max */

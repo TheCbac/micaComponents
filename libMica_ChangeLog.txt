@@ -2,9 +2,12 @@ CHANGE LOG
 libMICA - MICA Components - v1
 
 2018.08.22 CC
-* Writing unit tests for the packets in DriveBot
+* Writing unit tests for the packets in DriveBot                            ✓
 * Should add an sprintf equivalent to uartApi
-* PICKUP: fix creation tests - No reason to use the TX payloadMax param
+* PICKUP: fix creation tests - No reason to use the TX payloadMax param     ✓
+* Do NOT change any of the process buffer addresses
+* PICKUP: test communication between two device
+
 
 2018.08.08 CC
 # Buttons.c/h

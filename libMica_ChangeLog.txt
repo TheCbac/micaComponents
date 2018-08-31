@@ -1,6 +1,18 @@
 CHANGE LOG
 libMICA - MICA Components - v1
 
+2018.08.23 - CC
+Goals for the day:
+* Establish comms between host (DB) and peripheral (IMU)
+* Support cube comms relaying BLE from APP to IMU
+* Continue refactor of IMU project
+    * Create Upgrade-able stack component
+    * System Timer
+* Create component and handlers for commands
+    * IMU: 
+        Who am i 
+        
+
 2018.08.22 CC
 * Writing unit tests for the packets in DriveBot                            ✓
 * Should add an sprintf equivalent to uartApi

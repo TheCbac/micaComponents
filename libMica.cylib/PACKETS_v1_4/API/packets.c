@@ -307,7 +307,6 @@ uint32_t `$INSTANCE_NAME`_constructPacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer
         txBuffer->bufferIndex = ZERO;
         /* Header */
         txBuffer->buffer[(txBuffer->bufferIndex)++] = `$INSTANCE_NAME`_SYM_START;
-        txBuffer->buffer[(txBuffer->bufferIndex)++] = packet->moduleId;
         txBuffer->buffer[(txBuffer->bufferIndex)++] = packet->cmd;
         /* Payload length MSB */
         txBuffer->buffer[(txBuffer->bufferIndex)++] = (packet->payloadLen >> BITS_ONE_BYTE) & MASK_BYTE_ONE;
@@ -320,8 +319,6 @@ uint32_t `$INSTANCE_NAME`_constructPacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer
         }
         /* Footer */
         /* Flags Bytes 3-0 */
-        txBuffer->buffer[(txBuffer->bufferIndex)++] = (uint8_t) ((packet->flags) >> BITS_THREE_BYTES);
-        txBuffer->buffer[(txBuffer->bufferIndex)++] = (uint8_t) ((packet->flags) >> BITS_TWO_BYTES);
         txBuffer->buffer[(txBuffer->bufferIndex)++] = (uint8_t) ((packet->flags) >> BITS_ONE_BYTE);
         txBuffer->buffer[(txBuffer->bufferIndex)++] = (uint8_t)  (packet->flags);
         /* Calculate checksum */
@@ -512,13 +509,13 @@ uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) {
     if (startByte != `$INSTANCE_NAME`_SYM_START) {
         error |= `$INSTANCE_NAME`_ERR_START_SYM;
     }
-    /* Get the Module */
-    packet->moduleId = rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_MODULE_ID];
-    if (packet->moduleId > `$INSTANCE_NAME`_ID_MODULE_MAX) {
-        error |= `$INSTANCE_NAME`_ERR_MODULE;
-    }
+
     /* Get the Command - Cannot tell if valid at this point */
-    packet->cmd = rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_CMD];
+    uint8_t cmd =  rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_CMD];
+    packet->cmd = cmd;
+    /* Populate the module */
+    error |= `$INSTANCE_NAME`_getModuleFromCmd(cmd, &(packet->moduleId));
+    
     /* Get the payload length */
     packet->payloadLen = (rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_LEN_MSB] << BITS_ONE_BYTE) | rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_LEN_LSB];
     if (packet->payloadLen > `$INSTANCE_NAME`_LEN_MAX_PAYLOAD) {
@@ -536,11 +533,9 @@ uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) {
         /* Start of the footer */
         uint8_t* footerPtr = &(rxBuffer->buffer[`$INSTANCE_NAME`_LEN_HEADER + packet->payloadLen]);
         /* Get the flags */
-        uint8 flags3 = *footerPtr++;
-        uint8 flags2 = *footerPtr++;
         uint8 flags1 = *footerPtr++;
         uint8 flags0 = *footerPtr++;
-        packet->flags = (uint32_t) ((flags3 << BITS_THREE_BYTES) | (flags2 << BITS_TWO_BYTES) | (flags1 << BITS_ONE_BYTE) | flags0);
+        packet->flags = (uint32_t) ((flags1 << BITS_ONE_BYTE) | flags0);
         /* Validate checksum */
         uint16_t calculatedChecksum = `$INSTANCE_NAME`_computeChecksum16(rxBuffer->buffer, `$INSTANCE_NAME`_LEN_HEADER + packet->payloadLen + `$INSTANCE_NAME`_LEN_FLAGS);
         uint8 checkSumMsb = *footerPtr++;
@@ -560,6 +555,47 @@ uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) {
     }
     return error;
 } 
+
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_getModuleFromCmd()
+****************************************************************************//**
+* \brief
+*  Returns the module id from the CMD
+*
+* \param cmd [in]
+* The host or response command
+*
+* \param module [out]
+* Pointer on where to place the output
+*
+* \return
+* Error of the operation
+*
+*******************************************************************************/
+uint32_t `$INSTANCE_NAME`_getModuleFromCmd(uint8_t cmd, uint8_t *module) {
+    uint8 id;
+    /* Mask the Response flag */
+    cmd &= (~`$INSTANCE_NAME`_RSP_BIT);
+    /* Check the memory space */
+    if (cmd >= `$INSTANCE_NAME`_CMD_CONTROL_MIN && cmd <= `$INSTANCE_NAME`_CMD_CONTROL_MAX) {
+        id = `$INSTANCE_NAME`_ID_MODULE_CONTROL;
+    } else if (cmd >= `$INSTANCE_NAME`_CMD_ACTUATION_MIN && cmd <= `$INSTANCE_NAME`_CMD_ACTUATION_MAX){
+        id = `$INSTANCE_NAME`_ID_MODULE_ACTUATION;   
+    } else if (cmd >= `$INSTANCE_NAME`_CMD_SENSING_MIN && cmd <= `$INSTANCE_NAME`_CMD_SENSING_MAX){
+        id = `$INSTANCE_NAME`_ID_MODULE_SENSING;   
+    }  else if (cmd >= `$INSTANCE_NAME`_CMD_ENERGY_MIN && cmd <= `$INSTANCE_NAME`_CMD_ENERGY_MAX){
+        id = `$INSTANCE_NAME`_ID_MODULE_ENERGY;   
+    } else {
+        return `$INSTANCE_NAME`_ERR_MODULE;
+    }
+    /* Set the module value out */
+    *module = id;
+    /* Return success */
+    return `$INSTANCE_NAME`_ERR_SUCCESS;
+}
+
+
 
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_computeChecksum16()

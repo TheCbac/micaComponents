@@ -26,14 +26,15 @@
     /***************************************
     * Macro Definitions
     ***************************************/
+    
+    /* **** FRAME DEFINITIONS **** */
     #define `$INSTANCE_NAME`_LEN_SYM_START       (1u) /**< Length of the Start of Packet Symbol */
-    #define `$INSTANCE_NAME`_LEN_MODULE_ID       (1u) /**< Length of the Module ID */
     #define `$INSTANCE_NAME`_LEN_PAYLOAD_LEN     (2u) /**< Length of the Payload Length */
-    #define `$INSTANCE_NAME`_LEN_FLAGS           (4u) /**< Length of the flags  */
+    #define `$INSTANCE_NAME`_LEN_FLAGS           (2u) /**< Length of the flags  */
     #define `$INSTANCE_NAME`_LEN_CMD             (1u) /**< Length of the Command */
     #define `$INSTANCE_NAME`_LEN_CHECKSUM        (2u) /**< Length of the checksum */
     #define `$INSTANCE_NAME`_LEN_SYM_END         (1u) /**< Length of the End of Packet Symbol */
-    #define `$INSTANCE_NAME`_LEN_HEADER          (`$INSTANCE_NAME`_LEN_SYM_START + `$INSTANCE_NAME`_LEN_MODULE_ID + `$INSTANCE_NAME`_LEN_PAYLOAD_LEN  + `$INSTANCE_NAME`_LEN_CMD) /**< Length of the packet overhead, for checksum validation */
+    #define `$INSTANCE_NAME`_LEN_HEADER          (`$INSTANCE_NAME`_LEN_SYM_START + `$INSTANCE_NAME`_LEN_PAYLOAD_LEN  + `$INSTANCE_NAME`_LEN_CMD) /**< Length of the packet overhead, for checksum validation */
     #define `$INSTANCE_NAME`_LEN_FOOTER          (`$INSTANCE_NAME`_LEN_FLAGS + `$INSTANCE_NAME`_LEN_CHECKSUM + `$INSTANCE_NAME`_LEN_SYM_END) /**< Length of the footer */
     #define `$INSTANCE_NAME`_LEN_OVERHEAD        (`$INSTANCE_NAME`_LEN_HEADER + `$INSTANCE_NAME`_LEN_FOOTER) /**< Total length of the packet overhead */
     #define `$INSTANCE_NAME`_LEN_MAX_PAYLOAD     (256) /**< Maximum length of the payload */
@@ -43,47 +44,23 @@
     #define `$INSTANCE_NAME`_LEN_BLOCK_PACKET   (`$INSTANCE_NAME`_LEN_OVERHEAD  + `$INSTANCE_NAME`_LEN_BLOCK_PAYLOAD )
 
     #define `$INSTANCE_NAME`_INDEX_START         (0u) /**< Index of the start of packet symbol*/
-    #define `$INSTANCE_NAME`_INDEX_MODULE_ID     (1u) /**< Index of the module to talk to in the packet */
-    #define `$INSTANCE_NAME`_INDEX_CMD           (2u) /**< Index of the command to issue */
-    #define `$INSTANCE_NAME`_INDEX_LEN_MSB       (3u) /**< Index of the Payload length MSB */
-    #define `$INSTANCE_NAME`_INDEX_LEN_LSB       (4u) /**< Index of the Payload length LSB */
-    #define `$INSTANCE_NAME`_INDEX_PAYLOAD       (5u) /**< Index of the packet Payload */
+    #define `$INSTANCE_NAME`_INDEX_CMD           (1u) /**< Index of the command to issue */
+    #define `$INSTANCE_NAME`_INDEX_LEN_MSB       (2u) /**< Index of the Payload length MSB */
+    #define `$INSTANCE_NAME`_INDEX_LEN_LSB       (3u) /**< Index of the Payload length LSB */
+    #define `$INSTANCE_NAME`_INDEX_PAYLOAD       (4u) /**< Index of the packet Payload */
 
+    /* **** SYMBOL DEFINITIONS **** */
     #define `$INSTANCE_NAME`_SYM_START           (0x01u) /**< Start of Packet Symbol. All packets must begin with this symbol */
     #define `$INSTANCE_NAME`_SYM_END             (0xAAu) /**< End of Packet Symbol. All packets must end with this symbol */
-
-    #define `$INSTANCE_NAME`_ID_MODULE_ENERGY    (0u)    /**< ID of the Energy Module */
+    
+    /* **** MODULE IDS **** */
+    #define `$INSTANCE_NAME`_ID_MODULE_CONTROL   (0u)    /**< ID of the Control Module */
     #define `$INSTANCE_NAME`_ID_MODULE_ACTUATION (1u)    /**< ID of the Actuation Module */
-    #define `$INSTANCE_NAME`_ID_MODULE_POWER     (2u)    /**< ID of the Power Module */
-    #define `$INSTANCE_NAME`_ID_MODULE_SENSING   (3u)    /**< ID of the Sensing Module */
-    #define `$INSTANCE_NAME`_ID_MODULE_COMM      (4u)    /**< ID of the Communications Module */
-    #define `$INSTANCE_NAME`_ID_MODULE_CONTROL   (5u)    /**< ID of the Contorl Module */
-    #define `$INSTANCE_NAME`_ID_MODULE_MAX       (5u)    /**< Maximum value allowed */
-     /* **** RESPONSES **** */
-    #define `$INSTANCE_NAME`_RESP_INDEX_START    (0u) /**< Index of the start of response symbol*/
-    #define `$INSTANCE_NAME`_RESP_INDEX_MODULE_ID (1u) /**< Index module that is responding*/
-    #define `$INSTANCE_NAME`_RESP_INDEX_STATUS   (2u) /**< Index of the response status*/
-    #define `$INSTANCE_NAME`_RESP_INDEX_LEN_MSB  (3u) /**< Index of the response payload length MSB */
-    #define `$INSTANCE_NAME`_RESP_INDEX_LEN_LSB  (4u) /**< Index of the response payload length LSB*/
-    #define `$INSTANCE_NAME`_RESP_INDEX_PAYLOAD  (5u) /**< Index of the response payload */
-
-    #define `$INSTANCE_NAME`_RESP_LEN_SYM_START   (1u) /**< Length of the response Start of Packet Symbol */
-    #define `$INSTANCE_NAME`_RESP_LEN_MODULE_ID   (1u) /**< Length of the module ID */        
-    #define `$INSTANCE_NAME`_RESP_LEN_STATUS      (1u) /**< Length of the response Status */        
-    #define `$INSTANCE_NAME`_RESP_LEN_PAYLOAD_LEN (2u) /**< Length of the response Payload Length */
-    #define `$INSTANCE_NAME`_RESP_LEN_CHECKSUM    (2u) /**< Length of the response checksum */
-    #define `$INSTANCE_NAME`_RESP_LEN_SYM_END     (1u) /**< Length of the response End of Packet Symbol */
+    #define `$INSTANCE_NAME`_ID_MODULE_SENSING   (2u)    /**< ID of the Sensing Module */
+    #define `$INSTANCE_NAME`_ID_MODULE_ENERGY    (3u)    /**< ID of the Energy Module */
+    #define `$INSTANCE_NAME`_ID_MODULE_MAX       (3u)    /**< Maximum value allowed */
     
-
-    #define `$INSTANCE_NAME`_RESP_LEN_HEADER     (`$INSTANCE_NAME`_RESP_LEN_SYM_START + `$INSTANCE_NAME`_RESP_LEN_MODULE_ID + `$INSTANCE_NAME`_RESP_LEN_STATUS + `$INSTANCE_NAME`_RESP_LEN_PAYLOAD_LEN) /**< Length of the response packet header */
-    #define `$INSTANCE_NAME`_RESP_LEN_FOOTER     (`$INSTANCE_NAME`_RESP_LEN_CHECKSUM + `$INSTANCE_NAME`_RESP_LEN_SYM_END) /**< Length of the response footer */
-    #define `$INSTANCE_NAME`_RESP_LEN_OVERHEAD   (`$INSTANCE_NAME`_RESP_LEN_HEADER + `$INSTANCE_NAME`_RESP_LEN_FOOTER) /**< Length of the response overhead */   
-    #define `$INSTANCE_NAME`_RESP_LEN_MAX_PAYLOAD (100) /**< Maximum length of the payload */     
-    #define `$INSTANCE_NAME`_RESP_LEN_MAX_PACKET (`$INSTANCE_NAME`_RESP_LEN_OVERHEAD + `$INSTANCE_NAME`_RESP_LEN_MAX_PAYLOAD) /**< Maximum length of the entire packet */
-    /* **** COMMANDS **** */
-    #define `$INSTANCE_NAME`_RESP_SUCCESS        (0x00) /**< Successfully executed the previous command */
-    #define `$INSTANCE_NAME`_RESP_ASYNC          (0x80) /**< All response code that are greater than or equal to this are not responses but rather async data */
-    
+    /* **** PROCESSING ERROR FLAGS **** */
     #define `$INSTANCE_NAME`_ERR_SUCCESS        (0x00u)     /**< Returned Success */
     #define `$INSTANCE_NAME`_ERR_MEMORY         (1u << `$INSTANCE_NAME`_ERR_SHIFT_MEMORY )     /**< Failed to allocate memory*/
     #define `$INSTANCE_NAME`_ERR_START_SYM      (1u << `$INSTANCE_NAME`_ERR_SHIFT_START_SYM)   /**< Incorrect start symbol was received */
@@ -110,19 +87,47 @@
     #define `$INSTANCE_NAME`_ERR_SHIFT_CHECKSUM       (9u)     /**< The packet checksum does not match the expected value */
     #define `$INSTANCE_NAME`_ERR_SHIFT_STATE          (10u)     /**< Device was in the incorrect state to execute the command */
     #define `$INSTANCE_NAME`_ERR_SHIFT_DEVICE         (11u)     /**< An Unknown device was addressed */
-    
-    #define `$INSTANCE_NAME`_ERR__UNKNOWN             (31u)     /**< An unknown error occurred - End of error space */
-    /* Async data */
-    #define `$INSTANCE_NAME`_ASYNC_REPORT_ADV   (0x80u)     /**< Report an advertisement packet - Start of async space */
-    #define `$INSTANCE_NAME`_ASYNC_REPORT_CONN  (0x81u)     /**< Report a connection success  */
-    #define `$INSTANCE_NAME`_ASYNC_REPORT_DCON  (0x82u)     /**< Report a disconnection  */
+    #define `$INSTANCE_NAME`_ERR_UNKNOWN              (31u)     /**< An unknown error occurred - End of error space */
 
-    /* FLAGS */
-    #define `$INSTANCE_NAME`_FLAG_SHIFT_RESP            (0u) /**< A response is requested from the packet */
+    /* **** PACKET FLAGS **** */
+    #define `$INSTANCE_NAME`_FLAG_ACK                   (1u << `$INSTANCE_NAME`_FLAG_SHIFT_ACK) /**< This packet is acknowledging the previous command */
+    #define `$INSTANCE_NAME`_FLAG_NO_ACK                (1u << `$INSTANCE_NAME`_FLAG_SHIFT_NO_ACK) /**< The target device is not required to ACK the command  */
+    #define `$INSTANCE_NAME`_FLAG_INVALID_CMD           (1u << `$INSTANCE_NAME`_FLAG_SHIFT_INVALID_CMD) /**< The passed command was invalid  */
+   
     
-    #define `$INSTANCE_NAME`_FLAG_RESP                  (1u << `$INSTANCE_NAME`_FLAG_SHIFT_RESP) /**< A response is requested from the packet */
+    #define `$INSTANCE_NAME`_FLAG_SHIFT_ACK             (0u) /**< This packet is acknowledging the previous command */
+    #define `$INSTANCE_NAME`_FLAG_SHIFT_NO_ACK          (1u) /**< The target device is not required to ACK the command */
+    #define `$INSTANCE_NAME`_FLAG_SHIFT_INVALID_CMD     (2u) /**< The passed command was invalid */
+   
     
-
+    /* **** COMMAND SPACE **** */
+    #define `$INSTANCE_NAME`_CMD_MIN                    (0x00) /**< Start of the host command space */
+    #define `$INSTANCE_NAME`_CMD_MAX                    (0x7F) /**< End of the host command space */
+    #define `$INSTANCE_NAME`_CMD_CONTROL_MIN            (0x00) /**< Start of the host control command space */
+    #define `$INSTANCE_NAME`_CMD_CONTROL_MAX            (0x1F) /**< End of the host control command space */
+    #define `$INSTANCE_NAME`_CMD_ACTUATION_MIN          (0x20) /**< Start of the host actuation command space */
+    #define `$INSTANCE_NAME`_CMD_ACTUATION_MAX          (0x3F) /**< End of the host actuation command space */
+    #define `$INSTANCE_NAME`_CMD_SENSING_MIN            (0x40) /**< Start of the host sensing command space */
+    #define `$INSTANCE_NAME`_CMD_SENSING_MAX            (0x5F) /**< End of the host sensing command space */
+    #define `$INSTANCE_NAME`_CMD_ENERGY_MIN             (0x60) /**< Start of the host energy command space */
+    #define `$INSTANCE_NAME`_CMD_ENERGY_MAX             (0x7F) /**< End of the host energy command space */
+    
+    /* **** RESPONSE SPACE **** */
+    #define `$INSTANCE_NAME`_RSP_MIN                    (0x80) /**< Start of the response command space */
+    #define `$INSTANCE_NAME`_RSP_MAX                    (0xFF) /**< End of the response command space */
+    #define `$INSTANCE_NAME`_RSP_CONTROL_MIN            (0x80) /**< Start of the host control command space */
+    #define `$INSTANCE_NAME`_RSP_CONTROL_MAX            (0x9F) /**< End of the host control command space */
+    #define `$INSTANCE_NAME`_RSP_ACTUATION_MIN          (0xA0) /**< Start of the host actuation command space */
+    #define `$INSTANCE_NAME`_RSP_ACTUATION_MAX          (0xBF) /**< End of the host actuation command space */
+    #define `$INSTANCE_NAME`_RSP_SENSING_MIN            (0xC0) /**< Start of the host sensing command space */
+    #define `$INSTANCE_NAME`_RSP_SENSING_MAX            (0xDF) /**< End of the host sensing command space */
+    #define `$INSTANCE_NAME`_RSP_ENERGY_MIN             (0xE0) /**< Start of the host energy command space */
+    #define `$INSTANCE_NAME`_RSP_ENERGY_MAX             (0xFF) /**< End of the host energy command space */
+    
+    #define `$INSTANCE_NAME`_RSP_BIT_SHIFT              (7u)   /**< Shift of the bit that indicates the packet contains a response */
+    #define `$INSTANCE_NAME`_RSP_BIT                    (1u << `$INSTANCE_NAME`_RSP_BIT_SHIFT) /**< Bit that indicates the packet contains a response */
+    
+   
     /***************************************
     * Enumerated Types
     ***************************************/
@@ -167,7 +172,7 @@
         uint8_t *payload;       /**< Pointer to the data */
         uint16_t payloadMax;   /**< Size of the payload array */
         uint16_t payloadLen;    /**< Length of the payload in the buffer*/
-        uint32_t flags;         /**< Flags to include e.g. "ACK requested" */
+        uint16_t flags;         /**< Flags to include e.g. "ACK requested" */
         uint32_t error;          /**< Error code of packet*/
     } `$INSTANCE_NAME`_PACKET_S;
 
@@ -202,14 +207,11 @@
     void `$INSTANCE_NAME`_flushRxBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer);
     void `$INSTANCE_NAME`_flushTxBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer);
     void `$INSTANCE_NAME`_flushBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer);
-
-
     uint32_t `$INSTANCE_NAME`_constructPacket(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer);
     uint32_t `$INSTANCE_NAME`_sendPacket(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer);
-
     uint32_t `$INSTANCE_NAME`_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer, uint8_t byte);
     uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer);
-
+    uint32_t `$INSTANCE_NAME`_getModuleFromCmd(uint8_t cmd, uint8_t *module);
     uint16_t `$INSTANCE_NAME`_computeChecksum16(uint8_t* data, uint16_t length);
 #endif /* `$INSTANCE_NAME`_H */
 /* [] END OF FILE */

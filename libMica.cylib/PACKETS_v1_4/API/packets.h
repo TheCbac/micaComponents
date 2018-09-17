@@ -3,7 +3,7 @@
 * File: packets.h
 * Workspace: micaComponents
 * Project Name: libMica
-* Version: v1.0
+* Version: v1.4
 * Author: Craig Cheney
 *
 * Brief:
@@ -13,7 +13,7 @@
 *   Craig Cheney
 *
 * Change Log:
-*   2018.04.19 CC - Document created
+*   2018.09.17 CC - Document created
 ********************************************************************************/
 /* Header Guard */
 #ifndef `$INSTANCE_NAME`_H

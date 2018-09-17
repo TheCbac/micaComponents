@@ -3,7 +3,7 @@
 * File: packets.c
 * Workspace: micaComponents
 * Project Name: libMica
-* Version: v1.0
+* Version: v1.3
 * Author: Craig Cheney
 *
 * Brief:

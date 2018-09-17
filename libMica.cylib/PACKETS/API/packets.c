@@ -527,7 +527,7 @@ uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) {
     
     /* Ensure Payload array is allocated */
     if(packet->payload == NULL){
-        error |= packets_ERR_MEMORY;   
+        error |= `$INSTANCE_NAME`_ERR_MEMORY;   
     }
     if(!error){
         /* Transfer the payload to the new buffer */

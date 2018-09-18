@@ -1,6 +1,17 @@
 CHANGE LOG
 libMICA - MICA Components - v1
 
+2018.09.17 - CC
+* Change packets to v1.4
+
+* Add file generators
+    * main
+    * application file
+    * callback file
+    * isr
+
+
+
 2018.08.23 - CC
 Goals for the day:
 * Establish comms between host (DB) and peripheral (IMU)

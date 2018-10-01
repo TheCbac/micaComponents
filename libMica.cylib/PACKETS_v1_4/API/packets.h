@@ -26,6 +26,7 @@
     /***************************************
     * Macro Definitions
     ***************************************/
+    #define `$INSTANCE_NAME`_VERSION             (0x0104)/**< Version of the packet protocol, MSB -> Major, LSB -> Minor */
     
     /* **** FRAME DEFINITIONS **** */
     #define `$INSTANCE_NAME`_LEN_SYM_START       (1u) /**< Length of the Start of Packet Symbol */

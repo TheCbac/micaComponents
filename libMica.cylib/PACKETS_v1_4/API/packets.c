@@ -285,10 +285,6 @@ uint32_t `$INSTANCE_NAME`_constructPacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer
     `$INSTANCE_NAME`_PACKET_S* packet = &(buffer->send.packet);
     
     /* *** Validate packet *** */
-    /* Module ID */
-    if(packet->moduleId > `$INSTANCE_NAME`_ID_MODULE_MAX) {
-        error |= `$INSTANCE_NAME`_ERR_MODULE;
-    }
     /* LEN less than max */
     if (packet->payloadLen > `$INSTANCE_NAME`_LEN_MAX_PAYLOAD) {
         error |= `$INSTANCE_NAME`_ERR_LENGTH;
@@ -587,7 +583,7 @@ uint32_t `$INSTANCE_NAME`_getModuleFromCmd(uint8_t cmd, uint8_t *module) {
     }  else if (cmd >= `$INSTANCE_NAME`_CMD_ENERGY_MIN && cmd <= `$INSTANCE_NAME`_CMD_ENERGY_MAX){
         id = `$INSTANCE_NAME`_ID_MODULE_ENERGY;   
     } else {
-        return `$INSTANCE_NAME`_ERR_MODULE;
+        return `$INSTANCE_NAME`_ERR_UNKNOWN;
     }
     /* Set the module value out */
     *module = id;

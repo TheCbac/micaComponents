@@ -68,7 +68,7 @@
     #define `$INSTANCE_NAME`_ERR_LENGTH         (1u << `$INSTANCE_NAME`_ERR_SHIFT_LENGTH)   /**< The amount of data available is outside the expected range. */
     #define `$INSTANCE_NAME`_ERR_FORMAT         (1u << `$INSTANCE_NAME`_ERR_SHIFT_FORMAT)    /**< The packet is not in the correct format */
     #define `$INSTANCE_NAME`_ERR_INCOMPLETE     (1u << `$INSTANCE_NAME`_ERR_SHIFT_INCOMPLETE)    /**< The packet cannot be processed as it is incomplete */
-    #define `$INSTANCE_NAME`_ERR_MODULE         (1u << `$INSTANCE_NAME`_ERR_SHIFT_MODULE)    /**< An invalid module was specified */
+//    #define `$INSTANCE_NAME`_ERR_MODULE         (1u << `$INSTANCE_NAME`_ERR_SHIFT_MODULE)    /**< An invalid module was specified */
     #define `$INSTANCE_NAME`_ERR_DATA           (1u << `$INSTANCE_NAME`_ERR_SHIFT_DATA)    /**< The data is not of the proper form  */
     #define `$INSTANCE_NAME`_ERR_CMD            (1u << `$INSTANCE_NAME`_ERR_SHIFT_CMD)    /**< The command is not recognized */
     #define `$INSTANCE_NAME`_ERR_CHECKSUM       (1u << `$INSTANCE_NAME`_ERR_SHIFT_CHECKSUM)    /**< The packet checksum does not match the expected value */
@@ -81,7 +81,7 @@
     #define `$INSTANCE_NAME`_ERR_SHIFT_LENGTH         (3u)     /**< The amount of data available is outside the expected range. */
     #define `$INSTANCE_NAME`_ERR_SHIFT_FORMAT         (4u)     /**< The packet is not in the correct format */
     #define `$INSTANCE_NAME`_ERR_SHIFT_INCOMPLETE     (5u)     /**< The packet cannot be processed as it is incomplete */
-    #define `$INSTANCE_NAME`_ERR_SHIFT_MODULE         (6u)     /**< An invalid module was specified */
+//    #define `$INSTANCE_NAME`_ERR_SHIFT_MODULE         (6u)     /**< An invalid module was specified */
     #define `$INSTANCE_NAME`_ERR_SHIFT_DATA           (7u)     /**< The data is not of the proper form  */
     #define `$INSTANCE_NAME`_ERR_SHIFT_CMD            (8u)     /**< The command is not recognized */
     #define `$INSTANCE_NAME`_ERR_SHIFT_CHECKSUM       (9u)     /**< The packet checksum does not match the expected value */

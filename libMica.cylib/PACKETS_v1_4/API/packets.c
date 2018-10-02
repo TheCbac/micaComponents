@@ -374,7 +374,7 @@ uint32_t `$INSTANCE_NAME`_sendPacket(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer){
     }
     if(!error) {
         /* Write out the function */
-        `$txFunction`(txBuffer->buffer, txBuffer->bufferLen );
+        `$txFunction`(txBuffer->buffer, txBuffer->bufferIndex );
         /* Move back to the original state */
         *bufferState = `$INSTANCE_NAME`_BUFFER_SEND_WAIT;
         /* Flush the TX buffer */

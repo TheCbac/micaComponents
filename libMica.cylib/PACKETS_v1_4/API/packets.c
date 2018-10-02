@@ -39,8 +39,8 @@
 uint32_t `$INSTANCE_NAME`_initialize(`$INSTANCE_NAME`_BUFFER_FULL_S *packetBuffer) {
     uint32_t error = `$INSTANCE_NAME`_ERR_SUCCESS;
     /*  Receive Local references */
-    `$INSTANCE_NAME`_BUFFER_PROCESS_S* rxBuffer = &(packetBuffer->send.processBuffer);
-    `$INSTANCE_NAME`_PACKET_S* rxPacket = &(packetBuffer->send.packet);
+    `$INSTANCE_NAME`_BUFFER_PROCESS_S* rxBuffer = &(packetBuffer->receive.processBuffer);
+    `$INSTANCE_NAME`_PACKET_S* rxPacket = &(packetBuffer->receive.packet);
     /* Set send process buffer to zero */
     rxBuffer->buffer = NULL;
     rxBuffer->bufferLen = ZERO;
@@ -55,12 +55,12 @@ uint32_t `$INSTANCE_NAME`_initialize(`$INSTANCE_NAME`_BUFFER_FULL_S *packetBuffe
     rxPacket->flags = ZERO;
     rxPacket->error = ZERO;
 
-    /* Reset the state */
-    packetBuffer->send.bufferState = `$INSTANCE_NAME`_BUFFER_SEND_WAIT;
+    /* Reset the state */ 
+    packetBuffer->receive.bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START;
 
     /*  Receive Local references */
-    `$INSTANCE_NAME`_BUFFER_PROCESS_S* txBuffer = &(packetBuffer->receive.processBuffer);
-    `$INSTANCE_NAME`_PACKET_S* txPacket = &(packetBuffer->receive.packet);
+    `$INSTANCE_NAME`_BUFFER_PROCESS_S* txBuffer = &(packetBuffer->send.processBuffer);
+    `$INSTANCE_NAME`_PACKET_S* txPacket = &(packetBuffer->send.packet);
     /* Set receive process buffer to zero */
     txBuffer->buffer = NULL;
     txBuffer->bufferLen = ZERO;
@@ -75,7 +75,7 @@ uint32_t `$INSTANCE_NAME`_initialize(`$INSTANCE_NAME`_BUFFER_FULL_S *packetBuffe
     txPacket->flags = ZERO;
     txPacket->error = ZERO;
     /* Reset the tx state */
-    packetBuffer->receive.bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START;
+    packetBuffer->send.bufferState = `$INSTANCE_NAME`_BUFFER_SEND_WAIT;
 
     return error;
 }
@@ -101,9 +101,10 @@ uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packet
     `$INSTANCE_NAME`_BUFFER_PROCESS_S* rxBuffer = &(packetBuffer->receive.processBuffer);
     `$INSTANCE_NAME`_BUFFER_PROCESS_S* txBuffer = &(packetBuffer->send.processBuffer);
     uint8_t* rxPayload = packetBuffer->receive.packet.payload;
+    uint8_t* txPayload = packetBuffer->send.packet.payload;
     
     /* Make sure that buffers have not already been allocated */
-    if(rxBuffer->buffer != NULL || txBuffer->buffer != NULL || rxPayload != NULL){
+    if(rxBuffer->buffer != NULL || txBuffer->buffer != NULL || rxPayload != NULL || txPayload != NULL){
         error |= `$INSTANCE_NAME`_ERR_STATE;
     }
 
@@ -135,14 +136,22 @@ uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packet
         }
         packetBuffer->receive.packet.payload = rxPayloadAdr;
         packetBuffer->receive.packet.payloadMax = bufferSize;
-        
-        /* Set initial values to zero */
         packetBuffer->receive.bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START;
+        
+        /*  Create the txPayload */
+        uint8* txPayloadAdr = (uint8 *) calloc(ONE, bufferSize);
+        if(txPayloadAdr == NULL){
+            error |= `$INSTANCE_NAME`_ERR_MEMORY; 
+            goto `$INSTANCE_NAME`_clean4;
+        }
+        packetBuffer->send.packet.payload = txPayloadAdr;
+        packetBuffer->send.packet.payloadMax = bufferSize;
         packetBuffer->send.bufferState = `$INSTANCE_NAME`_BUFFER_SEND_WAIT;
-        packetBuffer->send.packet.payloadMax = ZERO;
 
         /* Clean up on error */
         if(error) {  
+`$INSTANCE_NAME`_clean4:
+            free(txPayloadAdr);      
 `$INSTANCE_NAME`_clean3:
             free(rxPayloadAdr);
 `$INSTANCE_NAME`_clean2:
@@ -198,6 +207,15 @@ uint32_t `$INSTANCE_NAME`_destoryBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer)
         buffer->receive.packet.payload = NULL;
         buffer->receive.packet.payloadMax = ZERO;
         buffer->receive.packet.payloadLen = ZERO;
+    } else {
+        error |= `$INSTANCE_NAME`_ERR_MEMORY;
+    }
+    /* Free the send payload buffer is it exists */
+    if(buffer->send.packet.payload != NULL) { 
+        free(buffer->send.packet.payload);   
+        buffer->send.packet.payload = NULL;
+        buffer->send.packet.payloadMax = ZERO;
+        buffer->send.packet.payloadLen = ZERO;
     } else {
         error |= `$INSTANCE_NAME`_ERR_MEMORY;
     }
@@ -552,6 +570,43 @@ uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) {
     return error;
 } 
 
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_acknowledgePacket()
+****************************************************************************//**
+* \brief
+*  Respond to a received packet
+*
+* \param rxPacket [in]
+*  Pointer to the received packet
+*
+* \param validateFn [in]
+*  Pointer to the device specific validation function
+* 
+* \return
+*  Returns the error of associated with 
+*******************************************************************************/
+uint32_t `$INSTANCE_NAME`_acknowledgePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* packet, uint32_t (*validateFn)(`$INSTANCE_NAME`_PACKET_S* rxPacket, `$INSTANCE_NAME`_PACKET_S* txPacket) ){
+    /* Validate that the command is valid */
+    uint32_t validateErr = validateFn(&(packet->receive.packet), &(packet->send.packet));
+    uint32_t responseErr = packets_ERR_SUCCESS;
+    /* Command is valid */
+    if(validateErr ==`$INSTANCE_NAME`_ERR_SUCCESS){
+        /* Respond if the NO ACK flag is not set */
+        if( !(packet->receive.packet.flags & `$INSTANCE_NAME`_FLAG_NO_ACK)){
+            /* Construct the response packet */
+            responseErr = `$INSTANCE_NAME`_sendPacket(packet);
+//            responseErr = `$INSTANCE_NAME`_constructPacket(packet);
+//            if(!responseErr){
+//                /* Send the response packet */
+//            }
+        }
+    /* An error occured during validation */
+    } else {
+        responseErr = validateErr;
+    }
+    return responseErr;
+}
+
 
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_getModuleFromCmd()
@@ -621,6 +676,33 @@ uint16_t `$INSTANCE_NAME`_computeChecksum16(uint8_t* data, uint16_t length){
     return (1 + ~sum);
 }
 
-
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_printPacket()
+****************************************************************************//**
+* \brief
+*  Prints the content of a packet
+*
+* \param packet [in]
+*  Packet to display
+* 
+* \param fn [in]
+*   Print function to use to display results
+* 
+* \return
+*  None
+*******************************************************************************/
+  void `$INSTANCE_NAME`_printPacket(`$INSTANCE_NAME`_PACKET_S* packet, void (*printFn)(char *pszFmt, ...)){
+    printFn("\r\nModule Id: %d\r\n", packet->moduleId);
+    printFn("Command: %x\r\n", packet->cmd);
+    uint16_t len = packet->payloadLen; 
+    printFn("payload Len: %d\r\n", len);
+    printFn("Payload:[ ", packet->cmd);
+    uint16_t i;
+    for(i = ZERO; i<len; i++){
+        printFn("0x%x ",packet->payload[i]);
+    }
+    printFn("]\r\n");
+    printFn("Flags: 0x%x\r\n\r\n", packet->flags);
+}
 
 /* [] END OF FILE */

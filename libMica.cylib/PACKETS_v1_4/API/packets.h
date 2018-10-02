@@ -113,6 +113,8 @@
     #define `$INSTANCE_NAME`_CMD_ENERGY_MIN             (0x60) /**< Start of the host energy command space */
     #define `$INSTANCE_NAME`_CMD_ENERGY_MAX             (0x7F) /**< End of the host energy command space */
     
+    #define `$INSTANCE_NAME`_CMD_ID                     (0x00) /**< Request the ID of a device */
+    
     /* **** RESPONSE SPACE **** */
     #define `$INSTANCE_NAME`_RSP_MIN                    (0x80) /**< Start of the response command space */
     #define `$INSTANCE_NAME`_RSP_MAX                    (0xFF) /**< End of the response command space */
@@ -208,12 +210,17 @@
     void `$INSTANCE_NAME`_flushRxBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer);
     void `$INSTANCE_NAME`_flushTxBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer);
     void `$INSTANCE_NAME`_flushBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer);
+    
     uint32_t `$INSTANCE_NAME`_constructPacket(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer);
     uint32_t `$INSTANCE_NAME`_sendPacket(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer);
     uint32_t `$INSTANCE_NAME`_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer, uint8_t byte);
     uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer);
+
+    uint32_t `$INSTANCE_NAME`_acknowledgePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* packet, uint32_t (*validateFn)(`$INSTANCE_NAME`_PACKET_S* rxPacket, `$INSTANCE_NAME`_PACKET_S* txPacket) );
+    
     uint32_t `$INSTANCE_NAME`_getModuleFromCmd(uint8_t cmd, uint8_t *module);
     uint16_t `$INSTANCE_NAME`_computeChecksum16(uint8_t* data, uint16_t length);
+    void `$INSTANCE_NAME`_printPacket(`$INSTANCE_NAME`_PACKET_S* packet, void (*printFn)(char *pszFmt, ...));
 #endif /* `$INSTANCE_NAME`_H */
 /* [] END OF FILE */
 

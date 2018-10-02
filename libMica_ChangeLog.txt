@@ -1,14 +1,26 @@
 CHANGE LOG
 libMICA - MICA Components - v1
 
+2018.10.02 - CC 
+* Need to add to packet definitions: commands
+
+2018.10.01 - CC
+* Update packet test to conform to v1.4
+    * Remove "Invalid Module Flag"
+* Add application file generator
+
 2018.09.17 - CC
 * Change packets to v1.4
 
 * Add file generators
     * main
     * application file
-    * callback file
-    * isr
+    * Syntax:
+        * ISR
+        * Switch
+        * enum
+        * struct
+    * Uart example
 
 
 

@@ -586,19 +586,21 @@ uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) {
 *  Returns the error of associated with 
 *******************************************************************************/
 uint32_t `$INSTANCE_NAME`_acknowledgePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* packet, uint32_t (*validateFn)(`$INSTANCE_NAME`_PACKET_S* rxPacket, `$INSTANCE_NAME`_PACKET_S* txPacket) ){
-    /* Validate that the command is valid */
-    uint32_t validateErr = validateFn(&(packet->receive.packet), &(packet->send.packet));
+    `$INSTANCE_NAME`_PACKET_S* rxPacket = &(packet->receive.packet);
+    `$INSTANCE_NAME`_PACKET_S* txPacket = &(packet->send.packet);
+    /* Set the default settings */
+    txPacket->moduleId = rxPacket->moduleId;
+    txPacket->cmd = rxPacket->cmd;
+    txPacket->flags = packets_FLAG_ACK;
+    /* Validate the command */
+    uint32_t validateErr = validateFn(rxPacket, txPacket);
     uint32_t responseErr = packets_ERR_SUCCESS;
     /* Command is valid */
     if(validateErr ==`$INSTANCE_NAME`_ERR_SUCCESS){
         /* Respond if the NO ACK flag is not set */
         if( !(packet->receive.packet.flags & `$INSTANCE_NAME`_FLAG_NO_ACK)){
-            /* Construct the response packet */
+            /* Send the response packet */
             responseErr = `$INSTANCE_NAME`_sendPacket(packet);
-//            responseErr = `$INSTANCE_NAME`_constructPacket(packet);
-//            if(!responseErr){
-//                /* Send the response packet */
-//            }
         }
     /* An error occured during validation */
     } else {

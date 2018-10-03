@@ -3,6 +3,9 @@ libMICA - MICA Components - v1
 
 2018.10.02 - CC 
 * Need to add to packet definitions: commands
+* Need to add 'start' function to uart api
+* create test user interface
+* Created a yo generator app - see /Dropbox/MICA/Creator/generators/generator-mica/
 
 2018.10.01 - CC
 * Update packet test to conform to v1.4
@@ -20,6 +23,7 @@ libMICA - MICA Components - v1
         * Switch
         * enum
         * struct
+        * test case
     * Uart example
 
 

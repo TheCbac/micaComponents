@@ -13,8 +13,61 @@
 * Copyright 2017, MICA. All rights reserved.
 *******************************************************************************/
 #include "`$INSTANCE_NAME`.h"
-#include "`$includeFile`.h"
 #include "micaCommon.h"
+
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_putChar()
+****************************************************************************//**
+*
+* \brief Place a byte into the buffer to be written out
+*
+* \param byte
+* Byte to write
+*
+* \return
+* None
+ *******************************************************************************/
+void `$INSTANCE_NAME`_putChar(uint8_t byte){
+    #if (`$INSTANCE_NAME`_SCB_STATUS)
+       `$componentName`_UartPutChar(byte);
+    #endif /* `$INSTANCE_NAME`_SCB_STATUS */
+}
+
+/* RX functions */
+#if `$INSTANCE_NAME`_RX_EN
+    /*******************************************************************************
+    * Function Name: `$INSTANCE_NAME`_getRxBufferSize()
+    ****************************************************************************//**
+    *
+    * \brief Get the number of bytes available to be read from the RX buffer
+    *
+    *
+    * \return
+    * Number of bytes available
+     *******************************************************************************/
+    uint32_t `$INSTANCE_NAME`_getRxBufferSize(void){
+        #if (`$INSTANCE_NAME`_SCB_STATUS)
+            return (uint32_t) `$componentName`_SpiUartGetRxBufferSize();
+        #endif /* `$INSTANCE_NAME`_SCB_STATUS */
+    }
+
+
+    /*******************************************************************************
+    * Function Name: `$INSTANCE_NAME`_getChar()
+    ****************************************************************************//**
+    *
+    * \brief Gets a byte from the RX buffe
+    *
+    * \return
+    *  Value of the byte
+     *******************************************************************************/
+    uint8_t `$INSTANCE_NAME`_getChar(void){
+        #if (`$INSTANCE_NAME`_SCB_STATUS)
+            return (uint8_t) `$componentName`_UartGetChar();
+        #endif /* `$INSTANCE_NAME`_SCB_STATUS */
+    }
+#endif /* `$INSTANCE_NAME`_RX_EN */
 
 
 /*******************************************************************************
@@ -119,7 +172,7 @@ void `$INSTANCE_NAME`_print(char8 *pszFmt,...){
             pszFmt++;
             continue;
         }
-        if(*pszFmt == 'd')
+        if(*pszFmt == 'd' || *pszFmt == 'i')
         {
             iVal = pArg[index++];
             i = 0;

@@ -199,7 +199,7 @@
 
     /* Communication structure  for RX/TX and callbacks */
     typedef struct {
-        void (*rxReadArray)(uint8* dest, uint16_t len);   /**< Receive bytes from a communication port */
+        uint8_t (*rxReadByte)(void);   /**< Receive bytes from a communication port */
         void (*txPutArray)(uint8* src, uint16_t len);     /**< Place byte into send buffer */
         uint32_t (*rxGetBytesPending)(void);                  /**< Report number of bytes available to read */
         uint32_t (*txGetQueueSize)(void);                     /**< Get available size of the send buffer */
@@ -227,7 +227,7 @@
     
     uint32_t `$INSTANCE_NAME`_constructPacket(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer);
     uint32_t `$INSTANCE_NAME`_sendPacket(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer);
-    uint32_t `$INSTANCE_NAME`_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer, uint8_t byte);
+    uint32_t `$INSTANCE_NAME`_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer);  
     uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer);
 
     uint32_t `$INSTANCE_NAME`_acknowledgePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* packet, uint32_t (*validateFn)(`$INSTANCE_NAME`_PACKET_S* rxPacket, `$INSTANCE_NAME`_PACKET_S* txPacket) );

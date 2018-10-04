@@ -368,8 +368,12 @@ uint32_t `$INSTANCE_NAME`_sendPacket(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer){
 *   ------------                            | -----------
 *   `$INSTANCE_NAME`_ERR_SUCCESS            | On Successful init
 *******************************************************************************/
-uint32_t `$INSTANCE_NAME`_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer, uint8_t byte) {
+uint32_t `$INSTANCE_NAME`_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) {
      uint32_t error = `$INSTANCE_NAME`_ERR_SUCCESS;
+     /* Ensure RX Function exists */
+     if(buffer->comms.rxReadByte == NULL || buffer->comms.rxGetBytesPending == NULL){
+         error |= `$INSTANCE_NAME`_ERR_CALLBACK;
+     }
     /* Create local references */
     `$INSTANCE_NAME`_BUFFER_PROCESS_S* rxBuffer = &(buffer->receive.processBuffer);
     `$INSTANCE_NAME`_BUFFER_STATE_RECEIVE_T* bufferState = &(buffer->receive.bufferState);
@@ -383,8 +387,10 @@ uint32_t `$INSTANCE_NAME`_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer, 
     ) {
         error |= `$INSTANCE_NAME`_ERR_MEMORY;
     }
-
-    if(!error) {
+    /* Ensure error free and data is available */
+    if(!error && buffer->comms.rxGetBytesPending()) {
+        /* Get the data */
+        uint8_t byte = buffer->comms.rxReadByte();
         /* Act according to the state of the packet buffer */
         switch (buffer->receive.bufferState) {
             /* Waiting for start, ensure that the data byte is valid */

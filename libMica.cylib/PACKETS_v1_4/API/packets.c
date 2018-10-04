@@ -465,6 +465,34 @@ uint32_t `$INSTANCE_NAME`_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) 
 }
 
 /*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_processRxQueue()
+****************************************************************************//**
+* \brief
+*  Processes all of the pending data in the RX queue
+*
+* \param buffer
+* The packet buffer to call
+*
+* \return
+*  A number indicating the error code
+*  Errors codes                             | Description
+*   ------------                            | -----------
+*   `$INSTANCE_NAME`_ERR_SUCCESS            | On Successful init
+*******************************************************************************/
+uint32_t `$INSTANCE_NAME`_processRxQueue(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer){
+    /* Get the number of pending bytes */
+    uint32_t pendingBytes = buffer->comms.rxGetBytesPending();
+    uint32_t i;
+    uint32_t err = `$INSTANCE_NAME`_ERR_SUCCESS;
+    /* Procces each byte */
+    for(i = ZERO; i< pendingBytes; i++){
+        err |= `$INSTANCE_NAME`_processRxByte(buffer);
+    }
+    return err;
+}  
+
+
+/*******************************************************************************
 * Function Name:`$INSTANCE_NAME`_parsePacket()
 ****************************************************************************//**
 * \brief

@@ -227,7 +227,8 @@
     
     uint32_t `$INSTANCE_NAME`_constructPacket(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer);
     uint32_t `$INSTANCE_NAME`_sendPacket(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer);
-    uint32_t `$INSTANCE_NAME`_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer);  
+    uint32_t `$INSTANCE_NAME`_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer); 
+    uint32_t `$INSTANCE_NAME`_processRxQueue(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer);  
     uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer);
 
     uint32_t `$INSTANCE_NAME`_acknowledgePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* packet, uint32_t (*validateFn)(`$INSTANCE_NAME`_PACKET_S* rxPacket, `$INSTANCE_NAME`_PACKET_S* txPacket) );

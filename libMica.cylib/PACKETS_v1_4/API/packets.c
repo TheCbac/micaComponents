@@ -17,7 +17,6 @@
 ********************************************************************************/
 #include "`$INSTANCE_NAME`.h"
 #include "micaCommon.h"
-#include "`$uartIncludeFile`.h"
 #include <stdlib.h>
 
 
@@ -37,47 +36,13 @@
 *   `$INSTANCE_NAME`_ERR_SUCCESS            | On Successful init
 *******************************************************************************/
 uint32_t `$INSTANCE_NAME`_initialize(`$INSTANCE_NAME`_BUFFER_FULL_S *packetBuffer) {
-    uint32_t error = `$INSTANCE_NAME`_ERR_SUCCESS;
-    /*  Receive Local references */
-    `$INSTANCE_NAME`_BUFFER_PROCESS_S* rxBuffer = &(packetBuffer->receive.processBuffer);
-    `$INSTANCE_NAME`_PACKET_S* rxPacket = &(packetBuffer->receive.packet);
-    /* Set send process buffer to zero */
-    rxBuffer->buffer = NULL;
-    rxBuffer->bufferLen = ZERO;
-    rxBuffer->timeCount = ZERO;
-    rxBuffer->bufferIndex = ZERO;
-    /* Set packet values */
-    rxPacket->moduleId = ZERO;
-    rxPacket->cmd = ZERO;
-    rxPacket->payload = NULL;
-    rxPacket->payloadLen = ZERO;
-    rxPacket->payloadMax = ZERO;
-    rxPacket->flags = ZERO;
-    rxPacket->error = ZERO;
-
+    /* Set everything to zero */
+    memset(packetBuffer, ZERO, sizeof(`$INSTANCE_NAME`_BUFFER_FULL_S ));
     /* Reset the state */ 
     packetBuffer->receive.bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START;
-
-    /*  Receive Local references */
-    `$INSTANCE_NAME`_BUFFER_PROCESS_S* txBuffer = &(packetBuffer->send.processBuffer);
-    `$INSTANCE_NAME`_PACKET_S* txPacket = &(packetBuffer->send.packet);
-    /* Set receive process buffer to zero */
-    txBuffer->buffer = NULL;
-    txBuffer->bufferLen = ZERO;
-    txBuffer->timeCount = ZERO;
-    txBuffer->bufferIndex = ZERO;
-    /* Set the packet values */
-    txPacket->moduleId = ZERO;
-    txPacket->cmd = ZERO;
-    txPacket->payload = NULL;
-    txPacket->payloadLen = ZERO;
-    txPacket->payloadMax = ZERO;
-    txPacket->flags = ZERO;
-    txPacket->error = ZERO;
     /* Reset the tx state */
     packetBuffer->send.bufferState = `$INSTANCE_NAME`_BUFFER_SEND_WAIT;
-
-    return error;
+    return `$INSTANCE_NAME`_ERR_SUCCESS;
 }
 
 /*******************************************************************************
@@ -372,13 +337,20 @@ uint32_t `$INSTANCE_NAME`_sendPacket(`$INSTANCE_NAME`_BUFFER_FULL_S *buffer){
     if(*bufferState != `$INSTANCE_NAME`_BUFFER_SEND_READY) {
        error |= `$INSTANCE_NAME`_ERR_STATE;
     }
+    /* Ensure valid txFunction */
+    if(buffer->comms.txPutArray == NULL){
+        error |= `$INSTANCE_NAME`_ERR_CALLBACK;
+    }
     if(!error) {
         /* Write out the function */
-        `$txFunction`(txBuffer->buffer, txBuffer->bufferIndex );
+        // `$txFunction`(txBuffer->buffer, txBuffer->bufferIndex );
+        // @TODO: check available buffer size first
+        buffer->comms.txPutArray(txBuffer->buffer, txBuffer->bufferIndex );
         /* Move back to the original state */
         *bufferState = `$INSTANCE_NAME`_BUFFER_SEND_WAIT;
         /* Flush the TX buffer */
         `$INSTANCE_NAME`_flushTxBuffers(buffer);   
+
     }
     return error;
 }

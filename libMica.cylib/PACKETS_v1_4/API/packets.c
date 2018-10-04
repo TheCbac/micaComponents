@@ -450,6 +450,7 @@ uint32_t `$INSTANCE_NAME`_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) 
                 if (rxBuffer->bufferIndex == fullPacketLength) {
                     /* Packet is complete */   
                     *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_COMPLETE;
+
                 }
                 break;
             }
@@ -487,6 +488,27 @@ uint32_t `$INSTANCE_NAME`_processRxQueue(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer)
     /* Procces each byte */
     for(i = ZERO; i< pendingBytes; i++){
         err |= `$INSTANCE_NAME`_processRxByte(buffer);
+        /* If the packet is complete Start Action on it*/
+        if(buffer->receive.bufferState == `$INSTANCE_NAME`_BUFFER_RECEIVE_COMPLETE){
+            /* Parse the packet */
+            err |= `$INSTANCE_NAME`_parsePacket(buffer);
+            if(!err){
+                if(buffer->comms.ackCallback != NULL && buffer->comms.ackCallback != NULL){
+                    /* Local Reference */
+                    `$INSTANCE_NAME`_PACKET_S *rxPacket = &(buffer->receive.packet);
+                    /* Is the packet an ACK or CMD packet */
+                    if(rxPacket->flags & `$INSTANCE_NAME`_FLAG_ACK){
+                        /* Call the ack callback */
+                       err |= buffer->comms.ackCallback(rxPacket);
+                    } else {
+                        /* Call the cmd callback */
+                       err |= buffer->comms.cmdCallback(rxPacket);
+                    }
+                } else {
+                    err |= `$INSTANCE_NAME`_ERR_CALLBACK;
+                }
+            }
+        }
     }
     return err;
 }  

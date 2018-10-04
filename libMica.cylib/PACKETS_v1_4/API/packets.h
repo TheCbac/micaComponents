@@ -203,8 +203,8 @@
         void (*txPutArray)(uint8* src, uint16_t len);     /**< Place byte into send buffer */
         uint32_t (*rxGetBytesPending)(void);                  /**< Report number of bytes available to read */
         uint32_t (*txGetQueueSize)(void);                     /**< Get available size of the send buffer */
-        void (*ackCallback)(`$INSTANCE_NAME`_PACKET_S* ackPacket);     /**< Function to call when a packet was acknowledged */
-        void (*cmdCallback)(`$INSTANCE_NAME`_PACKET_S* cmdPacket);     /**< Function that gets called when a command was received */
+        uint32_t (*ackCallback)(`$INSTANCE_NAME`_PACKET_S* ackPacket);     /**< Function to call when a packet was acknowledged */
+        uint32_t (*cmdCallback)(`$INSTANCE_NAME`_PACKET_S* cmdPacket);     /**< Function that gets called when a command was received */
     } `$INSTANCE_NAME`_COMMUNICATION_S;
 
     /* Struct containing both a send and receive buffer */

@@ -163,7 +163,7 @@ void `$INSTANCE_NAME`_print(char8 *pszFmt,...){
             continue;
         }
         pszFmt++;
-
+        /* Format a string */
         if(*pszFmt == 's')
         {
             pszVal = (uint8*)pArg[index++];
@@ -172,6 +172,18 @@ void `$INSTANCE_NAME`_print(char8 *pszFmt,...){
             pszFmt++;
             continue;
         }
+        /* Boolean */
+        if(*pszFmt == 'b'){
+            bool bVal = (bool) pArg[index++];
+            if(bVal){
+                `$INSTANCE_NAME`_putString("True");
+            } else {
+                `$INSTANCE_NAME`_putString("False");
+            }
+            pszFmt++;
+            continue;
+        }
+        /* Format integer */
         if(*pszFmt == 'd' || *pszFmt == 'i')
         {
             iVal = pArg[index++];
@@ -195,6 +207,7 @@ void `$INSTANCE_NAME`_print(char8 *pszFmt,...){
             pszFmt++;
             continue;
         }
+        /* Hex val */
         if(*pszFmt == 'x')
         {
             xVal = pArg[index++];

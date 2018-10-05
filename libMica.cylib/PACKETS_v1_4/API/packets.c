@@ -450,7 +450,6 @@ uint32_t `$INSTANCE_NAME`_processRxByte(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) 
                 if (rxBuffer->bufferIndex == fullPacketLength) {
                     /* Packet is complete */   
                     *bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_COMPLETE;
-
                 }
                 break;
             }
@@ -501,8 +500,6 @@ uint32_t `$INSTANCE_NAME`_processRxQueue(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer)
                         /* Call the ack callback */
                         err |= buffer->comms.ackCallback(rxPacket);
                     } else {
-                    //     /* Call the cmd callback */
-                    //    err |= buffer->comms.cmdCallback(rxPacket);
                     /* Handle the cmd packet */
                         err |= `$INSTANCE_NAME`_handleCmdPacket(buffer);
                     }
@@ -621,9 +618,11 @@ uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) {
     txPacket->moduleId = rxPacket->moduleId;
     txPacket->cmd = rxPacket->cmd;
     txPacket->flags = `$INSTANCE_NAME`_FLAG_ACK;
-
+    txPacket->payloadLen = ZERO;
+    
     uint32_t responseErr = `$INSTANCE_NAME`_ERR_SUCCESS;
-    uint32_t validateErr = buffer->comms.cmdCallback(&(buffer->receive.packet));
+    /* Call the Command callback */
+    uint32_t validateErr = buffer->comms.cmdCallback(rxPacket, txPacket);
     /* Command is valid */
     if(validateErr ==`$INSTANCE_NAME`_ERR_SUCCESS){
         /* Respond if the NO ACK flag is not set */

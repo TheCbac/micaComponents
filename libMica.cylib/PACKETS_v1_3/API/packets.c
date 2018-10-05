@@ -499,19 +499,15 @@ uint32_t `$INSTANCE_NAME`_processRxQueue(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer)
                     /* Is the packet an ACK or CMD packet */
                     if(rxPacket->flags & `$INSTANCE_NAME`_FLAG_ACK){
                         /* Call the ack callback */
-                        err |= buffer->comms.ackCallback(rxPacket);
+                       err |= buffer->comms.ackCallback(rxPacket);
                     } else {
-                    //     /* Call the cmd callback */
-                    //    err |= buffer->comms.cmdCallback(rxPacket);
-                    /* Handle the cmd packet */
-                        err |= `$INSTANCE_NAME`_handleCmdPacket(buffer);
+                        /* Call the cmd callback */
+                       err |= buffer->comms.cmdCallback(rxPacket);
                     }
                 } else {
                     err |= `$INSTANCE_NAME`_ERR_CALLBACK;
                 }
             }
-            /* Stop after one packet */
-            break;
         }
     }
     return err;
@@ -603,40 +599,44 @@ uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) {
 } 
 
 /*******************************************************************************
-* Function Name: `$INSTANCE_NAME`_handleCmdPacket()
+* Function Name: `$INSTANCE_NAME`_acknowledgePacket()
 ****************************************************************************//**
 * \brief
 *  Respond to a received packet
 *
-* \param buffer [in]
-*  Pointer to the buffer that contains the packet to handle
+* \param rxPacket [in]
+*  Pointer to the received packet
+*
+* \param validateFn [in]
+*  Pointer to the device specific validation function
 * 
 * \return
 *  Returns the error of associated with 
 *******************************************************************************/
-    uint32_t `$INSTANCE_NAME`_handleCmdPacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer){
-    `$INSTANCE_NAME`_PACKET_S* rxPacket = &(buffer->receive.packet);
-    `$INSTANCE_NAME`_PACKET_S* txPacket = &(buffer->send.packet);
+uint32_t `$INSTANCE_NAME`_acknowledgePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* packet, uint32_t (*validateFn)(`$INSTANCE_NAME`_PACKET_S* rxPacket, `$INSTANCE_NAME`_PACKET_S* txPacket) ){
+    `$INSTANCE_NAME`_PACKET_S* rxPacket = &(packet->receive.packet);
+    `$INSTANCE_NAME`_PACKET_S* txPacket = &(packet->send.packet);
     /* Set the default settings */
     txPacket->moduleId = rxPacket->moduleId;
     txPacket->cmd = rxPacket->cmd;
-    txPacket->flags = `$INSTANCE_NAME`_FLAG_ACK;
-
-    uint32_t responseErr = `$INSTANCE_NAME`_ERR_SUCCESS;
-    uint32_t validateErr = buffer->comms.cmdCallback(&(buffer->receive.packet));
+    txPacket->flags = packets_FLAG_ACK;
+    /* Validate the command */
+    uint32_t validateErr = validateFn(rxPacket, txPacket);
+    uint32_t responseErr = packets_ERR_SUCCESS;
     /* Command is valid */
     if(validateErr ==`$INSTANCE_NAME`_ERR_SUCCESS){
         /* Respond if the NO ACK flag is not set */
-        if( !(buffer->receive.packet.flags & `$INSTANCE_NAME`_FLAG_NO_ACK)){
+        if( !(packet->receive.packet.flags & `$INSTANCE_NAME`_FLAG_NO_ACK)){
             /* Send the response packet */
-            responseErr = `$INSTANCE_NAME`_sendPacket(buffer);
+            responseErr = `$INSTANCE_NAME`_sendPacket(packet);
         }
-    /* An error occurred during validation */
+    /* An error occured during validation */
     } else {
         responseErr = validateErr;
     }
     return responseErr;
 }
+
 
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_getModuleFromCmd()

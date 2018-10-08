@@ -119,6 +119,62 @@ uint32_t `$INSTANCE_NAME`_push(`$INSTANCE_NAME`_S *rb, const void *item){
     return `$INSTANCE_NAME`_ERR_SUCCESS;
 }
 
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_pop()
+****************************************************************************//**
+* \brief
+*  Pops an element from the beginging of the queue
+*
+* \param rb [in]
+*  Pointer to buffer
+*
+* \param item [out]
+*  Pointer to where to place the item
+*
+* \return
+*  An error of the pop operation
+*******************************************************************************/
+uint32_t `$INSTANCE_NAME`_pop(`$INSTANCE_NAME`_S *rb, void *item){
+    /* ensure buffer has been allocated */
+    if(rb->buffer == NULL || rb->head == NULL || rb->tail == NULL){
+        return `$INSTANCE_NAME`_ERR_MEMORY;    
+    }
+    if(rb->count == ZERO){
+        return `$INSTANCE_NAME`_ERR_EMPTY;
+    }
+    /* Copy the element out */
+    memcpy(item, rb->tail, rb->elemSize);
+    rb->tail += rb->elemSize;
+    /* Handle wrap around */
+    if(rb->tail == rb->buffer_end){
+        rb->tail = rb->buffer;
+    }
+    /* Decrease count */
+    rb->count--;
+    return `$INSTANCE_NAME`_ERR_SUCCESS;
+}
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_clear()
+****************************************************************************//**
+* \brief
+*  Resets the array
+*
+* \param rb [in]
+*  Pointer to buffer
+*
+* \return
+*  An error of the clear operation
+*******************************************************************************/
+uint32_t `$INSTANCE_NAME`_clear(`$INSTANCE_NAME`_S *rb){
+    rb->count = ZERO;    
+    rb->head = rb->buffer;
+    rb->tail = rb->buffer;
+    return `$INSTANCE_NAME`_ERR_SUCCESS;
+}
+    
+
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_pushArray()
 ****************************************************************************//**
@@ -159,42 +215,4 @@ uint32_t `$INSTANCE_NAME`_pushArray(`$INSTANCE_NAME`_S *rb, uint8_t *arr, size_t
     }
     return err;
 }
-
-/*******************************************************************************
-* Function Name: `$INSTANCE_NAME`_pop()
-****************************************************************************//**
-* \brief
-*  Pops an element from the beginging of the queue
-*
-* \param rb [in]
-*  Pointer to buffer
-*
-* \param item [out]
-*  Pointer to where to place the item
-*
-* \return
-*  An error of the pop operation
-*******************************************************************************/
-uint32_t `$INSTANCE_NAME`_pop(`$INSTANCE_NAME`_S *rb, void *item){
-    /* ensure buffer has been allocated */
-    if(rb->buffer == NULL || rb->head == NULL || rb->tail == NULL){
-        return `$INSTANCE_NAME`_ERR_MEMORY;    
-    }
-    if(rb->count == ZERO){
-        return `$INSTANCE_NAME`_ERR_EMPTY;
-    }
-    /* Copy the element out */
-    memcpy(item, rb->tail, rb->elemSize);
-    rb->tail += rb->elemSize;
-    /* Handle wrap around */
-    if(rb->tail == rb->buffer_end){
-        rb->tail = rb->buffer;
-    }
-    /* Decrease count */
-    rb->count--;
-    return `$INSTANCE_NAME`_ERR_SUCCESS;
-}
-    
-    
-
 /* [] END OF FILE */

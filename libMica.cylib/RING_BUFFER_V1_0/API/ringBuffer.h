@@ -64,6 +64,8 @@
     uint32_t `$INSTANCE_NAME`_free(`$INSTANCE_NAME`_S *rb);
     uint32_t `$INSTANCE_NAME`_push(`$INSTANCE_NAME`_S *rb, const void *item);    
     uint32_t `$INSTANCE_NAME`_pop(`$INSTANCE_NAME`_S *rb, void *item);
+    uint32_t `$INSTANCE_NAME`_clear(`$INSTANCE_NAME`_S *rb);
+    
     
     uint32_t `$INSTANCE_NAME`_pushArray(`$INSTANCE_NAME`_S *rb, uint8_t *item, size_t len);
     

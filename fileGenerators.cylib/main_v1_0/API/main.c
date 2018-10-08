@@ -98,7 +98,7 @@ int main(void){
         7. White (RGB) LEDs on
         */
         /* Infinite loop */
-        //LEDS_Test(MICA_TEST_INFINITE);
+        LEDS_Test(MICA_TEST_INFINITE);
     /* End MICA_DEBUG_LEDS */
     #else
         #error "At least ONE MICA_DEBUG_<case> must be defined if MICA_DEBUG is defined"

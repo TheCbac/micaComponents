@@ -122,23 +122,23 @@
         float Z; /**< Field Strength, Z */
     } MAG_DATA_F;
         
-    /* Struct for handling int16 accelerometer data */
+    /* Struct for handling int16_t  accelerometer data */
     typedef struct {
-        int16 Ax; /**< Acceleration X */
-        int16 Ay; /**< Acceleration Y */
-        int16 Az; /**< Acceleration Z */
+        int16_t  Ax; /**< Acceleration X */
+        int16_t  Ay; /**< Acceleration Y */
+        int16_t  Az; /**< Acceleration Z */
     } ACC_DATA_T;
     /* Struct for handling Float Gyro data */
     typedef struct {
-        int16 Wx; /**< Angular velocity, X */
-        int16 Wy; /**< Angular velocity, Y */
-        int16 Wz; /**< Angular velocity, Z */
+        int16_t  Wx; /**< Angular velocity, X */
+        int16_t  Wy; /**< Angular velocity, Y */
+        int16_t  Wz; /**< Angular velocity, Z */
     } GYR_DATA_T;
     /* Struct for handling Float magnetometer data [uT] */
     typedef struct{
-        int16 X; /**< Field Strength, X */
-        int16 Y; /**< Field Strength, Y */
-        int16 Z; /**< Field Strength, Z */
+        int16_t  X; /**< Field Strength, X */
+        int16_t  Y; /**< Field Strength, Y */
+        int16_t  Z; /**< Field Strength, Z */
     } MAG_DATA_T;
         
     
@@ -166,8 +166,8 @@
     
     /* Struct for Encoders */
     typedef struct {
-        uint32 rightCount;  /**< Right encoder count value */
-        uint32 leftCount;   /**< Left encoder count value */
+        uint32_t rightCount;  /**< Right encoder count value */
+        uint32_t leftCount;   /**< Left encoder count value */
     } ENCODER_DUAL_T;
     
     

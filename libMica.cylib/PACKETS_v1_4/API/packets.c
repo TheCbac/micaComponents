@@ -18,7 +18,7 @@
 #include "`$INSTANCE_NAME`.h"
 #include "micaCommon.h"
 #include <stdlib.h>
-
+#include <string.h>
 
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_initialize()
@@ -75,7 +75,7 @@ uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packet
 
     if(!error) {
         /* Create receive process buffer */
-        uint8* processRxBufferAdr = (uint8 *) calloc(ONE, bufferSize);
+        uint8_t *processRxBufferAdr = (uint8_t *) calloc(ONE, bufferSize);
         if(processRxBufferAdr == NULL){
             error |= `$INSTANCE_NAME`_ERR_MEMORY; 
             /* Do not try to allocate again */
@@ -85,7 +85,7 @@ uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packet
         packetBuffer->receive.processBuffer.bufferLen = bufferSize;
 
         /* Create Send process buffer */
-        uint8* processTxBufferAdr = (uint8 *) calloc(ONE, bufferSize);
+        uint8_t *processTxBufferAdr = (uint8_t *) calloc(ONE, bufferSize);
         if(processTxBufferAdr == NULL){
             error |= `$INSTANCE_NAME`_ERR_MEMORY; 
             goto `$INSTANCE_NAME`_clean2;
@@ -94,7 +94,7 @@ uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packet
         packetBuffer->send.processBuffer.bufferLen = bufferSize;
         
         /*  Create the rxPayload */
-        uint8* rxPayloadAdr = (uint8 *) calloc(ONE, bufferSize);
+        uint8_t *rxPayloadAdr = (uint8_t *) calloc(ONE, bufferSize);
         if(rxPayloadAdr == NULL){
             error |= `$INSTANCE_NAME`_ERR_MEMORY; 
             goto `$INSTANCE_NAME`_clean3;
@@ -104,7 +104,7 @@ uint32_t `$INSTANCE_NAME`_generateBuffers(`$INSTANCE_NAME`_BUFFER_FULL_S *packet
         packetBuffer->receive.bufferState = `$INSTANCE_NAME`_BUFFER_RECEIVE_WAIT_FOR_START;
         
         /*  Create the txPayload */
-        uint8* txPayloadAdr = (uint8 *) calloc(ONE, bufferSize);
+        uint8_t *txPayloadAdr = (uint8_t *) calloc(ONE, bufferSize);
         if(txPayloadAdr == NULL){
             error |= `$INSTANCE_NAME`_ERR_MEMORY; 
             goto `$INSTANCE_NAME`_clean4;
@@ -548,7 +548,7 @@ uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) {
         return `$INSTANCE_NAME`_ERR_INCOMPLETE;    
     }
     /* Ensure start of packet symbol */
-    uint8 startByte = rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_START];
+    uint8_t startByte = rxBuffer->buffer[`$INSTANCE_NAME`_INDEX_START];
     if (startByte != `$INSTANCE_NAME`_SYM_START) {
         error |= `$INSTANCE_NAME`_ERR_START_SYM;
     }
@@ -576,19 +576,19 @@ uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) {
         /* Start of the footer */
         uint8_t* footerPtr = &(rxBuffer->buffer[`$INSTANCE_NAME`_LEN_HEADER + packet->payloadLen]);
         /* Get the flags */
-        uint8 flags1 = *footerPtr++;
-        uint8 flags0 = *footerPtr++;
+        uint8_t flags1 = *footerPtr++;
+        uint8_t flags0 = *footerPtr++;
         packet->flags = (uint32_t) ((flags1 << BITS_ONE_BYTE) | flags0);
         /* Validate checksum */
         uint16_t calculatedChecksum = `$INSTANCE_NAME`_computeChecksum16(rxBuffer->buffer, `$INSTANCE_NAME`_LEN_HEADER + packet->payloadLen + `$INSTANCE_NAME`_LEN_FLAGS);
-        uint8 checkSumMsb = *footerPtr++;
-        uint8 checkSumLsb = *footerPtr++;
+        uint8_t checkSumMsb = *footerPtr++;
+        uint8_t checkSumLsb = *footerPtr++;
         uint16_t reportedChecksum = (checkSumMsb << BITS_ONE_BYTE) | checkSumLsb;
         if( calculatedChecksum != reportedChecksum) {
             error |= `$INSTANCE_NAME`_ERR_CHECKSUM;
         }
         /* Check end of packet symbol */
-        uint8 endSymbol = *footerPtr;
+        uint8_t endSymbol = *footerPtr;
         if (endSymbol != `$INSTANCE_NAME`_SYM_END) {
             error|= `$INSTANCE_NAME`_ERR_END_SYM;
         }
@@ -654,7 +654,7 @@ uint32_t `$INSTANCE_NAME`_parsePacket(`$INSTANCE_NAME`_BUFFER_FULL_S* buffer) {
 *
 *******************************************************************************/
 uint32_t `$INSTANCE_NAME`_getModuleFromCmd(uint8_t cmd, uint8_t *module) {
-    uint8 id;
+    uint8_t id;
     /* Mask the Response flag */
     cmd &= (~`$INSTANCE_NAME`_RSP_BIT);
     /* Check the memory space */

@@ -22,7 +22,7 @@
     * Included files
     ***************************************/
     #include <stdbool.h>
-    #include "cytypes.h"
+    #include <stdint.h>
     /***************************************
     * Macro Definitions
     ***************************************/
@@ -200,7 +200,7 @@
     /* Communication structure  for RX/TX and callbacks */
     typedef struct {
         uint8_t (*rxReadByte)(void);   /**< Receive bytes from a communication port */
-        void (*txPutArray)(uint8* src, uint16_t len);     /**< Place byte into send buffer */
+        void (*txPutArray)(uint8_t *src, uint16_t len);     /**< Place byte into send buffer */
         uint32_t (*rxGetBytesPending)(void);                  /**< Report number of bytes available to read */
         uint32_t (*txGetQueueSize)(void);                     /**< Get available size of the send buffer */
         uint32_t (*ackCallback)(`$INSTANCE_NAME`_PACKET_S* ackPacket);     /**< Function to call when a packet was acknowledged */

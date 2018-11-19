@@ -172,35 +172,39 @@ void `$INSTANCE_NAME`_Test(uint8 runs, uint16 speed){
     /* Run through a specified number of times */
     while( (i++ < runs) || runs == 0) {
         /* Initial Delay */
-        CyDelay(`$INSTANCE_NAME`_TEST_DELAY);
+        MICA_delayMs(`$INSTANCE_NAME`_TEST_DELAY);
         
         /* Forward  */
+        `$INSTANCE_NAME`_Enable();
         `$INSTANCE_NAME`_Move(`$INSTANCE_NAME`_DIRECTION_FORWARD, speed);
-        CyDelay(`$INSTANCE_NAME`_TEST_DELAY);
+        MICA_delayMs(`$INSTANCE_NAME`_TEST_DELAY);
         /* Stop for half time */
         `$INSTANCE_NAME`_Disable();
-        CyDelay(`$INSTANCE_NAME`_TEST_DELAY_HALF);
+        MICA_delayMs(`$INSTANCE_NAME`_TEST_DELAY_HALF);
         
         /* Back  */
+        `$INSTANCE_NAME`_Enable();
         `$INSTANCE_NAME`_Move(`$INSTANCE_NAME`_DIRECTION_BACKWARD, speed);
-        CyDelay(`$INSTANCE_NAME`_TEST_DELAY);
+        MICA_delayMs(`$INSTANCE_NAME`_TEST_DELAY);
         /* Stop for half time */
         `$INSTANCE_NAME`_Disable();
-        CyDelay(`$INSTANCE_NAME`_TEST_DELAY_HALF);
+        MICA_delayMs(`$INSTANCE_NAME`_TEST_DELAY_HALF);
         
         /* CW  */
+        `$INSTANCE_NAME`_Enable();
         `$INSTANCE_NAME`_Move(`$INSTANCE_NAME`_DIRECTION_CW, speed);
-        CyDelay(`$INSTANCE_NAME`_TEST_DELAY);
+        MICA_delayMs(`$INSTANCE_NAME`_TEST_DELAY);
         /* Stop for half time */
         `$INSTANCE_NAME`_Disable();
-        CyDelay(`$INSTANCE_NAME`_TEST_DELAY_HALF);
+        MICA_delayMs(`$INSTANCE_NAME`_TEST_DELAY_HALF);
         
         /* CCW  */
+        `$INSTANCE_NAME`_Enable();
         `$INSTANCE_NAME`_Move(`$INSTANCE_NAME`_DIRECTION_CCW, speed);
-        CyDelay(`$INSTANCE_NAME`_TEST_DELAY);
+        MICA_delayMs(`$INSTANCE_NAME`_TEST_DELAY);
         /* Disable motors at end of run */
         `$INSTANCE_NAME`_Disable();
-        CyDelay(`$INSTANCE_NAME`_TEST_DELAY_HALF);
+        MICA_delayMs(`$INSTANCE_NAME`_TEST_DELAY_HALF);
     }
 }
     

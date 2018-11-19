@@ -38,7 +38,7 @@
     #define `$INSTANCE_NAME`_LEN_HEADER          (`$INSTANCE_NAME`_LEN_SYM_START + `$INSTANCE_NAME`_LEN_PAYLOAD_LEN  + `$INSTANCE_NAME`_LEN_CMD) /**< Length of the packet overhead, for checksum validation */
     #define `$INSTANCE_NAME`_LEN_FOOTER          (`$INSTANCE_NAME`_LEN_FLAGS + `$INSTANCE_NAME`_LEN_CHECKSUM + `$INSTANCE_NAME`_LEN_SYM_END) /**< Length of the footer */
     #define `$INSTANCE_NAME`_LEN_OVERHEAD        (`$INSTANCE_NAME`_LEN_HEADER + `$INSTANCE_NAME`_LEN_FOOTER) /**< Total length of the packet overhead */
-    #define `$INSTANCE_NAME`_LEN_MAX_PAYLOAD     (256) /**< Maximum length of the payload */
+    #define `$INSTANCE_NAME`_LEN_MAX_PAYLOAD     (512) /**< Maximum length of the payload */
     #define `$INSTANCE_NAME`_LEN_MAX_PACKET      (`$INSTANCE_NAME`_LEN_OVERHEAD + `$INSTANCE_NAME`_LEN_MAX_PAYLOAD) /**< Maximum length of the entire packet */
 
     #define `$INSTANCE_NAME`_LEN_PAYLOAD_128     (0x80u)
@@ -95,14 +95,28 @@
     #define `$INSTANCE_NAME`_ERR_SHIFT_UNKNOWN        (31u)     /**< An unknown error occurred - End of error space */
 
     /* **** PACKET FLAGS **** */
-    #define `$INSTANCE_NAME`_FLAG_ACK                   (1u << `$INSTANCE_NAME`_FLAG_SHIFT_ACK) /**< This packet is acknowledging the previous command */
-    #define `$INSTANCE_NAME`_FLAG_NO_ACK                (1u << `$INSTANCE_NAME`_FLAG_SHIFT_NO_ACK) /**< The target device is not required to ACK the command  */
-    #define `$INSTANCE_NAME`_FLAG_INVALID_CMD           (1u << `$INSTANCE_NAME`_FLAG_SHIFT_INVALID_CMD) /**< The passed command was invalid  */
-   
-    
     #define `$INSTANCE_NAME`_FLAG_SHIFT_ACK             (0u) /**< This packet is acknowledging the previous command */
     #define `$INSTANCE_NAME`_FLAG_SHIFT_NO_ACK          (1u) /**< The target device is not required to ACK the command */
     #define `$INSTANCE_NAME`_FLAG_SHIFT_INVALID_CMD     (2u) /**< The passed command was invalid */
+    #define `$INSTANCE_NAME`_FLAG_SHIFT_INVALID_STATE   (3u) /**< The device was in an invalid state to execute the command */
+    #define `$INSTANCE_NAME`_FLAG_SHIFT_INVALID_ARGS    (4u) /**< The arguments passed in with the command were not valid*/
+    #define `$INSTANCE_NAME`_FLAG_SHIFT_MEMORY          (5u) /**< Ran out of memory */
+    #define `$INSTANCE_NAME`_FLAG_SHIFT_ILLEGAL_OPERATION (6u) /**< Illegal operation occurred */
+    #define `$INSTANCE_NAME`_FLAG_SHIFT_UNKNOWN_ERR     (15u) /**< An unknown error occurred */
+    
+    #define `$INSTANCE_NAME`_FLAG_NONE                  (0x00) /** < No flags to be sent */
+    #define `$INSTANCE_NAME`_FLAG_ACK                   (1u << `$INSTANCE_NAME`_FLAG_SHIFT_ACK) /**< This packet is acknowledging the previous command */
+    #define `$INSTANCE_NAME`_FLAG_NO_ACK                (1u << `$INSTANCE_NAME`_FLAG_SHIFT_NO_ACK) /**< The target device is not required to ACK the command  */
+    #define `$INSTANCE_NAME`_FLAG_INVALID_CMD           (1u << `$INSTANCE_NAME`_FLAG_SHIFT_INVALID_CMD) /**< The passed command was invalid  */
+    #define `$INSTANCE_NAME`_FLAG_INVALID_STATE         (1u << `$INSTANCE_NAME`_FLAG_SHIFT_INVALID_STATE) /**< The device was in an invalid state to execute the command  */
+    #define `$INSTANCE_NAME`_FLAG_INVALID_ARGS          (1u << `$INSTANCE_NAME`_FLAG_SHIFT_INVALID_ARGS) /**< The arguments passed in with the command were not valid  */
+    #define `$INSTANCE_NAME`_FLAG_MEMORY                (1u << `$INSTANCE_NAME`_FLAG_SHIFT_MEMORY) /**< Ran out of memory  */
+    #define `$INSTANCE_NAME`_FLAG_ILLEGAL_OPERATION     (1u << `$INSTANCE_NAME`_FLAG_SHIFT_ILLEGAL_OPERATION) /**< Illegal operation occurred  */
+    #define `$INSTANCE_NAME`_FLAG_UNKNOWN_ERR           (1u << `$INSTANCE_NAME`_FLAG_SHIFT_UNKNOWN_ERR) /**< An unknown error occurred  */
+    
+    
+    
+
    
     
     /* **** COMMAND SPACE **** */
@@ -117,7 +131,33 @@
     #define `$INSTANCE_NAME`_CMD_ENERGY_MIN             (0x60) /**< Start of the host energy command space */
     #define `$INSTANCE_NAME`_CMD_ENERGY_MAX             (0x7F) /**< End of the host energy command space */
     
+    /* **** CONTROL COMMANDS **** */
     #define `$INSTANCE_NAME`_CMD_ID                     (0x00) /**< Request the ID of a device */
+    #define `$INSTANCE_NAME`_CMD_MODE                   (0x01) /**< Change the operating mode (active app) */
+    #define `$INSTANCE_NAME`_CMD_SCAN_START             (0x02) /**< Start a BLE Scan */
+    #define `$INSTANCE_NAME`_CMD_SCAN_STOP              (0x03) /**< Stop a BLE Scan */
+    #define `$INSTANCE_NAME`_CMD_CONNECT                (0x04) /**< Connect to a remote device */
+    #define `$INSTANCE_NAME`_CMD_DISCONNECT             (0x05) /**< Disconnect from a remote device */
+    #define `$INSTANCE_NAME`_CMD_CONNECT_CANCEL         (0x06) /**< Cancels a Pending connection */
+    #define `$INSTANCE_NAME`_CMD_RELAY_ENTER            (0x07) /**< Enter Relay mode */
+    #define `$INSTANCE_NAME`_CMD_RELAY_EXIT             (0x08) /**< Exit Relay mode */
+    #define `$INSTANCE_NAME`_CMD_NAME                   (0x09) /**< Change the name of the device */
+    #define `$INSTANCE_NAME`_CMD_RESET                  (0x0A) /**< Perform a software reset of the device */
+    #define `$INSTANCE_NAME`_CMD_CHAR_WRITE             (0x0B) /**< Write to a BLE characteristic */
+    #define `$INSTANCE_NAME`_CMD_CHAR_READ              (0x0C) /**< Read from a BLE characteristic */
+    
+    #define `$INSTANCE_NAME`_MODE_NORMAL                (0x00) /**< ID of normal mode */
+    #define `$INSTANCE_NAME`_MODE_BOOTLOAD              (0x00) /**< ID of bootload mode */
+    
+    
+    
+    /* **** ACTUATION COMMANDS **** */
+    
+    /* **** SENSING COMMANDS **** */
+    #define `$INSTANCE_NAME`_CMD_SENSORS_START          (0x40) /**< Start the desired sensors */
+    #define `$INSTANCE_NAME`_CMD_SENSORS_STOP           (0x41) /**< Stop the desired sensors */
+    
+    /* **** ENERGY COMMANDS **** */
     
     /* **** RESPONSE SPACE **** */
     #define `$INSTANCE_NAME`_RSP_MIN                    (0x80) /**< Start of the response command space */
@@ -134,7 +174,26 @@
     #define `$INSTANCE_NAME`_RSP_BIT_SHIFT              (7u)   /**< Shift of the bit that indicates the packet contains a response */
     #define `$INSTANCE_NAME`_RSP_BIT                    (1u << `$INSTANCE_NAME`_RSP_BIT_SHIFT) /**< Bit that indicates the packet contains a response */
     
-   
+    /* **** CONTROL RESPONSES **** */
+    #define `$INSTANCE_NAME`_RSP_DEVICE_FOUND           (0x80) /**< A remote device was found*/
+    #define `$INSTANCE_NAME`_RSP_SCAN_STOPPED           (0x81) /**< The current scan was stopped */
+    #define `$INSTANCE_NAME`_RSP_CONNECTED              (0x82) /**< Successfully connected to the remote device*/
+    #define `$INSTANCE_NAME`_RSP_DISCONNECTED           (0x83) /**< The BLE device was successfully disconnected */
+    #define `$INSTANCE_NAME`_RSP_CONNECTION_LOST        (0x84) /**< The BLE connection was lost */
+    #define `$INSTANCE_NAME`_RSP_RELAY_EXIT             (0x85) /**< The device was forced out of relay mode */
+    #define `$INSTANCE_NAME`_RSP_READ                   (0x86) /**< Data returned from a read operation */
+    #define `$INSTANCE_NAME`_RSP_NOTIFY                 (0x87) /**< Data returned from a notify operation */
+    #define `$INSTANCE_NAME`_RSP_LOG                    (0x88) /**< Log data */
+    #define `$INSTANCE_NAME`_RSP_MODE                   (0x89) /**< The device entered a new mode */
+    
+    
+    /* **** ACTUATION RESPONSES **** */
+    /* **** SENSING RESPONSES **** */
+    #define `$INSTANCE_NAME`_RSP_DATA                   (0xC0) /**< Data reported by the sensors */
+    #define `$INSTANCE_NAME`_RSP_SENSORS_STOPPED        (0xC1) /**< The running sensors were halted */
+    
+    /* **** ENERGY RESPONSES **** */
+    
     /***************************************
     * Enumerated Types
     ***************************************/

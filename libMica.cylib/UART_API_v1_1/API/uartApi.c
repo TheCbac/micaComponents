@@ -31,6 +31,8 @@
 void `$INSTANCE_NAME`_putChar(uint8_t byte){
     #if (`$INSTANCE_NAME`_SCB_STATUS)
        `$componentName`_UartPutChar(byte);
+    #else 
+        `$componentName`_PutChar(byte);
     #endif /* `$INSTANCE_NAME`_SCB_STATUS */
 }
 
@@ -49,6 +51,8 @@ void `$INSTANCE_NAME`_putChar(uint8_t byte){
     uint32_t `$INSTANCE_NAME`_getRxBufferSize(void){
         #if (`$INSTANCE_NAME`_SCB_STATUS)
             return (uint32_t) `$componentName`_SpiUartGetRxBufferSize();
+        #else 
+            return (uint32_t) `$componentName`_GetRxBufferSize();
         #endif /* `$INSTANCE_NAME`_SCB_STATUS */
     }
 
@@ -65,6 +69,8 @@ void `$INSTANCE_NAME`_putChar(uint8_t byte){
     uint8_t `$INSTANCE_NAME`_getChar(void){
         #if (`$INSTANCE_NAME`_SCB_STATUS)
             return (uint8_t) `$componentName`_UartGetChar();
+        #else 
+            return (uint8_t) `$componentName`_GetChar();
         #endif /* `$INSTANCE_NAME`_SCB_STATUS */
     }
 #endif /* `$INSTANCE_NAME`_RX_EN */

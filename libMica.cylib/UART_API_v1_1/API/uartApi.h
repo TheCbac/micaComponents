@@ -25,7 +25,7 @@
     #if (`$INSTANCE_NAME`_SCB_STATUS)
         #include "`$componentName`_SPI_UART.h"
     #else
-    
+        #include "`$componentName`.h"
     #endif /* End `isScb` */ 
     /***************************************
     * Function declarations 

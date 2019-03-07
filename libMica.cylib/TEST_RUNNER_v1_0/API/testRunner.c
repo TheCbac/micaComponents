@@ -152,4 +152,5 @@ void `$INSTANCE_NAME`_setPrintFunction( void (*fn)(char *pszFmt, ...) ) {
     printFunction = fn;
 }
 
+
 /* [] END OF FILE */

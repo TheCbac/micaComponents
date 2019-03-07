@@ -93,6 +93,7 @@
     
 
     #define MICA_delayMs(val)     `$msDelayFunction`(val)    /**< Delay function */
+    #define MICA_softwareReset()    `$softwareResetFunction`() /**< Software reset function */
     
     /***************************************
     * Structs

@@ -21,7 +21,7 @@
     /***************************************
     * Included files
     ***************************************/
-    
+    #include <stdint.h>
     /***************************************
     * Macro Definitions
     ***************************************/
@@ -45,7 +45,10 @@
     /***************************************
     * Function declarations 
     ***************************************/
-    unsigned long `$INSTANCE_NAME`_djb2(unsigned char *str);
+    uint32_t `$INSTANCE_NAME`_hash_djb2(char *str);
+    
+    void `$INSTANCE_NAME`_printHash(char* hashString, uint32_t hashValue, void (*printFn)(char *pszFmt, ...));
+    
 
 #endif /* `$INSTANCE_NAME`_H */
 /* [] END OF FILE */

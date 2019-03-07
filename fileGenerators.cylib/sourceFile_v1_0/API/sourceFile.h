@@ -19,6 +19,7 @@
 
 /* Header Guard */
 #ifndef `$fileName`_H
+    #define `$fileName`_H
     /***************************************
     * Included files
     ***************************************/

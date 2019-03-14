@@ -30,7 +30,7 @@
     #define `$INSTANCE_NAME`_ERR_OK         (0u) /**< Operation succedded */
     #define `$INSTANCE_NAME`_ERR_READ       (1u) /**< An error occured during the read */
     
-    #define `$INSTANCE_NAME`_MASK_READ_ERR  (0x80000000) /**< Mask for determining if an error occured during the read operation. MSB of uint32 */
+    #define `$INSTANCE_NAME`_MASK_READ_ERR  (0x80000000) /**< Mask for determining if an error occured during the read operation. MSB of uint32_t */
     
     #define `$i2cInstanceName`_TIMEOUT_WRITE        (MICA_DELAY_MS_SEC_QUARTER) /* Delay for writting time out */
     #define `$i2cInstanceName`_TIMEOUT_READ        (MICA_DELAY_MS_SEC_QUARTER) /* Delay for reading time out */
@@ -39,13 +39,17 @@
     * Function Prototypes
     ***************************************/
     /* Leave these to the base component for now */
-//    uint32 `$INSTANCE_NAME`_Start(void);    /**< Start the I2C Component*/
-//    uint32 `$INSTANCE_NAME`_Stop(void);     /**< Stop the I2C Componen*/
-//    uint32 `$INSTANCE_NAME`_Sleep(void);    /**< Put the I2C component to sleep*/
-//    uint32 `$INSTANCE_NAME`_Wakeup(void);   /**< Wake up the I2C component*/
+//    uint32_t `$INSTANCE_NAME`_Start(void);    /**< Start the I2C Component*/
+//    uint32_t `$INSTANCE_NAME`_Stop(void);     /**< Stop the I2C Componen*/
+//    uint32_t `$INSTANCE_NAME`_Sleep(void);    /**< Put the I2C component to sleep*/
+//    uint32_t `$INSTANCE_NAME`_Wakeup(void);   /**< Wake up the I2C component*/
     
-    uint32 `$INSTANCE_NAME`_Write(uint8 deviceAddr, uint8 regAddr, uint8 val);      /**< Write a value to a register*/
-    uint32 `$INSTANCE_NAME`_Read(uint8 deviceAddr, uint8 regAddr, uint8 * readVal); /**< Read a value from a register */
+    uint32_t `$INSTANCE_NAME`_Write(uint8_t deviceAddr, uint8_t regAddr, uint8_t val);      /**< Write a value to a register*/
+    uint32_t `$INSTANCE_NAME`_WriteCmd(uint8_t deviceAddr, uint8_t cmd);      /**< Write a command with no data */
+    uint32_t `$INSTANCE_NAME`_WriteArray(uint8_t deviceAddr, uint8_t regAddr, uint8_t *array, uint16_t len);      /**< Write multiple arrays */
+    
+    
+    uint32_t `$INSTANCE_NAME`_Read(uint8_t deviceAddr, uint8_t regAddr, uint8_t * readVal); /**< Read a value from a register */
 
 #endif /* `$INSTANCE_NAME`_H */
 /* [] END OF FILE */

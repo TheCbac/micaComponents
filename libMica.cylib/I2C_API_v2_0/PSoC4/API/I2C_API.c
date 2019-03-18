@@ -17,7 +17,6 @@
 *   2018.03.14 CC - Document created
 ********************************************************************************/
 #include "`$INSTANCE_NAME`.h"
-#include "`$i2cInclude`.h"
 
 /*******************************************************************************
 * Function Name:  `$INSTANCE_NAME`_Write()
@@ -52,7 +51,7 @@ uint32_t `$INSTANCE_NAME`_Write(uint8_t deviceAddr, uint8_t regAddr, uint8_t val
     result = `$i2cInstanceName`_I2CMasterWriteByte(regAddr, `$i2cInstanceName`_TIMEOUT_WRITE);
     if (result != `$INSTANCE_NAME`_ERR_OK) { return result;}
     /* DATA */
-    `$i2cInstanceName`_I2CMasterWriteByte(val, `$i2cInstanceName`_TIMEOUT_WRITE);
+    result = `$i2cInstanceName`_I2CMasterWriteByte(val, `$i2cInstanceName`_TIMEOUT_WRITE);
     if (result != `$INSTANCE_NAME`_ERR_OK) { return result;}
     /* STOP Bit */
     `$i2cInstanceName`_I2CMasterSendStop(`$i2cInstanceName`_TIMEOUT_WRITE);
@@ -97,6 +96,56 @@ uint32_t `$INSTANCE_NAME`_WriteCmd(uint8_t deviceAddr, uint8_t cmd){
     return `$INSTANCE_NAME`_ERR_OK;
     
 }
+
+
+/*******************************************************************************
+* Function Name:  `$INSTANCE_NAME`_WriteArray()
+****************************************************************************//**
+* \brief
+*  Writes multiple bytes of data out the a specified device
+*
+* \param deviceAddr
+*  Address of the I2C slave device
+*
+* \param regAddr
+*  The starting address of the registers to write to
+*
+* \param array
+*   Pointer to the array that contains the data to write
+*
+* \param len
+*   The length of data to write out
+*       
+* \return
+* An error code with the result of the Write procedure. 
+* The possible error codes are:
+*
+*  Errors codes                             | Description
+*   ------------                            | -----------
+*   `$INSTANCE_NAME`_ERR_OK                 | On successful operation
+*   Error from I2C Component, `$i2cInstanceName`
+*
+*******************************************************************************/
+uint32_t `$INSTANCE_NAME`_WriteArray(uint8_t deviceAddr, uint8_t regAddr, uint8_t *array, uint16_t len) {
+    /* Start, Slave Address & Write bit */
+    uint32_t result = `$i2cInstanceName`_I2CMasterSendStart(deviceAddr, `$i2cInstanceName`_I2C_WRITE_XFER_MODE, `$i2cInstanceName`_TIMEOUT_WRITE );
+    if (result != `$INSTANCE_NAME`_ERR_OK) { return result;}
+    /* SUB Address */
+    result = `$i2cInstanceName`_I2CMasterWriteByte(regAddr, `$i2cInstanceName`_TIMEOUT_WRITE);
+    if (result != `$INSTANCE_NAME`_ERR_OK) { return result;}
+    /* DATA */
+    uint16_t i;
+    for(i = ZERO; i < len; i++) {
+        result = `$i2cInstanceName`_I2CMasterWriteByte(array[i], `$i2cInstanceName`_TIMEOUT_WRITE);
+        if (result != `$INSTANCE_NAME`_ERR_OK) { return result;}
+    }
+    /* STOP Bit */
+    `$i2cInstanceName`_I2CMasterSendStop(`$i2cInstanceName`_TIMEOUT_WRITE);
+    if (result != `$INSTANCE_NAME`_ERR_OK) { return result;}
+    /* Indicate successs */
+    return `$INSTANCE_NAME`_ERR_OK;
+}
+
 
 
 /*******************************************************************************
@@ -165,27 +214,6 @@ displayError:
     *readVal = opResult;
     /* return write failed */
     return `$INSTANCE_NAME`_ERR_READ;
-//    
-//    
-//    /* SUB Address */
-//    result = `$i2cInstanceName`_I2CMasterWriteByte(regAddr, `$i2cInstanceName`_TIMEOUT_WRITE);
-//    if (result != `$INSTANCE_NAME`I2C_MSTR_NO_ERROR ) { return result;}
-//    /* Restart, Slave address & read bit */
-//    result = `$i2cInstanceName`_I2CMasterSendRestart(deviceAddr, `$i2cInstanceName`_I2C_READ_XFER_MODE, `$i2cInstanceName`_TIMEOUT_WRITE);
-//    if (result != `$INSTANCE_NAME`I2C_MSTR_NO_ERROR ) { return result;}
-//    
-//    /* Read the data */
-//    uint8_t rdByte; // TODO: implement the read byte functionality
-//    uint32_t readErr = `$i2cInstanceName`_I2CMasterReadByte(`$i2cInstanceName`_I2C_NAK_DATA, &rdByte, `$i2cInstanceName`_TIMEOUT_WRITE);
-//    if (readErr & `$INSTANCE_NAME`_MASK_READ_ERR) {return `$INSTANCE_NAME`_ERR_READ;}
-//    /* Place the result into the pointer */
-//    *readVal = (uint8_t) rdByte;
-//    
-//    /* Send the stop bit */
-//    result = `$i2cInstanceName`_I2CMasterSendStop(`$i2cInstanceName`_TIMEOUT_WRITE);
-//    if (result != `$INSTANCE_NAME`_ERR_OK) { return result;}
-//    /* Indicate successs */
-//    return `$INSTANCE_NAME`_ERR_OK;
 }
 
 

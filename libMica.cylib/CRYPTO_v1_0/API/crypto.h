@@ -46,6 +46,8 @@
     * Function declarations 
     ***************************************/
     uint32_t `$INSTANCE_NAME`_hash_djb2(char *str);
+    uint32_t `$INSTANCE_NAME`_rand_xorshift32(uint32_t seed);
+    
     
     void `$INSTANCE_NAME`_printHash(char* hashString, uint32_t hashValue, void (*printFn)(char *pszFmt, ...));
     

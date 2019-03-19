@@ -17,8 +17,8 @@
 ********************************************************************************/
 #include "`$INSTANCE_NAME`.h"
 #include "CyLib.h"
-#include "`$INSTANCE_NAME`_btn_press_interrupt.h"
-#include "`$INSTANCE_NAME`_btn_release_interrupt.h"
+#include "`$INSTANCE_NAME`_btn_pos_interrupt.h"
+#include "`$INSTANCE_NAME`_btn_neg_interrupt.h"
 
 /* State Variables */
 volatile uint32 `$INSTANCE_NAME`_btnPressCount = ZERO;
@@ -134,16 +134,25 @@ bool `$INSTANCE_NAME`_wasButtonReleased(void){
 * Function Name:`$INSTANCE_NAME`_EnableBtnInterrupts()
 ********************************************************************************
 * Summary: 
-*  Enable the button interrupts
+*  Enable the button interrupts. Configured based on the active level of the device
 *
 * Return:
 *  None
 *
 *******************************************************************************/
 void `$INSTANCE_NAME`_EnableBtnInterrupts(void){
+    /* Ensure there are no pending interrupts */
+    `$INSTANCE_NAME`_btn_pos_interrupt_ClearPending();
+    `$INSTANCE_NAME`_btn_neg_interrupt_ClearPending();
     /* Initialize interrupt vectors */
-    `$INSTANCE_NAME`_btn_press_interrupt_StartEx(`$INSTANCE_NAME`_ISR_testButton_press); 
-    `$INSTANCE_NAME`_btn_release_interrupt_StartEx(`$INSTANCE_NAME`_ISR_testButton_release); 
+    #if `$INSTANCE_NAME`_ACTIVE_HIGH
+        `$INSTANCE_NAME`_btn_pos_interrupt_StartEx(`$INSTANCE_NAME`_ISR_testButton_press); 
+        `$INSTANCE_NAME`_btn_neg_interrupt_StartEx(`$INSTANCE_NAME`_ISR_testButton_release); 
+    #else 
+        `$INSTANCE_NAME`_btn_pos_interrupt_StartEx(`$INSTANCE_NAME`_ISR_testButton_release); 
+        `$INSTANCE_NAME`_btn_neg_interrupt_StartEx(`$INSTANCE_NAME`_ISR_testButton_press); 
+    #endif
+    `$INSTANCE_NAME`_resetBtnCounts();
 }  
 
 

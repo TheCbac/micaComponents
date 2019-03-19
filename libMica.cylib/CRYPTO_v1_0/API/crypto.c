@@ -19,6 +19,27 @@
 #include "`$INSTANCE_NAME`.h"
 
 /*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_xorshift32()
+****************************************************************************//**
+* \brief
+*  Generate a psuedorandom number from a seed. See https://en.wikipedia.org/wiki/Xorshift
+*
+* \param seed
+*  Seed value input
+*
+* \return
+*  Random number generator
+*******************************************************************************/
+uint32_t `$INSTANCE_NAME`_rand_xorshift32(uint32_t seed){
+	/* Algorithm "xor" from p. 4 of Marsaglia, "Xorshift RNGs" */
+	uint32_t x = seed;
+	x ^= x << 13;
+	x ^= x >> 17;
+	x ^= x << 5;
+	return x;
+}
+
+/*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_hash_djb2()
 ****************************************************************************//**
 * \brief

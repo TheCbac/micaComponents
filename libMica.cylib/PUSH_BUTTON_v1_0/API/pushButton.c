@@ -151,7 +151,7 @@ void `$INSTANCE_NAME`_EnableBtnInterrupts(void){
     #else 
         `$INSTANCE_NAME`_btn_pos_interrupt_StartEx(`$INSTANCE_NAME`_ISR_testButton_release); 
         `$INSTANCE_NAME`_btn_neg_interrupt_StartEx(`$INSTANCE_NAME`_ISR_testButton_press); 
-    #endif
+    #endif /* End `$INSTANCE_NAME`_ACTIVE_HIGH */
     `$INSTANCE_NAME`_resetBtnCounts();
 }  
 

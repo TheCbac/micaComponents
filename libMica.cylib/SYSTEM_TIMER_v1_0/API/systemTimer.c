@@ -17,7 +17,6 @@
 * 2019.01.10  - Document Created
 ********************************************************************************/
 #include "`$INSTANCE_NAME`.h"
-#include "micaCommon.h"
 #include "`$INSTANCE_NAME`_timer_interrupt.h"
 
 
@@ -68,6 +67,7 @@ void `$INSTANCE_NAME`_Stop(void){
 void `$INSTANCE_NAME`_ResetTime(void){
     systemTime.seconds = ZERO;
     systemTime.microSecs = ZERO;
+    systemTime.count = ZERO;
     flag_systemTime_halfSec = false;
 }
 
@@ -84,11 +84,12 @@ void `$INSTANCE_NAME`_getSystemTime(`$INSTANCE_NAME`_time_S *time){
     uint8_t intStatus = CyEnterCriticalSection();
     
     time->seconds = systemTime.seconds;
-    uint32_t microSecs = `$INSTANCE_NAME`_timer_ReadCounter();
+    uint32_t microSecs = `$INSTANCE_NAME`_timer_ReadCounter() * `$INSTANCE_NAME`_CLK_PERIOD_US;
     if ( flag_systemTime_halfSec) {
-        microSecs += MICA_DELAY_US_SEC_HALF;
+        microSecs += `$INSTANCE_NAME`_TIMER_PERIOD_US;
     }
     time->microSecs = microSecs;
+    time->count = ((uint64_t) systemTime.seconds << 32) | microSecs;
     
     CyExitCriticalSection(intStatus);
 }

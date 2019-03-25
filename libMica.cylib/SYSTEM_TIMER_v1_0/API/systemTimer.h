@@ -23,19 +23,19 @@
     ***************************************/
     #include <stdint.h>
     #include <stdbool.h>
+    #include "micaCommon.h"
     #include "`$INSTANCE_NAME`_timer.h"
     /***************************************
     * Macro Definitions
     ***************************************/
-//    #define  `$INSTANCE_NAME`_DEFINE_NAME             (0x00)  /**< DEFINE NAME Description */
+    #define  `$INSTANCE_NAME`_CLK_PERIOD_US             (10)    /**< Period of one clock in microseconds */
+    #define  `$INSTANCE_NAME`_TIMER_PERIOD_US           (500000)  /**< Period of one timer count in microseconds */
+    
     
     /***************************************
     * Enumerated Types
     ***************************************/
-//    typedef enum {
-//        typeVal1,                 /**< val1 Description */
-//        typeVal2                  /**< val2 Description */
-//    }  `$INSTANCE_NAME`_ENUM_NAME_T;
+
     
     /***************************************
     * Structures
@@ -43,6 +43,7 @@
     typedef struct {
         uint32_t seconds;            /**< Number of seconds the timer has been running */
         uint32_t microSecs;         /**< number of microseconds elapsed */
+        uint64_t count;             /**< running count of the time */
     }  `$INSTANCE_NAME`_time_S;
     
     /***************************************
@@ -51,7 +52,10 @@
     void `$INSTANCE_NAME`_ResetTime(void);
     void `$INSTANCE_NAME`_Start(void);        
     void `$INSTANCE_NAME`_Stop(void);
-    
+    void `$INSTANCE_NAME`_getSystemTime(`$INSTANCE_NAME`_time_S *time);
+    uint8_t `$INSTANCE_NAME`_scheduleTask(FUNCTION_T * callback, uint32_t time);
+    uint32_t `$INSTANCE_NAME`_unscheduleTask(uint8_t taskId); 
+    void `$INSTANCE_NAME`_processSystemTasks(void);
 
 #endif /* `$INSTANCE_NAME`_H */
 

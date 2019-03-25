@@ -31,7 +31,8 @@
 //    #define MICA_DEBUG_LEDS           /* Test the onboard RGB LED */
 //    #define MICA_UART_USB_TX        /* Send data through the UART to test connectivity */
 //    #define MICA_DEBUG_ECHO           /* Echo to the USB UART */
-    #define MICA_DEBUG_BTN            /* Check the user button */
+//    #define MICA_DEBUG_BTN            /* Check the user button */
+    #define MICA_DEBUG_MCUPSOC4         /* Run the full hardware testing suite */
 #endif
 /* -------------- END DEBUG CASE --------------  */
    
@@ -170,6 +171,33 @@ int main(void){
             }
         }
     /* end MICA_DEBUG_BTN */
+    #elif defined MICA_DEBUG_MCUPSOC4         
+        /* Run the full hardware testing suite */
+       
+        /* Startup sequence */
+        LEDS_Write(LEDS_ON_WHITE);
+        Button_EnableBtnInterrupts();
+        usbUart_Start();
+        MICA_delayMs(MICA_DELAY_MS_SEC_HALF);
+        LEDS_Write(LEDS_ON_BLUE);
+        
+        /* Print Welcome message */
+        usbUart_clearScreen();
+        usbUart_printHeader(__TIME__, __DATE__, "mcuPSoC4 Board Testing");
+        
+        /* Infinite Loop */
+        for(;;) {
+            uint8_t data = usbUart_getChar();
+            if(data) {
+                usbUart_putChar(data);
+                LEDS_R_Toggle();
+            }
+            if(data==' ' || Button_wasButtonReleased() ){
+                usbUart_print("Resetting...");
+                MICA_delayMs(MICA_DELAY_MS_SEC_TENTH);
+                MICA_softwareReset();  
+            }
+        }
     #else
         #error "At least ONE MICA_DEBUG_<case> must be defined if MICA_DEBUG is defined"
     #endif /* End MICA_DEBUG_<case> */

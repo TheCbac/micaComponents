@@ -21,7 +21,9 @@
     /***************************************
     * Included files
     ***************************************/
-    
+    #include <stdint.h>
+    #include <stdbool.h>
+    #include "`$INSTANCE_NAME`_timer.h"
     /***************************************
     * Macro Definitions
     ***************************************/
@@ -38,14 +40,18 @@
     /***************************************
     * Structures
     ***************************************/
-//    typedef struct {
-//        uint8_t param;            /**< param Description */
-//    }  `$INSTANCE_NAME`_structName_S;
+    typedef struct {
+        uint32_t seconds;            /**< Number of seconds the timer has been running */
+        uint32_t microSecs;         /**< number of microseconds elapsed */
+    }  `$INSTANCE_NAME`_time_S;
     
     /***************************************
     * Function declarations 
     ***************************************/
-//    void  `$INSTANCE_NAME`_yourFunction(void);        
+    void `$INSTANCE_NAME`_ResetTime(void);
+    void `$INSTANCE_NAME`_Start(void);        
+    void `$INSTANCE_NAME`_Stop(void);
+    
 
 #endif /* `$INSTANCE_NAME`_H */
 

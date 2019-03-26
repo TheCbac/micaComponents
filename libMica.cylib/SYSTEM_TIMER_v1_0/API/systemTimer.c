@@ -167,17 +167,20 @@ void `$INSTANCE_NAME`_ISR_incTime(void){
 *   ID of the tasks
 *******************************************************************************/
 uint8_t `$INSTANCE_NAME`_scheduleTaskMs(FUNCTION_VOID_T * callback, uint32_t msDelay){
-    /* Calculate current system time */
-    `$INSTANCE_NAME`_time_S currentTime;
-    `$INSTANCE_NAME`_getSystemTime(&currentTime);
-    /* insert the tasks into the schedule queue */
-    uint8_t taskId = numTasks++;
-    scheduleQueue[taskId].callback = callback;
-    scheduleQueue[taskId].exiprationTime = currentTime.count + ( msDelay *`$INSTANCE_NAME`_MSEC_PER_SEC);
-    /* Sort the queue */
-    qsort(scheduleQueue, numTasks, sizeof(`$INSTANCE_NAME`_task_S), `$INSTANCE_NAME`_compareTaskTime); 
-    /* Return task ID */
-    return taskId;
+    if(numTasks < `$INSTANCE_NAME`_TASKS_MAX) {
+        /* Calculate current system time */
+        `$INSTANCE_NAME`_time_S currentTime;
+        `$INSTANCE_NAME`_getSystemTime(&currentTime);
+        /* insert the tasks into the schedule queue */
+        uint8_t taskId = numTasks++;
+        scheduleQueue[taskId].callback = callback;
+        scheduleQueue[taskId].exiprationTime = currentTime.count + ( msDelay *`$INSTANCE_NAME`_MSEC_PER_SEC);
+        /* Sort the queue */
+        qsort(scheduleQueue, numTasks, sizeof(`$INSTANCE_NAME`_task_S), `$INSTANCE_NAME`_compareTaskTime); 
+        /* Return task ID */
+        return taskId;
+    }
+    return ZERO;
 }
 
 
@@ -199,8 +202,9 @@ uint8_t `$INSTANCE_NAME`_processSystemTasks(void){
     if(numTasks && currentTime.count >= nextTask.exiprationTime){
         /* Shift the schedule queue down */
         uint8_t i;
-        for(i = --numTasks; i>ZERO; i--){
-            scheduleQueue[i-ONE] = scheduleQueue[i]; 
+        numTasks--;
+        for(i = ZERO; i<numTasks; i++){
+            scheduleQueue[i] = scheduleQueue[i+ONE]; 
         }   
         /* Run the tasks */
         nextTask.callback();
@@ -223,14 +227,14 @@ uint8_t `$INSTANCE_NAME`_processSystemTasks(void){
 *   Number of tasks in the queue
 *******************************************************************************/
 uint8_t `$INSTANCE_NAME`_unscheduleTask(uint8_t taskId){
-    /* Ensure the task exists */
-    if(taskId < numTasks) {
-        /* Shift tasks down */
-        uint8_t i;
-        for(i = --numTasks; i>taskId; i--){
-            scheduleQueue[i-ONE] = scheduleQueue[i]; 
-        } 
-    }
+//    /* Ensure the task exists */
+//    if(taskId < numTasks) {
+//        /* Shift tasks down */
+//        uint8_t i;
+//        for(i = --numTasks; i>taskId; i--){
+//            scheduleQueue[i-ONE] = scheduleQueue[i]; 
+//        } 
+//    }
     return numTasks;
 }
 

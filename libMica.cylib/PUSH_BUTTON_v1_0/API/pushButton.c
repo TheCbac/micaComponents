@@ -27,8 +27,8 @@ volatile bool `$INSTANCE_NAME`_btnPressed = false;       /**< Whether or not a b
 volatile bool `$INSTANCE_NAME`_btnReleased = false;       /**< Whether or not a button has been released since last check */
 
 /* Call callback functions */
-FUNCTION_T* `$INSTANCE_NAME`_btnPressCallback = NULL;    /**< Pointer to ISR callback */
-FUNCTION_T* `$INSTANCE_NAME`_btnReleaseCallback = NULL;    /**< Pointer to ISR callback */
+FUNCTION_VOID_T* `$INSTANCE_NAME`_btnPressCallback = NULL;    /**< Pointer to ISR callback */
+FUNCTION_VOID_T* `$INSTANCE_NAME`_btnReleaseCallback = NULL;    /**< Pointer to ISR callback */
 
 
 /*******************************************************************************
@@ -169,7 +169,7 @@ void `$INSTANCE_NAME`_EnableBtnInterrupts(void){
 *   None
 *
 *******************************************************************************/
-void `$INSTANCE_NAME`_SetBtnPressIsr(FUNCTION_T * callback){
+void `$INSTANCE_NAME`_SetBtnPressIsr(FUNCTION_VOID_T * callback){
     /* Change address of global variable */
     `$INSTANCE_NAME`_btnPressCallback = callback;   
 }
@@ -187,7 +187,7 @@ void `$INSTANCE_NAME`_SetBtnPressIsr(FUNCTION_T * callback){
 *   None
 *
 *******************************************************************************/
-void `$INSTANCE_NAME`_SetBtnReleaseIsr(FUNCTION_T * callback){
+void `$INSTANCE_NAME`_SetBtnReleaseIsr(FUNCTION_VOID_T * callback){
     /* Change address of global variable */
     `$INSTANCE_NAME`_btnReleaseCallback = callback;   
 }

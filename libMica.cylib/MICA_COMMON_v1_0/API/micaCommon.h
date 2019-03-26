@@ -179,7 +179,7 @@
     /***************************************
     * Typedefs
     ***************************************/  
-    typedef void FUNCTION_T(void); /**< void/void function type (for interrupts) */
+    typedef void FUNCTION_VOID_T(void); /**< void/void function type (for interrupts) */
     
     /***************************************
     * Function prototypes

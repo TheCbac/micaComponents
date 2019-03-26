@@ -28,10 +28,12 @@
     /***************************************
     * Macro Definitions
     ***************************************/
-    #define  `$INSTANCE_NAME`_CLK_PERIOD_US             (10)    /**< Period of one clock in microseconds */
-    #define  `$INSTANCE_NAME`_TIMER_PERIOD_US           (500000)  /**< Period of one timer count in microseconds */
+    #define `$INSTANCE_NAME`_CLK_PERIOD_US              (10)        /**< Period of one clock in microseconds */
+    #define `$INSTANCE_NAME`_TIMER_PERIOD_US            (500000)    /**< Period of one timer count in microseconds */
     
-    
+    #define `$INSTANCE_NAME`_MSEC_PER_SEC               (1000)      /**< Number of milliseconds per second */    
+    #define `$INSTANCE_NAME`_USEC_PER_SEC               (1000000)   /**< Number of microseconds per second */    
+    #define `$INSTANCE_NAME`_TASKS_MAX                  (32)        /**< Maximum number of tasks that can be stored in the schedule queue */
     /***************************************
     * Enumerated Types
     ***************************************/
@@ -46,16 +48,24 @@
         uint64_t count;             /**< running count of the time */
     }  `$INSTANCE_NAME`_time_S;
     
+    typedef struct {
+        uint64_t exiprationTime;    /**< System time when the task should be executed */
+        FUNCTION_VOID_T* callback;   /**< Function to execute when task has expired */
+    } `$INSTANCE_NAME`_task_S;
+    
     /***************************************
     * Function declarations 
     ***************************************/
     void `$INSTANCE_NAME`_ResetTime(void);
-    void `$INSTANCE_NAME`_Start(void);        
+    void `$INSTANCE_NAME`_Start(void);
     void `$INSTANCE_NAME`_Stop(void);
     void `$INSTANCE_NAME`_getSystemTime(`$INSTANCE_NAME`_time_S *time);
-    uint8_t `$INSTANCE_NAME`_scheduleTask(FUNCTION_T * callback, uint32_t time);
-    uint32_t `$INSTANCE_NAME`_unscheduleTask(uint8_t taskId); 
-    void `$INSTANCE_NAME`_processSystemTasks(void);
+    uint8_t `$INSTANCE_NAME`_scheduleTaskMs(FUNCTION_VOID_T * callback, uint32_t msDelay);
+    uint8_t `$INSTANCE_NAME`_unscheduleTask(uint8_t taskId); 
+    uint8_t `$INSTANCE_NAME`_processSystemTasks(void);
+    uint8_t `$INSTANCE_NAME`_getNumTasks(void);
+    
+    
 
 #endif /* `$INSTANCE_NAME`_H */
 

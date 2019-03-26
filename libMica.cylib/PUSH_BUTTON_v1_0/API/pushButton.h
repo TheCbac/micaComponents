@@ -38,8 +38,8 @@
     bool `$INSTANCE_NAME`_wasButtonPressed(void);
     bool `$INSTANCE_NAME`_wasButtonReleased(void);
     void `$INSTANCE_NAME`_EnableBtnInterrupts(void);
-    void `$INSTANCE_NAME`_SetBtnPressIsr(FUNCTION_T * callback);
-    void `$INSTANCE_NAME`_SetBtnReleaseIsr(FUNCTION_T * callback);
+    void `$INSTANCE_NAME`_SetBtnPressIsr(FUNCTION_VOID_T * callback);
+    void `$INSTANCE_NAME`_SetBtnReleaseIsr(FUNCTION_VOID_T * callback);
     /***************************************
     * ISR prototypes
     ***************************************/

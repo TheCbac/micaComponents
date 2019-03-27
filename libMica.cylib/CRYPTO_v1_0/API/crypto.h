@@ -45,6 +45,7 @@
     /***************************************
     * Function declarations 
     ***************************************/
+    void  `$INSTANCE_NAME`_fisherYates(uint8_t *array, uint16_t len, uint32_t seed );
     uint32_t `$INSTANCE_NAME`_hash_djb2(char *str);
     uint32_t `$INSTANCE_NAME`_rand_xorshift32(uint32_t seed);
     

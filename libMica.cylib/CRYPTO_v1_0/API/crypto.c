@@ -17,6 +17,43 @@
 * 2019.03.01  - Document Created
 ********************************************************************************/
 #include "`$INSTANCE_NAME`.h"
+#include "micaCommon.h"
+#include <stdlib.h>
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_fisherYates()
+****************************************************************************//**
+* \brief
+*  Implements the Fisher-Yates shuffle for creating a permutation 
+*
+*   https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
+*   https://stackoverflow.com/questions/42321370/fisher-yates-shuffling-algorithm-in-c
+*   
+* \param array [in/out]
+*   Array to shuffle params
+*
+* \param len [in]
+*   Number of parameters to manipulate
+*
+* \param seed [in]
+*   Seed value in creating a random number
+*
+* \return
+*  none
+*******************************************************************************/
+void  `$INSTANCE_NAME`_fisherYates(uint8_t *array, uint16_t len, uint32_t seed ){
+    uint8_t tmp;
+    uint16_t i, j;
+    /* Seed the random number generator */
+    srand(seed);
+    /* Shuffle the array */
+    for(i = len - INDEX_ZERO_CORRECT; i > ZERO; i--){
+        j = rand() % (i + ONE);
+        tmp = array[j];
+        array[j] = array[i];
+        array[i] = tmp;
+    }
+}
 
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_xorshift32()

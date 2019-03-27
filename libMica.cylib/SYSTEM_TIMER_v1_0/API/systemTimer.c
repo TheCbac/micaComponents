@@ -18,7 +18,7 @@
 ********************************************************************************/
 #include "`$INSTANCE_NAME`.h"
 #include "`$INSTANCE_NAME`_timer_interrupt.h"
-
+#include <stdlib.h>
 
 `$INSTANCE_NAME`_task_S scheduleQueue[`$INSTANCE_NAME`_TASKS_MAX];
 uint8_t numTasks = ZERO;
@@ -126,6 +126,20 @@ void `$INSTANCE_NAME`_getSystemTime(`$INSTANCE_NAME`_time_S *time){
     CyExitCriticalSection(intStatus);
 }
 
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_getSystemCount()
+****************************************************************************//**
+* \brief
+*  Returns the current system count
+*
+* \return
+*   Time count
+*******************************************************************************/
+uint64_t `$INSTANCE_NAME`_getSystemCount(void) {
+    `$INSTANCE_NAME`_time_S time;
+    `$INSTANCE_NAME`_getSystemTime(&time);
+    return time.count;
+}
 
 /*******************************************************************************
 * ISR Name: `$INSTANCE_NAME`_ISR_incTime()

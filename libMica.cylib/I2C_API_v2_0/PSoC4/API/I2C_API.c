@@ -149,30 +149,28 @@ uint32_t `$INSTANCE_NAME`_WriteArray(uint8_t deviceAddr, uint8_t regAddr, uint8_
 
 
 /*******************************************************************************
-* Function Name: `$INSTANCE_NAME_read()
+* Function Name:  `$INSTANCE_NAME`_Read()
 ****************************************************************************//**
-* \brief
-*  Reads a given register of the target I2C device and places that value into the pointer passed in. *** In 
-*  current implementation, this is a blocking function ***
+* \brief 
+* Read a byte of data from a slave
 *
-* \param deviceAddr
-*  Address of the I2C slave devices
+* \param deviceAddr [in]
+*   Address of the slave device
 *
-* \param regAddr 
-*  Address of register to read from.
+* \param regAddr [in]
+*   Memory address of the register to be read
 *
-* \param readVal
-* Pointer to place the results into
-*   
-* \return
-* An error code with the result of the Read procedure. 
-* The possible error codes are:
+* \param readVal [out]
+*   Pointer to varable to place result into. If the command fails this will be 
+*   the I2C opcode associated with the error.
+*
+* \Return
+*   Error associated with the read value
 *
 *  Errors codes                             | Description
 *   ------------                            | -----------
-*   `$INSTANCE_NAME`_ERR_OK                 | On successful operation
-*   `$INSTANCE_NAME`_ERR_READ               | An error occured during reading
-*   Error from I2C Component, `$i2cInstanceName`
+*   i2cApi_ERR_OK                           | On successful operation
+*   Error from I2C Component
 *
 *******************************************************************************/
 uint32_t `$INSTANCE_NAME`_Read(uint8_t deviceAddr, uint8_t regAddr, uint8_t * readVal) {

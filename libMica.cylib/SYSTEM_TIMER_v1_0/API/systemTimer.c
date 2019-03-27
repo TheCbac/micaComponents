@@ -18,7 +18,6 @@
 ********************************************************************************/
 #include "`$INSTANCE_NAME`.h"
 #include "`$INSTANCE_NAME`_timer_interrupt.h"
-#include "`$INSTANCE_NAME`_ringBuffer.h"
 
 
 `$INSTANCE_NAME`_task_S scheduleQueue[`$INSTANCE_NAME`_TASKS_MAX];

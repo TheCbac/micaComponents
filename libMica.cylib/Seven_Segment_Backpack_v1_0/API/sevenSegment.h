@@ -33,6 +33,10 @@
     
     #define `$INSTANCE_NAME`_CMD_DISP_ON             (0x81)      /**< Command: Turn the display on */
     #define `$INSTANCE_NAME`_CMD_DISP_BLINK_2HZ      (0x83)      /**< Command: Blink the display at 2 Hz */ 
+    #define `$INSTANCE_NAME`_CMD_DISP_BLINK_1HZ      (0x85)      /**< Command: Blink the display at 1 Hz */ 
+    #define `$INSTANCE_NAME`_CMD_DISP_BLINK_HALF_HZ  (0x87)      /**< Command: Blink the display at 0.5 Hz */ 
+    
+    
     #define `$INSTANCE_NAME`_CMD_SYS_CLCK_ON         (0x21)      /**< Command: Enable the system clock */
      
     #define `$INSTANCE_NAME`_NUM_DIGITS              (9u)        /**< Number of digit registers */
@@ -74,6 +78,7 @@
     #define `$INSTANCE_NAME`_CHAR_H                  (0b1110110) /**< 7-Segment display value of 'H' */
     #define `$INSTANCE_NAME`_CHAR_O                  (0b0111111) /**< 7-Segment display value of 'O' */
     #define `$INSTANCE_NAME`_CHAR_G                  (0b0111101) /**< 7-Segment display value of 'G' */
+    #define `$INSTANCE_NAME`_CHAR_DASH               (0b1000000) /**< 7-Segment display value of '-' */   
 
     
     #define `$INSTANCE_NAME`_OFFSET_CHAR        (0x30)      /**< Offset for converting from ascii to numeric */
@@ -86,7 +91,12 @@
     /***************************************
     * Enumerated Types
     ***************************************/
-
+    typedef enum {
+        BLINK_SOLID,
+        BLINK_2HZ,
+        BLINK_1HZ,
+        BLINK_HALFHZ,
+    } `$INSTANCE_NAME`_BLINK_T;
     
     /***************************************
     * Structures
@@ -113,6 +123,9 @@
     uint32_t `$INSTANCE_NAME`_writeDigitChar(uint8_t addr, uint8_t position, uint8_t digit);
     uint32_t `$INSTANCE_NAME`_writeDisplayString(uint8_t addr, char* array);
     uint32_t `$INSTANCE_NAME`_writeDisplayNum(uint8_t addr, uint16_t val);      
+    uint32_t `$INSTANCE_NAME`_blinkState(uint8_t addr,`$INSTANCE_NAME`_BLINK_T rate);
+    
+    
 
 #endif /* `$INSTANCE_NAME`_H */
 /* [] END OF FILE */

@@ -289,14 +289,14 @@ void `$INSTANCE_NAME`_txTest(uint8 runs) {
 * \return
 * None
 *******************************************************************************/
-    void `$INSTANCE_NAME`_printHeader(char* time, char* date, char * name){
-    `$INSTANCE_NAME`_print("**************************************\r\n* ");
-    `$INSTANCE_NAME`_print(name);
-    `$INSTANCE_NAME`_print("\r\n*\r\n* Compiled at: ");
-    `$INSTANCE_NAME`_print(time);
-    `$INSTANCE_NAME`_print(" on ");
-    `$INSTANCE_NAME`_print(date);
-    `$INSTANCE_NAME`_print("\r\n**************************************\r\n");
+void `$INSTANCE_NAME`_printHeader(char* time, char* date, char * name){
+    `$INSTANCE_NAME`_log("**************************************\r\n* ");
+    `$INSTANCE_NAME`_log(name);
+    `$INSTANCE_NAME`_log("\r\n*\r\n* Compiled at: ");
+    `$INSTANCE_NAME`_log(time);
+    `$INSTANCE_NAME`_log(" on ");
+    `$INSTANCE_NAME`_log(date);
+    `$INSTANCE_NAME`_log("\r\n**************************************\r\n");
 }
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_dummyTxArray()

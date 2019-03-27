@@ -62,6 +62,7 @@
     void `$INSTANCE_NAME`_getSystemTime(`$INSTANCE_NAME`_time_S *time);
     uint64_t `$INSTANCE_NAME`_getSystemCount(void);
     uint8_t `$INSTANCE_NAME`_scheduleTaskMs(FUNCTION_VOID_T * callback, uint32_t msDelay);
+    uint8_t `$INSTANCE_NAME`_startTask(FUNCTION_VOID_T * task);
     uint8_t `$INSTANCE_NAME`_unscheduleTask(uint8_t taskId); 
     uint8_t `$INSTANCE_NAME`_processSystemTasks(void);
     uint8_t `$INSTANCE_NAME`_getNumTasks(void);

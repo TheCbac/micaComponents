@@ -196,6 +196,21 @@ uint8_t `$INSTANCE_NAME`_scheduleTaskMs(FUNCTION_VOID_T * callback, uint32_t msD
     return ZERO;
 }
 
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_startTask()
+****************************************************************************//**
+* \brief
+*  Queues a task to immediately begin
+*
+* \param callback [in]
+*   function pointer to tasks. Must be of signature void/void
+*
+* \return
+*   ID of the tasks
+*******************************************************************************/
+uint8_t `$INSTANCE_NAME`_startTask(FUNCTION_VOID_T * task){
+    return `$INSTANCE_NAME`_scheduleTaskMs(task, ZERO);
+}
 
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_processSystemTasks()

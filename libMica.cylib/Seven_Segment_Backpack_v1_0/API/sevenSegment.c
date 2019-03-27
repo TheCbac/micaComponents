@@ -178,7 +178,7 @@ uint32_t `$INSTANCE_NAME`_writeDigitRaw(uint8_t addr, uint8_t position, uint8_t 
     uint32_t error = `$INSTANCE_NAME`_validateComms();
     if(error) {return error;}
     /* Write the raw digit value */
-    return `$INSTANCE_NAME`_comms.i2c_write(addr, `$INSTANCE_NAME`_ADDR_DISPLAY_DATA + position, val);
+    return `$INSTANCE_NAME`_comms.i2c_write(addr, `$INSTANCE_NAME`_positionArray[position], val);
 }
 
 /*******************************************************************************
@@ -307,6 +307,44 @@ uint32_t `$INSTANCE_NAME`_writeDisplayNum(uint8_t addr, uint16_t val) {
         if(error) {break;}
     }
     return error;
+}
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_blinkState()
+****************************************************************************//**
+* \brief
+*  Sets the blinking frequency of a display
+*
+* \param addr
+*   I2C Address of the device 
+*
+* \param rate
+*   Blink Rate
+*
+* \return
+*  Result of the I2C Write operation
+*******************************************************************************/
+uint32_t `$INSTANCE_NAME`_blinkState(uint8_t addr,`$INSTANCE_NAME`_BLINK_T rate) {
+    uint8_t cmd = `$INSTANCE_NAME`_CMD_DISP_ON;
+    switch(rate){
+        case BLINK_SOLID: {
+            cmd = `$INSTANCE_NAME`_CMD_DISP_ON;
+            break;
+        }
+        case BLINK_2HZ: {
+            cmd = `$INSTANCE_NAME`_CMD_DISP_BLINK_2HZ;
+            break;
+        }
+        case BLINK_1HZ: {
+            cmd = `$INSTANCE_NAME`_CMD_DISP_BLINK_1HZ;
+            break;    
+        }
+        case BLINK_HALFHZ: {
+            cmd = `$INSTANCE_NAME`_CMD_DISP_BLINK_HALF_HZ;
+            break;    
+        }
+    }
+    return `$INSTANCE_NAME`_comms.i2c_writeCmd(addr, cmd); 
 }
 
 /* [] END OF FILE */

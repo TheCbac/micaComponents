@@ -305,7 +305,9 @@ uint32_t `$INSTANCE_NAME`_writeDisplayNum(uint8_t addr, uint16_t val) {
     }
     uint8_t i;
     for(i = `$INSTANCE_NAME`_POSITION_MAX - INDEX_ZERO_CORRECT; i>=ZERO; i--) {
-        error = `$INSTANCE_NAME`_writeDigitNum(addr, `$INSTANCE_NAME`_positionArray[i], val % TEN);
+//        error = `$INSTANCE_NAME`_writeDigitNum(addr, `$INSTANCE_NAME`_positionArray[i], val % TEN);
+        error = `$INSTANCE_NAME`_writeDigitNum(addr, i, val % TEN);
+        
         val /= TEN;
         if(error) {break;}
     }

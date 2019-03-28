@@ -106,6 +106,7 @@
         uint32_t (*i2c_write)(uint8_t deviceAddr, uint8_t regAddr, uint8_t val);    /**< Write to an I2C register */
         uint32_t (*i2c_writeCmd)(uint8_t deviceAddr, uint8_t cmd);                  /**< Send a command via I2C */
         uint32_t (*i2c_writeArray)(uint8_t deviceAddr, uint8_t regAddr, uint8_t *array, uint16_t len);  /**< Write multiple registers */
+        uint32_t (*i2c_read)(uint8_t deviceAddr, uint8_t regAddr, uint8_t *result); /**< Read from a register */
     } `$INSTANCE_NAME`_COMMUNICATION_S;
     
     /***************************************
@@ -122,8 +123,11 @@
     uint32_t `$INSTANCE_NAME`_writeDigitNum(uint8_t addr, uint8_t position, uint8_t digit);
     uint32_t `$INSTANCE_NAME`_writeDigitChar(uint8_t addr, uint8_t position, uint8_t digit);
     uint32_t `$INSTANCE_NAME`_writeDisplayString(uint8_t addr, char* array);
-    uint32_t `$INSTANCE_NAME`_writeDisplayNum(uint8_t addr, uint16_t val);      
+    uint32_t `$INSTANCE_NAME`_writeDisplayNum(uint8_t addr, uint16_t val);  
+    uint32_t `$INSTANCE_NAME`_writeDisplayArray(uint8_t addr, uint8_t *array);
     uint32_t `$INSTANCE_NAME`_blinkState(uint8_t addr,`$INSTANCE_NAME`_BLINK_T rate);
+    uint32_t `$INSTANCE_NAME`_readDigit(uint8_t addr, uint8_t position, uint8_t *result);
+    uint32_t `$INSTANCE_NAME`_readDisplay(uint8_t displayAddr, uint8_t *resultArray);
     
     
 

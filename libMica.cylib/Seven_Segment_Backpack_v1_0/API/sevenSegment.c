@@ -22,7 +22,7 @@
 `$INSTANCE_NAME`_COMMUNICATION_S `$INSTANCE_NAME`_comms;
 
 /* Mapping of the position numeric value to their register value */
-uint8_t `$INSTANCE_NAME`_positionArray[`$INSTANCE_NAME`_POSITION_MAX + INDEX_ZERO_CORRECT] = {
+uint8_t `$INSTANCE_NAME`_positionArray[`$INSTANCE_NAME`_POSITION_MAX + ONE] = {
     `$INSTANCE_NAME`_REG_DIGIT_1,
     `$INSTANCE_NAME`_REG_DIGIT_2,
     `$INSTANCE_NAME`_REG_DIGIT_3,
@@ -31,7 +31,7 @@ uint8_t `$INSTANCE_NAME`_positionArray[`$INSTANCE_NAME`_POSITION_MAX + INDEX_ZER
 };
 
 /* Mapping of the digits numeric value to display value */
-uint8_t `$INSTANCE_NAME`_digitArray[`$INSTANCE_NAME`_DIGIT_MAX + INDEX_ZERO_CORRECT] = {
+uint8_t `$INSTANCE_NAME`_digitArray[`$INSTANCE_NAME`_DIGIT_MAX + ONE] = {
     `$INSTANCE_NAME`_CHAR_0,
     `$INSTANCE_NAME`_CHAR_1,
     `$INSTANCE_NAME`_CHAR_2,
@@ -63,6 +63,8 @@ void `$INSTANCE_NAME`_setCommunications(`$INSTANCE_NAME`_COMMUNICATION_S* comms)
   `$INSTANCE_NAME`_comms.i2c_write = comms->i2c_write;
   `$INSTANCE_NAME`_comms.i2c_writeCmd = comms->i2c_writeCmd;
   `$INSTANCE_NAME`_comms.i2c_writeArray = comms->i2c_writeArray;
+  `$INSTANCE_NAME`_comms.i2c_read = comms->i2c_read;
+    
 }
 
 /*******************************************************************************
@@ -79,7 +81,8 @@ uint32_t `$INSTANCE_NAME`_validateComms(void) {
   if(
     `$INSTANCE_NAME`_comms.i2c_write == NULL ||
     `$INSTANCE_NAME`_comms.i2c_writeCmd == NULL ||
-    `$INSTANCE_NAME`_comms.i2c_writeArray == NULL
+    `$INSTANCE_NAME`_comms.i2c_writeArray == NULL ||
+    `$INSTANCE_NAME`_comms.i2c_read == NULL
   ){ return `$INSTANCE_NAME`_ERR_COMMS; }
   return ZERO;
 }
@@ -302,12 +305,42 @@ uint32_t `$INSTANCE_NAME`_writeDisplayNum(uint8_t addr, uint16_t val) {
     }
     uint8_t i;
     for(i = `$INSTANCE_NAME`_POSITION_MAX - INDEX_ZERO_CORRECT; i>=ZERO; i--) {
-        error = `$INSTANCE_NAME`_writeDigitNum(addr, i, val % TEN);
+        error = `$INSTANCE_NAME`_writeDigitNum(addr, `$INSTANCE_NAME`_positionArray[i], val % TEN);
         val /= TEN;
         if(error) {break;}
     }
     return error;
 }
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_writeDisplayArray()
+****************************************************************************//**
+* \brief
+*  Writes the display from an aray
+*
+* \param addr
+*   I2C Address of the device 
+*
+* \param array
+*   Pointer to array containing the four values to write
+*
+* \return
+*  Result of the I2C Write operation
+*******************************************************************************/
+uint32_t `$INSTANCE_NAME`_writeDisplayArray(uint8_t addr, uint8_t *array){
+    /* validate the communication structure */
+    uint32_t error = `$INSTANCE_NAME`_validateComms();
+    if(error) {return error;}
+    /* Write the string to the displays */
+    uint8_t i;
+    for(i=ZERO; i< `$INSTANCE_NAME`_POSITION_MAX; i++) {
+        error = `$INSTANCE_NAME`_writeDigitRaw(addr, i, array[i]);
+        if(error) {break;}
+    }
+    return error;
+    
+}
+
 
 /*******************************************************************************
 * Function Name: `$INSTANCE_NAME`_blinkState()
@@ -345,6 +378,62 @@ uint32_t `$INSTANCE_NAME`_blinkState(uint8_t addr,`$INSTANCE_NAME`_BLINK_T rate)
         }
     }
     return `$INSTANCE_NAME`_comms.i2c_writeCmd(addr, cmd); 
+}
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_readDigit()
+****************************************************************************//**
+* \brief
+*  Read the value of a given digit from the display
+*
+* \param addr [in]
+*   I2C Address of the device 
+*
+* \param position [in]
+*   Position of the digit on the diplay
+*
+* \param result [out]
+*   Pointer to the location to place the result
+*
+* \return
+*  Result of the I2C read operation
+*******************************************************************************/
+uint32_t `$INSTANCE_NAME`_readDigit(uint8_t addr, uint8_t position, uint8_t *result){
+    /* validate the communication structure */
+    uint32_t error = `$INSTANCE_NAME`_validateComms();
+    if(error) {return error;}
+    /* Ensure valid position */
+    if(position > `$INSTANCE_NAME`_POSITION_MAX) {
+        return `$INSTANCE_NAME`_ERR_RANGE;
+    }
+    uint8_t regAddr = `$INSTANCE_NAME`_positionArray[position];
+    return `$INSTANCE_NAME`_comms.i2c_read(addr, regAddr, result);
+        
+}
+
+/*******************************************************************************
+* Function Name: `$INSTANCE_NAME`_readDisplay()
+****************************************************************************//**
+* \brief
+*  Read the current value in the displays 
+*
+* \param displayAddr [in]
+*   Address of display
+* 
+* \param resultArray [out]
+*   Pointer to array of width 4 to place results
+*
+* \return
+*  Error of the read procedure
+*******************************************************************************/
+uint32_t `$INSTANCE_NAME`_readDisplay(uint8_t displayAddr, uint8_t *resultArray){
+    uint32_t error = ZERO;
+    uint8_t i;
+    for(i=ZERO; i <= `$INSTANCE_NAME`_POSITION_MAX; i++){
+       error |= HT16_readDigit(displayAddr, i, &resultArray[i]);
+    }
+
+    return error;
 }
 
 /* [] END OF FILE */

@@ -58,7 +58,7 @@
     #define `$INSTANCE_NAME`_POSITION_MAX            (4u)        /**< Number of position that are writeable */
     #define `$INSTANCE_NAME`_DISPLAY_VAL_MAX         (9999)      /**< Maximum value that can be displayed */
     
-   
+    #define `$INSTANCE_NAME`_CHAR_BLANK              (0b0000000) /**< Blank the display */
     #define `$INSTANCE_NAME`_CHAR_0                  (0b0111111) /**< 7-Segment display value of numeric 0 */
     #define `$INSTANCE_NAME`_CHAR_1                  (0b0000110) /**< 7-Segment display value of numeric 1 */
     #define `$INSTANCE_NAME`_CHAR_2                  (0b1011011) /**< 7-Segment display value of numeric 2 */
@@ -79,6 +79,24 @@
     #define `$INSTANCE_NAME`_CHAR_O                  (0b0111111) /**< 7-Segment display value of 'O' */
     #define `$INSTANCE_NAME`_CHAR_G                  (0b0111101) /**< 7-Segment display value of 'G' */
     #define `$INSTANCE_NAME`_CHAR_DASH               (0b1000000) /**< 7-Segment display value of '-' */   
+    
+    #define `$INSTANCE_NAME`_DOTS_SHIFT_CENTER       (1u)       /**< Center colon shift value */
+    #define `$INSTANCE_NAME`_DOTS_SHIFT_LEFT_UPPER   (2u)       /**< Upper left dot shift value */
+    #define `$INSTANCE_NAME`_DOTS_SHIFT_LEFT_LOWER   (3u)       /**< Lower left dot shift value */
+    #define `$INSTANCE_NAME`_DOTS_SHIFT_RIGHT        (4u)       /**< right dot shift value */
+    
+    #define `$INSTANCE_NAME`_DOTS_CENTER             (1 << `$INSTANCE_NAME`_DOTS_SHIFT_CENTER)      /**< Center colon value */
+    #define `$INSTANCE_NAME`_DOTS_LEFT_UPPER         (1 << `$INSTANCE_NAME`_DOTS_SHIFT_LEFT_UPPER)  /**< Upper left dot value */
+    #define `$INSTANCE_NAME`_DOTS_LEFT_LOWER         (1 << `$INSTANCE_NAME`_DOTS_SHIFT_LEFT_LOWER)  /**< Lower left dot value */
+    #define `$INSTANCE_NAME`_DOTS_RIGHT              (1 << `$INSTANCE_NAME`_DOTS_SHIFT_RIGHT)       /**< Right dot value */
+    
+    
+    
+    
+    
+    #define `$INSTANCE_NAME`_DOTS_SHIFT_CENTER       (1u)       /**< Center colon  shift value */
+
+    
 
     
     #define `$INSTANCE_NAME`_OFFSET_CHAR        (0x30)      /**< Offset for converting from ascii to numeric */

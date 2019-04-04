@@ -50,8 +50,9 @@
     /***************************************
     * Macro Definitions
     ***************************************/
-    #define `$INSTANCE_NAME`_Start()    `$componentName`_Start()
-    #define `$INSTANCE_NAME`_clearScreen()  `$INSTANCE_NAME`_print("\033[2J\033[1;1H")    /**< Clear the terminal screen */
+    #define `$INSTANCE_NAME`_Start()            `$componentName`_Start()
+    #define `$INSTANCE_NAME`_clearScreen()      `$INSTANCE_NAME`_print("\033[2J\033[1;1H")    /**< Clear the terminal screen */
+    #define `$INSTANCE_NAME`_clearLine()        `$INSTANCE_NAME`_print("\033[k")    /**< Clear the terminal screen */
 
     
     /* Logging */ 

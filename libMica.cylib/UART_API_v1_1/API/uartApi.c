@@ -290,7 +290,7 @@ void `$INSTANCE_NAME`_txTest(uint8 runs) {
 * None
 *******************************************************************************/
 void `$INSTANCE_NAME`_printHeader(char* time, char* date, char * name){
-    `$INSTANCE_NAME`_log("**************************************\r\n* ");
+    `$INSTANCE_NAME`_log("\r\n**************************************\r\n* ");
     `$INSTANCE_NAME`_log(name);
     `$INSTANCE_NAME`_log("\r\n*\r\n* Compiled at: ");
     `$INSTANCE_NAME`_log(time);

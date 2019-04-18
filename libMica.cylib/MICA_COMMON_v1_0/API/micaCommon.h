@@ -180,6 +180,7 @@
     * Typedefs
     ***************************************/  
     typedef void FUNCTION_VOID_T(void); /**< void/void function type (for interrupts) */
+    typedef uint32_t FUNCTION_TASK_T(void);  /**< uint32_t/void function type for creating tasks */
     
     /***************************************
     * Function prototypes

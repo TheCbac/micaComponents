@@ -66,7 +66,7 @@
     uint8_t `$INSTANCE_NAME`_unscheduleTask(uint8_t taskId); 
     uint8_t `$INSTANCE_NAME`_processSystemTasks(void);
     uint8_t `$INSTANCE_NAME`_getNumTasks(void);
-    
+
     
 
 #endif /* `$INSTANCE_NAME`_H */
